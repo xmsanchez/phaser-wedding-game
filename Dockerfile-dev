@@ -1,0 +1,9 @@
+FROM node:latest
+
+WORKDIR /app
+
+RUN npm install -g parcel-bundler
+
+EXPOSE 8080
+
+CMD ["npm", "start"]

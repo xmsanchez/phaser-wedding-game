@@ -1,0 +1,8 @@
+canvas {
+    image-rendering: pixelated; /* This will keep the pixel art look sharp */
+}
+
+body {
+    padding: 0;
+    margin: 0;
+}

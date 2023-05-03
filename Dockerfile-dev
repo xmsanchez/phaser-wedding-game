@@ -4,6 +4,6 @@ WORKDIR /app
 
 RUN npm install -g parcel-bundler
 
-EXPOSE 8080
+EXPOSE 8000
 
-CMD ["npm", "start"]
+CMD ["parcel", "run", "start"]

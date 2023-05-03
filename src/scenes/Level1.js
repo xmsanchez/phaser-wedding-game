@@ -20,6 +20,40 @@ export default class Level1 extends Phaser.Scene
 
 	preload()
     {	
+		const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
+		const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
+
+		var progressBar = this.add.graphics();
+		var progressBox = this.add.graphics();
+		progressBox.fillStyle(0x222222, 0.8);
+		progressBox.fillRect(240, screenCenterY - 50, 320, 50);
+
+		this.load.on('progress', function (value) {
+			console.log(value);
+			progressBar.clear();
+			progressBar.fillStyle(0xffffff, 1);
+			progressBar.fillRect(250, screenCenterY - 40, 300 * value, 30);
+		});
+
+		var assetText = this.make.text({
+			x: screenCenterX,
+			y: screenCenterY + 50,
+			text: '',
+			style: {
+				font: '18px monospace'
+			}
+		});
+		assetText.setOrigin(0.5, 0.5);
+					
+		this.load.on('fileprogress', function (file) {
+			assetText.setText('Loading asset: ' + file.key);
+		});
+
+		this.load.on('complete', function () {
+			progressBar.destroy();
+			progressBox.destroy();
+		});
+
 		// Load plugins
 		var urlJoystick = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexvirtualjoystickplugin.min.js';
 		var urlButton = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbuttonplugin.min.js';
@@ -28,7 +62,7 @@ export default class Level1 extends Phaser.Scene
     
 		// Load assets
 		this.load.image('tileset','assets/tilesets/tileset.png');
-		this.load.tilemapTiledJSON('map', 'assets/maps/level1-new.json');
+		this.load.tilemapTiledJSON('map', 'assets/maps/level1.json');
 		this.load.audio('background_music', 'assets/audio/tangled.mp3');
 		this.load.spritesheet('player',
 			'assets/spritesheets/player.png',
@@ -58,6 +92,18 @@ export default class Level1 extends Phaser.Scene
 		this.grass = this.map.createLayer('grass', tileset)
 		this.ladder = this.map.createLayer('ladder', tileset);
 		this.coins = this.map.createLayer('coins', tileset)
+
+		// Get the treasures object layer from the map
+		const treasuresObj = this.map.getObjectLayer('treasures');
+
+		// // Create a static group for the treasures
+		// this.treasures = this.physics.add.staticGroup();
+
+		// // Create sprites for each object in the layer
+		// treasuresObj.objects.forEach(obj => {
+		// 	const treasure = this.treasures.create(obj.x, obj.y, obj.properties.sprite);
+		// treasure.setOrigin(0, 1);
+		// });
 
         this.physics.world.setBounds(50, 0, this.map.widthInPixels - 50, this.map.heightInPixels * tileset.tileHeight);
 

@@ -1,9 +1,13 @@
 import Player from './Player.js';
 import Joystick from './Joystick.js';
-import HUD from './HUD.js';
 
 export default class Common {
-    constructor() {}
+    constructor(scene) {
+		this.score = scene.score
+		this.hud = scene.hud
+		this.openTreasure = this.openTreasure.bind(scene);
+		this.messageBox = [];
+	}
 	
     addPlayer(scene) {
         // Player
@@ -26,6 +30,67 @@ export default class Common {
 
 		return scene.joystick;
 	}
+
+	spawnTreasures(scene) {
+		scene.treasures = scene.physics.add.staticGroup();
+		scene.treasuresLayer = scene.map.getObjectLayer('treasures');
+		var count = 0;
+		scene.treasuresLayer.objects.forEach((treasure) => {
+			count += 1;
+			const newTreasure = scene.physics.add.sprite(treasure.x, treasure.y, 'treasure', 8).setOrigin(0, 1);
+			newTreasure.id = count;
+			scene.treasures.add(newTreasure);
+		});	
+	}
+
+	openTreasure(player, treasure, scene) {
+		console.log('Treasure opened! Show the message');
+		// Remove the treasure from the scene
+		// treasure.disableBody(true, true);
+		// Show a message
+		scene.common.showMessage(this, 'You found a treasure!');
+
+		// Update the score (if you have a scoring system)
+		this.score += 10;
+		this.hud.updateScore(this.score);
+	}
+
+	showMessage(scene, message) {
+		const padding = 20;
+		const boxWidth = scene.cameras.main.width / 2.3 - padding * 2;
+		const boxHeight = 100;
+		const centerX = scene.cameras.main.centerX;
+		const centerY = scene.cameras.main.centerY;
+		const boxX = centerX - boxWidth / 2;
+		const boxY = centerY - boxHeight / 2;
+	
+		const graphics = scene.add.graphics();
+		graphics.fillStyle(0x000000, 1);
+		graphics.fillRect(boxX, boxY, boxWidth, boxHeight);
+		graphics.lineStyle(4, 0xffffff);
+		graphics.strokeRect(boxX, boxY, boxWidth, boxHeight);
+		
+		const text = scene.add.text(centerX, centerY, message, {
+			fontSize: '24px',
+			fill: '#ffffff'
+		});
+		text.setOrigin(0.5);
+	
+		graphics.setScrollFactor(0);
+		text.setScrollFactor(0);
+
+		this.messageBox.push(graphics, text);
+		scene.messageDisplaying = true;
+	}
+
+	destroyMessageBox() {
+		if (this.messageBox && this.messageBox.length > 0) {
+		  this.messageBox.forEach(element => {
+			element.destroy();
+		  });
+		  this.messageBox = [];
+		}
+	}
 	
 	addColliders(scene) {
 		// Add colliders
@@ -34,6 +99,7 @@ export default class Common {
 		scene.physics.add.collider(scene.player, scene.walls);
 		scene.physics.add.collider(scene.player, scene.bridge);
 		scene.physics.add.collider(scene.player, scene.coins);
+		scene.physics.add.collider(scene.treasures, scene .ground);
 	}
 
 	setCollisions(scene){

@@ -17,8 +17,8 @@ Access the UI: http://localhost:8000
 ## Deploy on Cloud Run
 
 ```bash
-gcloud builds submit --tag gcr.io/xavi-332016/game .
-gcloud run deploy game --image gcr.io/xavi-332016/game --region europe-west1 --platform managed --allow-unauthenticated --quiet
+ gcloud builds submit --tag gcr.io/xavi-332016/game-new .
+gcloud run deploy game-new --image gcr.io/xavi-332016/game-new --region europe-west1 --platform managed --allow-unauthenticated --quiet
 ```
 
 **Troubleshoot deployment**

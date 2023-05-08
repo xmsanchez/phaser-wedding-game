@@ -16,6 +16,9 @@ export default class Level1 extends Phaser.Scene
 		this.score = 0;
 		this.player = null;
 		this.joystick = null;
+		this.messageDisplaying = false;
+
+		this.common = null;
 	}
 
 	preload()
@@ -63,11 +66,16 @@ export default class Level1 extends Phaser.Scene
 		// Load assets
 		this.load.image('tileset','assets/tilesets/tileset.png');
 		this.load.tilemapTiledJSON('map', 'assets/maps/level1.json');
-		this.load.audio('background_music', 'assets/audio/tangled.mp3');
+		// this.load.audio('background_music', 'assets/audio/tangled.mp3');
 		this.load.spritesheet('player',
 			'assets/spritesheets/player.png',
 			{ frameWidth: 16, frameHeight: 16 }
 		);
+		// Load tileset as spritesheet for objects such as the treasure
+		this.load.spritesheet('treasure', 'assets/spritesheets/treasure.png', {
+			frameWidth: 16,
+			frameHeight: 16
+		});
     }
 
 	create()
@@ -93,30 +101,25 @@ export default class Level1 extends Phaser.Scene
 		this.ladder = this.map.createLayer('ladder', tileset);
 		this.coins = this.map.createLayer('coins', tileset)
 
-		// Get the treasures object layer from the map
-		const treasuresObj = this.map.getObjectLayer('treasures');
 
-		// // Create a static group for the treasures
-		// this.treasures = this.physics.add.staticGroup();
-
-		// // Create sprites for each object in the layer
-		// treasuresObj.objects.forEach(obj => {
-		// 	const treasure = this.treasures.create(obj.x, obj.y, obj.properties.sprite);
-		// treasure.setOrigin(0, 1);
-		// });
-
-        this.physics.world.setBounds(50, 0, this.map.widthInPixels - 50, this.map.heightInPixels * tileset.tileHeight);
+		this.physics.world.setBounds(50, 0, this.map.widthInPixels - 50, this.map.heightInPixels * tileset.tileHeight);
 
 		// Create all resources
-		this.common = new Common();
+		this.common = new Common(this);
 		this.camera = new Camera();
+		this.common.spawnTreasures(this);
 		this.player = this.common.addPlayer(this);
 		this.common.addColliders(this);
 		this.common.setCollisions(this);
 		this.joystick = this.common.addInput(this).joystick;
-		this.hud = new HUD().addHud(this);
-		this.loadMusic();
+		this.hud = new HUD();
+		this.hud.addHud(this)
+		// this.loadMusic();
 
+		// Add the pointers to the create function
+		// Adding it on update will create several 'n' calls
+		this.player.addTouchScreenPointers(this);
+		this.player.setKeyboardControls(this);
 	}
 
     update() {

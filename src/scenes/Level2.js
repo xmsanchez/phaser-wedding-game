@@ -1,12 +1,13 @@
 import Common from '../classes/Common.js';
 import Camera from '../classes/Camera.js';
 import HUD from '../classes/HUD.js';
+import Level1 from '../scenes/Level1.js';
 
-export default class Level1 extends Phaser.Scene
+export default class Level2 extends Phaser.Scene
 {
 	constructor()
 	{
-		super('Level1');
+		super('Level2');
 		this.jumpKeyReleased = true;
 		this.jump = false;
 		this.moveLeft = false;
@@ -17,7 +18,7 @@ export default class Level1 extends Phaser.Scene
 		this.player = null;
 		this.joystick = null;
 		this.messageDisplaying = false;
-		this.startScene = false;
+		this.startScene = null;
 
 		this.common = null;
 	}
@@ -66,7 +67,7 @@ export default class Level1 extends Phaser.Scene
     
 		// Load assets
 		this.load.image('tileset','assets/tilesets/tileset.png');
-		this.load.tilemapTiledJSON('level1', 'assets/maps/level1.json');
+		this.load.tilemapTiledJSON('level2', 'assets/maps/level2.json');
 		this.load.audio('background_music', 'assets/audio/tangled.mp3');
 		this.load.audio('audio_coin', 'assets/audio/coin.mp3');
 		this.load.audio('audio_chest_opened', 'assets/audio/new_item.mp3');
@@ -89,7 +90,7 @@ export default class Level1 extends Phaser.Scene
 	create()
 	{
 		// Create the tilemap using the loaded JSON file
-		this.map = this.make.tilemap({ key: 'level1'});
+		this.map = this.make.tilemap({ key: 'level2' });
 	
 		// Add the loaded tiles image asset to the map
 		const tileset = this.map.addTilesetImage('tileset', 'tileset');
@@ -103,8 +104,8 @@ export default class Level1 extends Phaser.Scene
 		this.trees_fg = this.map.createLayer('trees_fg', tileset);
 		this.ground_bg = this.map.createLayer('ground_bg', tileset);
 		this.ground = this.map.createLayer('ground_fg', tileset);
-		this.rocks = this.map.createLayer('rocks', tileset);
 		this.walls = this.map.createLayer('walls', tileset);
+		this.rocks = this.map.createLayer('rocks', tileset);
 		this.bridge = this.map.createLayer('bridge', tileset);
 		this.platforms = this.map.createLayer('platforms', tileset);
 		this.grass = this.map.createLayer('grass', tileset)
@@ -141,12 +142,11 @@ export default class Level1 extends Phaser.Scene
 		// Setup camera bounds and zoom
 		this.camera.setCamera(this, 2.40);
 
-		if (this.startScene) {
-			console.log('Stop scene Level1, start scene Level2');
-			this.startScene = false; // Reset the flag
-			this.scene.stop('Level1');
+		if(this.startScene != null){
+			console.log('Stop scene Level2, start scene Level1');
+			this.scene.stop('Level2');
 			this.backgroundMusic.stop();
-			this.scene.start('Level2');
+			this.scene.start('Level1');
 		}
     }
 

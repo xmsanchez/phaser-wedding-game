@@ -1,6 +1,7 @@
 import Phaser from 'phaser'
 import MainMenu from './scenes/MainMenu'
 import Level1 from './scenes/Level1'
+import Level2 from './scenes/Level2'
 
 const config = {
 	type: Phaser.AUTO,
@@ -9,7 +10,8 @@ const config = {
 	// width: window.innerWidth,
 	// height: window.innerHeight,
     scale: {
-        mode: Phaser.Scale.FIT,
+        // mode: Phaser.Scale.ENVELOP,
+		mode: Phaser.Scale.FIT,
     },
 	physics: {
 		default: 'arcade',
@@ -22,8 +24,7 @@ const config = {
         pixelArt: true,
         roundPixels: true
     },
-	// scene: [ MainMenu, Level1 ]
-	scene: [ Level1 ]
+	scene: [ Level1, Level2 ]
 }
 
 export default new Phaser.Game(config)

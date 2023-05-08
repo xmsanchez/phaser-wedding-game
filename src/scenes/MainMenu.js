@@ -5,12 +5,11 @@ export default class MainMenu extends Phaser.Scene
 		super('MainMenu');
 	}
 
-	preload()
-    {	
+	preload() {	
+
     }
 
-	create()
-	{		
+	create() {		
 		const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
 		const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
 

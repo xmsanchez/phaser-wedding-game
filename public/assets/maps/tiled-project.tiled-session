@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level2.json",
+    "activeFile": "level1.json",
     "automapping.whileDrawing": true,
     "expandedProjectPaths": [
         "."
@@ -22,14 +22,14 @@
         },
         "level1.json": {
             "expandedObjectLayers": [
-                24,
-                27
+                27,
+                24
             ],
             "scale": 1.0182812499999998,
             "selectedLayer": 12,
             "viewCenter": {
-                "x": 800.8592910848553,
-                "y": 317.69218965781806
+                "x": 299.03329752953823,
+                "y": 493.478594445297
             }
         },
         "level1.json#objects_16x16": {
@@ -50,8 +50,8 @@
             "scale": 2,
             "selectedLayer": 12,
             "viewCenter": {
-                "x": 409.75,
-                "y": 428.25
+                "x": 156.75,
+                "y": 461.25
             }
         },
         "level2.json#objects_16x16": {
@@ -67,8 +67,8 @@
             "scale": 3,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 207.16666666666663,
-                "y": 159.5
+                "x": 159.83333333333334,
+                "y": 160.16666666666669
             }
         },
         "rule1.tmx#tileset": {
@@ -102,9 +102,9 @@
     "project": "tiled-project.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "level1.json",
         "rule1.tmx",
         "level2.json",
+        "level1.json",
         "test.tmx"
     ],
     "tileset.embedInMap": true,

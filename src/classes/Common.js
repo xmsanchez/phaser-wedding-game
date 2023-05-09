@@ -37,6 +37,17 @@ export default class Common {
 		return scene.joystick;
 	}
 
+	getTreasureContains(scene, treasure, newTreasure) {
+		const contains = treasure.properties.find(obj => obj.name === "contains");
+		newTreasure.contains = contains.value;
+		if (contains.value == 'key'){
+			newTreasure.containsText = 'una clau';
+		}else{
+			newTreasure.containsText = contains.value;
+		}
+		return newTreasure
+	}
+
 	spawnTreasures(scene) {
 		scene.treasures = scene.physics.add.staticGroup();
 		scene.treasuresLayer = scene.map.getObjectLayer('treasures');
@@ -45,6 +56,7 @@ export default class Common {
 			count += 1;
 			const newTreasure = scene.physics.add.sprite(treasure.x, treasure.y, 'treasure', 8).setOrigin(0, 1);
 			newTreasure.id = count;
+			newTreasure.contains = this.getTreasureContains(scene, treasure, newTreasure);
 			scene.treasures.add(newTreasure);
 		});	
 	}
@@ -102,10 +114,10 @@ export default class Common {
 		
 		scene.common.chest_opened_sound.play();
 		// Show a message
-		scene.common.showMessage(this, 'Has trobat un tresor!');
+		scene.common.showMessage(this, 'Has trobat ' + treasure.containsText + '!');
 		
 		// Add a new object to the inventory
-		scene.hud.inventory.push('key');
+		scene.hud.inventory.push(treasure.contains);
 		scene.hud.updateInventory(scene);
 	}
 

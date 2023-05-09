@@ -34,6 +34,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 				scene.player.setDragX(drag);
 				scene.player.anims.play('idle', true);
 			}
+		}else{
+			scene.player.setAccelerationX(0);
+			scene.player.setDragX(drag);
+			scene.player.anims.play('idle', true);
 		}
 
 		if (this.jump && scene.player.body.onFloor() && this.jumpKeyReleased) {
@@ -67,24 +71,29 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
 		// Add a listener for the 'pointerup' event, which fires when the button is released
 		scene.interactBtn.on('pointerdown', () => {
-			const overlappingTreasures = this.isOverlappingTreasures(scene);
-			const overlappingDoors = this.isOverlappingDoors(scene);
-			console.log('Overlapping treasures and doors: ' + overlappingTreasures.length + ' ' + overlappingDoors.length);
-			if (overlappingTreasures.length > 0) {
-				overlappingTreasures.forEach((treasure) => {
-					scene.common.openTreasure(this, treasure, scene);
-				});
-			} else if (overlappingDoors.length > 0) {
-				overlappingDoors.forEach((door) => {
-					scene.common.openDoor(this, door, scene);
-				});
-			} else if (scene.messageDisplaying) {
-				scene.messageDisplaying = false;
-				scene.common.destroyMessageBox();
-			} else if (scene.player.body.onFloor()) {
-				this.jump = true;
-			}
+			this.checkInteractBtn(scene);
 		});
+	}
+
+	checkInteractBtn(scene) {
+		const overlappingTreasures = this.isOverlappingTreasures(scene);
+		const overlappingDoors = this.isOverlappingDoors(scene);
+		console.log('Overlapping treasures: ' + overlappingTreasures.length);
+		console.log('Overlapping doors: ' + overlappingDoors.length);
+		if (overlappingTreasures.length > 0) {
+			overlappingTreasures.forEach((treasure) => {
+				scene.common.openTreasure(this, treasure, scene);
+			});
+		} else if (overlappingDoors.length > 0) {
+			overlappingDoors.forEach((door) => {
+				scene.common.openDoor(this, door, scene);
+			});
+		} else if (scene.messageDisplaying) {
+			scene.messageDisplaying = false;
+			scene.common.destroyMessageBox();
+		} else if (scene.player.body.onFloor()) {
+			this.jump = true;
+		}
 	}
 
 	readTouchInput() {
@@ -121,24 +130,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		})
 		scene.cursors.space.on('down', () => {
 			if(scene.player.body.onFloor()){
-				const overlappingTreasures = this.isOverlappingTreasures(scene);
-				const overlappingDoors = this.isOverlappingDoors(scene);
-				console.log('Overlapping treasures: ' + overlappingTreasures.length);
-				console.log('Overlapping doors: ' + overlappingDoors.length);
-				if (overlappingTreasures.length > 0) {
-					overlappingTreasures.forEach((treasure) => {
-						scene.common.openTreasure(this, treasure, scene);
-					});
-				} else if (overlappingDoors.length > 0) {
-					overlappingDoors.forEach((door) => {
-						scene.common.openDoor(this, door, scene);
-					});
-				} else if (scene.messageDisplaying) {
-					scene.messageDisplaying = false;
-					scene.common.destroyMessageBox();
-				} else if (scene.player.body.onFloor()) {
-					this.jump = true;
-				}
+				this.checkInteractBtn(scene);
 			}
 		})
 		scene.cursors.left.on('up', () => {

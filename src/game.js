@@ -24,7 +24,7 @@ const config = {
         pixelArt: true,
         roundPixels: true
     },
-	scene: [ Level1, Level2 ]
+	scene: [ MainMenu, Level1, Level2 ]
 }
 
 export default new Phaser.Game(config)

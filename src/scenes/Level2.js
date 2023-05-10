@@ -67,6 +67,7 @@ export default class Level2 extends Phaser.Scene
     
 		// Load assets
 		this.load.image('tileset','assets/tilesets/tileset.png');
+		this.load.image('disney_castle_256','assets/tilesets/disney_castle_256.png');
 		this.load.tilemapTiledJSON('level2', 'assets/maps/level2.json');
 		this.load.audio('background_music', 'assets/audio/tangled.mp3');
 		this.load.audio('audio_coin', 'assets/audio/coin.mp3');
@@ -94,7 +95,7 @@ export default class Level2 extends Phaser.Scene
 	
 		// Add the loaded tiles image asset to the map
 		const tileset = this.map.addTilesetImage('tileset', 'tileset');
-		const objects = this.map.addTilesetImage('objects', 'objects');
+		const disney_castle_256 = this.map.addTilesetImage('disney_castle_256', 'disney_castle_256');
 
 		this.sky_bg = this.map.createLayer('sky_bg', tileset).scrollFactorX = 0.5;
 		this.sky_fg = this.map.createLayer('sky_fg', tileset).scrollFactorX = 0.6;
@@ -104,9 +105,10 @@ export default class Level2 extends Phaser.Scene
 		this.trees_fg = this.map.createLayer('trees_fg', tileset);
 		this.ground_bg = this.map.createLayer('ground_bg', tileset);
 		this.ground = this.map.createLayer('ground_fg', tileset);
+		this.castle = this.map.createLayer('castle', disney_castle_256);
 		this.walls = this.map.createLayer('walls', tileset);
 		this.rocks = this.map.createLayer('rocks', tileset);
-		this.bridge = this.map.createLayer('bridge', tileset);
+		// this.bridge = this.map.createLayer('bridge', tileset);
 		this.platforms = this.map.createLayer('platforms', tileset);
 		this.grass = this.map.createLayer('grass', tileset)
 		

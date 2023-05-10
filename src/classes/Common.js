@@ -32,7 +32,8 @@ export default class Common {
 		console.log('Canvas width: ' + canvasWidth);
 		scene.input.addPointer(1);
 		scene.joystick = new Joystick(scene, 300, (canvasHeight / 2) * 1.3);
-		scene.interactBtn = scene.joystick.createInteractButton(scene, canvasWidth - 300, (canvasHeight / 2) * 1.3);
+		scene.jumpBtn = scene.joystick.createJumpButton(scene, canvasWidth - 300, (canvasHeight / 2) * 1.3);
+		scene.interactBtn = scene.joystick.createInteractButton(scene, canvasWidth - 380, (canvasHeight / 2) * 1.34);
 
 		return scene.joystick;
 	}
@@ -78,16 +79,22 @@ export default class Common {
 	}
 
 	openTreasure(player, treasure, scene) {
-		console.log('Treasure opened! Show the message');
-		
-		scene.common.chest_opened_sound.play();
-		// Show a message
-		scene.common.showMessage(this, 'Has trobat ' + treasure.containsText + '!');
-		
-		// Add a new object to the inventory
-		console.log('Add treasure contents to the inventory: ' + treasure.contents);
-		scene.hud.inventory.push(treasure.contents);
-		scene.hud.updateInventory(scene);
+		console.log('Check if treasure is opened: ' + treasure.opened);
+		if(!treasure.opened){
+			treasure.opened = true;
+			treasure.setFrame(11);
+			console.log(treasure)
+				
+			
+			scene.common.chest_opened_sound.play();
+			// Show a message
+			scene.common.showMessage(this, 'Has trobat ' + treasure.containsText + '!');
+			
+			// Add a new object to the inventory
+			console.log('Add treasure contents to the inventory: ' + treasure.contents);
+			scene.hud.inventory.push(treasure.contents);
+			scene.hud.updateInventory(scene);
+		}
 	}
 
 	spawnTreasures(scene) {
@@ -131,74 +138,99 @@ export default class Common {
 
 			// Custom data must be accessed from here and assigned to the new object...
 			newdoor.name = door.name;
-			// newdoor.data = door.properties;
+			console.log('Door ' + door.name + ' props:', door.properties);
+
+			newdoor.isEntry = door.properties.find(obj => obj.name === "isEntry").value;
+			newdoor.isExit = door.properties.find(obj => obj.name === "isExit").value;
+			newdoor.opened = door.properties.find(obj => obj.name === "opened").value;
+
 			scene.doors.add(newdoor);
 		});	
 	}
 
-	translatePlayerPosition(player, door, scene) {
+	translatePlayerPosition(player, door, targetDoor, scene) {
 		// Find the door2_2 object
-		const door2_2 = scene.doors.getChildren().find(child => child.name === 'door2_2');
+		const target = scene.doors.getChildren().find(child => child.name === targetDoor);
 
-		if (door2_2) {
+		if (target) {
 			// Move the player to the location of door2_2
-			player.x = door2_2.x + door2_2.width / 2;
-			player.y = door2_2.y;
+			player.x = target.x + target.width / 2;
+			player.y = target.y;
 		} else {
-			console.error("Door 'door2_2' not found in this.doors");
+			console.error("Door '" + target + "' not found in this.doors");
 		}
 	}
 
-	openDoor(player, door, scene) {
-		console.log('You found a door');
+	// The player has no keys. They can't open the door.
+	doorNoKeyMessage(player, door, scene, key) {
+		console.log('Key is: ' + key);
+		console.log('Message is displaying? ' + scene.messageDisplaying);
+		if(scene.messageDisplaying){
+			scene.messageDisplaying = false;
+			this.destroyMessageBox();
+		}else{
+			scene.common.showMessage(this, 'La porta està tancada.\nNecessites una clau!.');
+		}
+	}
+
+	// The player has a key. They can open the door.
+	doorOpenWithKey(player, door, scene) {
+		door.opened = true; 
+
+		// Remove the used from the inventory
+		scene.hud.inventory.pop('key');
+		scene.hud.updateInventory(scene);
+		
+		scene.common.showMessage(this, 'Utilitzes la clau!\nObres la porta...');
+	}
+
+	// Check if the door can be opened or is already opened.
+	checkIfCanOpenDoor(player, door, scene) {
 		var inventory = scene.hud.inventory;
 		var key = null;
-		console.log('Inventory length: ' + inventory.length);
+		
 		console.log('Inventory contents: ' + JSON.stringify(inventory));
 		console.log(JSON.stringify(inventory))
 		for (var i = 0; i < inventory.length; i++) {
 			if (inventory[i] == 'key') {
+				console.log('The user has a key!');
 				key = i;
 			}
 		}
 
-		const doorName = door.name;
-		console.log('Key is: ' + key);
-		console.log('Door opened is: ' + door.opened);
+		// The player has no key and the door is currently closed
+		if (key == null && !door.opened) {
+			console.log('The player has no key and the door is currently closed. Message displaying: ' + scene.messageDisplaying);
+			this.doorNoKeyMessage(player, door, scene, key);
 
-		if (key == null && door.opened == null) {
-			console.log('Key is: ' + key);
-			console.log('Door opened is: ' + door.opened);
-			if(scene.messageDisplaying) {
+		// The player has the key o the door was already opened!
+		}else{
+			console.log('The player has the key OR the door is opened');
+			if(!door.opened && !scene.messageDisplaying){
+				this.doorOpenWithKey(player, door, scene);
+			}else{
 				scene.messageDisplaying = false;
 				this.destroyMessageBox();
-			}else{
-				scene.common.showMessage(this, 'La porta està tancada.\nNecessites una clau!.');
 			}
-
-		// The player has the key!
-		}else{
-			door.opened = true;
-
-			// Remove the used from the inventory
-			scene.hud.inventory.pop('key');
-			scene.hud.updateInventory(scene);
-			
-			scene.common.showMessage(this, 'Utilitzes la clau!\nObres la porta...');
+			console.log('The player has a key or the door was already opened');
 
 			// Doors Level1
-			if (doorName == 'door1_1'){
+			if (door.name == 'door1_1'){
 				// Start a new scene
 				console.log('door1_1 interacted. Start a new scene');
 				this.scene.startScene = true;
 
 			// Doors Level2
-			}else if (doorName == 'door1_2') {
-				console.log('We found the door number 1!');
+			}else if (door.name == 'door1_2') {
 				// Move the player to the location of door number2
-				this.translatePlayerPosition(player, doorName, scene);
+				this.translatePlayerPosition(player, door.name, 'door2_2', scene);
+			}else if (door.name == 'door2_2') {
+				// Move the player to the location of door number3
+				this.translatePlayerPosition(player, door.name, 'door1_2', scene);
 			}
 		}
+		console.log(JSON.stringify(door))
+		console.log('Door is opened: ' + door.opened);
 	}
 
 	showMessage(scene, message) {

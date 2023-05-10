@@ -12,13 +12,58 @@ export default class Joystick {
         });
     }
 
-	createInteractButton = function (scene, x, y) {
-		var btn = scene.add.circle(x, y, 50, 0x888888).setAlpha(0.3);
+	createJumpButton = function (scene, x, y) {
+		var btn = scene.add.circle(x, y, 50, 0x008000).setAlpha(0.3);
 		btn.scrollFactorX = 0;
 		btn.scrollFactorY = 0;
 
-		// Enable touch input on the button
-		btn.setInteractive();
+        // Add text to the circle
+        var textStyle = {
+            font: '38px Arial',
+            fill: '#ffffff'
+        };
+        var text = 'A';
+        var textElement = scene.add.text(x, y, text, textStyle).setOrigin(0.5);
+        textElement.scrollFactorX = 0;
+        textElement.scrollFactorY = 0;
+
+        // Enable touch input on the button
+        btn.setInteractive();
+
+        // Create a container to group the circle and text
+        var container = scene.add.container(0, 0, [btn, textElement]);
+        container.setSize(btn.width, btn.height);
+
+        // Enable touch input on the container
+        container.setInteractive({ useHandCursor: true });
+
+		return btn;
+	}
+
+	createInteractButton = function (scene, x, y) {
+		var btn = scene.add.circle(x, y, 20, 0xFF0000).setAlpha(0.3);
+		btn.scrollFactorX = 0;
+		btn.scrollFactorY = 0;
+
+        // Add text to the circle
+        var textStyle = {
+            font: '24px Arial',
+            fill: '#ffffff'
+        };
+        var text = 'B';
+        var textElement = scene.add.text(x, y, text, textStyle).setOrigin(0.5);
+        textElement.scrollFactorX = 0;
+        textElement.scrollFactorY = 0;
+
+        // Enable touch input on the button
+        btn.setInteractive();
+
+        // Create a container to group the circle and text
+        var container = scene.add.container(0, 0, [btn, textElement]);
+        container.setSize(btn.width, btn.height);
+
+        // Enable touch input on the container
+        container.setInteractive({ useHandCursor: true });
 
 		return btn;
 	}

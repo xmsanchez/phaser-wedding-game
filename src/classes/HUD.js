@@ -23,7 +23,6 @@ export default class HUD {
     }
     
     updateInventory(scene) {
-        console.log('Update inventory display. Inventory is ' + this.inventory);
         // Clear the previous inventory display
         this.inventoryDisplay.removeAll(true);
 

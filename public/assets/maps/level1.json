@@ -677,6 +677,11 @@
                          "name":"isExit",
                          "type":"bool",
                          "value":false
+                        }, 
+                        {
+                         "name":"opened",
+                         "type":"bool",
+                         "value":false
                         }],
                  "rotation":0,
                  "type":"",

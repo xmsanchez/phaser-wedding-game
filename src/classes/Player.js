@@ -73,25 +73,43 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		scene.interactBtn.on('pointerdown', () => {
 			this.checkInteractBtn(scene);
 		});
+
+		// Add a listener for the 'pointerup' event, which fires when the button is released
+		scene.jumpBtn.on('pointerdown', () => {
+			this.checkJumpBtn(scene);
+		});
+	}
+
+	// Check if the message box must be destroyed
+	checkIfMessageBoxMustBeDestroyed(scene) {
+		if (scene.messageDisplaying) {
+			console.log('Checking interact button. Destroying the message box.');
+			scene.messageDisplaying = false;
+			scene.common.destroyMessageBox();
+		}	
 	}
 
 	checkInteractBtn(scene) {
+		// Check overlaps
 		const overlappingTreasures = this.isOverlappingTreasures(scene);
 		const overlappingDoors = this.isOverlappingDoors(scene);
 		console.log('Overlapping treasures: ' + overlappingTreasures.length);
 		console.log('Overlapping doors: ' + overlappingDoors.length);
 		if (overlappingTreasures.length > 0) {
 			overlappingTreasures.forEach((treasure) => {
+				this.checkIfMessageBoxMustBeDestroyed(scene);
 				scene.common.openTreasure(this, treasure, scene);
 			});
 		} else if (overlappingDoors.length > 0) {
 			overlappingDoors.forEach((door) => {
-				scene.common.openDoor(this, door, scene);
+				//this.checkIfMessageBoxMustBeDestroyed(scene);
+				scene.common.checkIfCanOpenDoor(this, door, scene);
 			});
-		} else if (scene.messageDisplaying) {
-			scene.messageDisplaying = false;
-			scene.common.destroyMessageBox();
-		} else if (scene.player.body.onFloor()) {
+		}
+	}
+
+	checkJumpBtn(scene) {
+		if (scene.player.body.onFloor()) {
 			this.jump = true;
 		}
 	}
@@ -117,6 +135,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 	setKeyboardControls(scene) {
 		// Keyboard ccontrols
+		const enterKey = scene.input.keyboard.addKey('ENTER');
 		scene.cursors = scene.input.keyboard.createCursorKeys();
 		scene.cursors.left.on('down', () => {
 			console.log('Keyboard LEFT');
@@ -127,12 +146,15 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 			console.log('Keyboard RIGHT');
 			this.moveRight = true;
 			this.moveLeft = false;
-		})
+		});
 		scene.cursors.space.on('down', () => {
 			if(scene.player.body.onFloor()){
-				this.checkInteractBtn(scene);
+				this.checkJumpBtn(scene);
 			}
-		})
+		});
+		enterKey.on('down', () => {
+			this.checkInteractBtn(scene);
+		});
 		scene.cursors.left.on('up', () => {
 			this.moveLeft = false;
 			this.moveRight = false;
@@ -150,11 +172,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		// console.log('Check if overlaps with TREASURES');
 		const overlaps = [];
 		scene.physics.world.overlap(this, scene.treasures.getChildren(), (player, treasure) => {
-			if (treasure.opened){
-				return;
-			}
-			treasure.opened = true;
-			treasure.setFrame(11);
 			overlaps.push(treasure);
 		});
 		return overlaps;
@@ -186,9 +203,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 	isOverlappingDoors(scene) {
 		const overlaps = [];
 		scene.physics.world.overlap(this, scene.doors.getChildren(), (player, door) => {
-			if (door.opened){
-				return;
-			}
 			overlaps.push(door);
 		});
 		return overlaps;

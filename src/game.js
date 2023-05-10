@@ -7,8 +7,6 @@ const config = {
 	type: Phaser.AUTO,
 	width: 800,
 	height: 1200,
-	// width: window.innerWidth,
-	// height: window.innerHeight,
     scale: {
         // mode: Phaser.Scale.ENVELOP,
 		mode: Phaser.Scale.FIT,

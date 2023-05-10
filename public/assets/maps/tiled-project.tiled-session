@@ -29,7 +29,7 @@
             "selectedLayer": 13,
             "viewCenter": {
                 "x": 847.0154979284949,
-                "y": 432.5916832898574
+                "y": 431.6096363357374
             }
         },
         "level1.json#objects_16x16": {
@@ -43,15 +43,15 @@
         },
         "level2.json": {
             "expandedObjectLayers": [
-                15,
                 16,
-                14
+                14,
+                15
             ],
             "scale": 1,
-            "selectedLayer": 12,
+            "selectedLayer": 14,
             "viewCenter": {
-                "x": 842.5,
-                "y": 319.5
+                "x": 841.5,
+                "y": 318.5
             }
         },
         "level2.json#disney_castle_256": {
@@ -70,8 +70,8 @@
             "scale": 3,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 160,
-                "y": 159.83333333333331
+                "x": 160.16666666666669,
+                "y": 160.16666666666669
             }
         },
         "rule1.tmx#tileset": {
@@ -105,8 +105,8 @@
     "project": "tiled-project.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "level1.json",
         "rule1.tmx",
+        "level1.json",
         "level2.json",
         "test.tmx"
     ],

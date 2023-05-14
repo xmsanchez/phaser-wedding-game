@@ -40,23 +40,6 @@ export default class Joystick {
 		return btn;
 	}
 
-    // This is to display on messages
-    createButtonIcon = function (scene, x, y, buttonText) {
-        var btn = scene.add.circle(x, y, 10, 0xFF0000).setAlpha(0.3);
-		btn.scrollFactorX = 0;
-		btn.scrollFactorY = 0;
-
-        // Add text to the circle
-        var textStyle = {
-            font: '24px Arial',
-            fill: '#ffffff'
-        };
-        var text = buttonText;
-        var textElement = scene.add.text(x, y, text, textStyle).setOrigin(0.5);
-        textElement.scrollFactorX = 0;
-        textElement.scrollFactorY = 0;
-    }
-
 	createInteractButton = function (scene, x, y) {
 		var btn = scene.add.circle(x, y, 20, 0xFF0000).setAlpha(0.3);
 		btn.scrollFactorX = 0;

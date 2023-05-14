@@ -62,8 +62,7 @@ export default class Level1 extends Phaser.Scene
 		this.common.spawnTreasures(this);
 		this.common.spawnCoins(this);
 		this.common.spawnDoors(this);
-		this.common.spawnNpcs(this, 'npc_mi', 4);
-		this.common.spawnNpcs(this, 'npc_xavi', 7);
+		this.common.spawnNpcs(this, 'npcs', 4);
 
 		// Spawn player
 		this.player = this.common.addPlayer(this);
@@ -79,6 +78,8 @@ export default class Level1 extends Phaser.Scene
 		// Add controls
 		this.player.addTouchScreenPointers(this);
 		this.player.setKeyboardControls(this);
+
+		this.common.createButtonIcon(this, this.player.x, this.player.y - 20, 'Test');
 	}
 
 	update() {
@@ -92,18 +93,11 @@ export default class Level1 extends Phaser.Scene
 		this.npcs.getChildren().forEach((npc) => {
 			const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
 			if (distance < 50 && this.firstInteraction) {
+				npc.setFrame(4);
 				console.log('Show message from NPCs');
 				let text = 'Som el Xavi i la Miriam!\nSaps què? Ens casem!!\nEl problema és que hem perdut el mapa de la ubicació.\nEns ajudes a trobar-lo?'
 				this.common.showMessage(this, text);
 			}
-			// this.input.on('pointerdown', (pointer) => {
-			// 	if(this.firstInteraction === true){
-			// 		console.log('This is first interaction? ' + this.firstInteraction + '. Message is displaying? ' + this.messageDisplaying);
-			// 		this.firstInteraction = false;
-			// 		this.messageDisplaying = false;
-			// 		this.common.destroyMessageBox();
-			// 	}
-			// })
 		});
 		
 	

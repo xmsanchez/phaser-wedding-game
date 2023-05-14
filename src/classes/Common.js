@@ -69,22 +69,6 @@ export default class Common {
 		scene.physics.world.setBoundsCollision(true, true, true, true);
 	}
 
-	getTreasureContents(scene, treasure, newTreasure) {
-		const contains = treasure.properties.find(obj => obj.name === "contains");
-		console.log('Contains.value is: ' + contains.value);
-		newTreasure.contents = contains.value;
-		if (contains.value == 'key'){
-			newTreasure.containsText = 'una clau';
-		}else if (contains.value == 'map'){
-			newTreasure.containsText = 'un mapa';
-		}else{
-			newTreasure.containsText = contains.value;
-		}
-		console.log('Contains.value is: ' + contains.value);
-		console.log('Newtreasure.contents is: ' + newTreasure.contents);
-		return newTreasure
-	}
-
 	openTreasure(player, treasure, scene) {
 		console.log('Check if treasure is opened: ' + treasure.opened);
 		if(!treasure.opened){
@@ -103,22 +87,20 @@ export default class Common {
 		}
 	}
 
-	checkNpcActions(player, npc, scene) {
-		console.log('Perform actions with NPCs here');
-	}
-
-	spawnNpcs(scene, layer, frame) {
-		scene.npcs = scene.physics.add.staticGroup();
-		scene.npcsLayer = scene.map.getObjectLayer(layer);
-		var count = 0;
-		scene.npcsLayer.objects.forEach((npc) => {
-			count += 1;
-			const newnpc = scene.physics.add.sprite(npc.x, npc.y, layer, frame).setOrigin(0, 1)
-			newnpc.setImmovable(true)
-			newnpc.body.setAllowGravity(false);
-			newnpc.id = count;
-			scene.npcs.add(newnpc);
-		});	
+	getTreasureContents(scene, treasure, newTreasure) {
+		const contains = treasure.properties.find(obj => obj.name === "contains");
+		console.log('Contains.value is: ' + contains.value);
+		newTreasure.contents = contains.value;
+		if (contains.value == 'key'){
+			newTreasure.containsText = 'una clau';
+		}else if (contains.value == 'map'){
+			newTreasure.containsText = 'un mapa';
+		}else{
+			newTreasure.containsText = contains.value;
+		}
+		console.log('Contains.value is: ' + contains.value);
+		console.log('Newtreasure.contents is: ' + newTreasure.contents);
+		return newTreasure
 	}
 
 	spawnTreasures(scene) {
@@ -132,6 +114,31 @@ export default class Common {
 			newTreasure = this.getTreasureContents(scene, treasure, newTreasure);
 			scene.treasures.add(newTreasure);
 			console.log('Newtreasure.contents is: ' + newTreasure.contents);
+		});	
+	}
+	checkNpcActions(player, npc, scene) {
+		console.log('Perform actions with NPCs here');
+	}
+
+	spawnNpcs(scene, layer, frame) {
+		scene.npcs = scene.physics.add.staticGroup();
+		scene.npcsLayer = scene.map.getObjectLayer(layer);
+		var count = 0;
+		scene.npcsLayer.objects.forEach((npc) => {
+			count += 1;
+			const contains = npc.properties.find(obj => obj.name === "contains");
+			const default_frame = npc.properties.find(obj => obj.name === "default_frame");
+			const spritesheet = npc.properties.find(obj => obj.name === "spritesheet");
+			console.log('Contains.value is: ' + contains.value);
+			console.log('default_frame.value is: ' + default_frame.value);
+			var newnpc = scene.physics.add.sprite(npc.x, npc.y, spritesheet.value, default_frame.value).setOrigin(0, 1);
+			newnpc.contents = contains.value;
+			newnpc.default_frame = default_frame.value;
+			newnpc.setImmovable(true)
+			newnpc.body.setAllowGravity(false);
+			newnpc.id = count;
+			scene.npcs.add(newnpc);
+			console.log('Spawn NPC: ' + JSON.stringify(newnpc));
 		});	
 	}
 
@@ -265,7 +272,7 @@ export default class Common {
 		const boxX = centerX - boxWidth / 2;
 	  
 		const textConfig = {
-		  fontSize: '24px',
+		  fontSize: '18px',
 		  fill: '#ffffff',
 		  wordWrap: { width: boxWidth - padding * 2, useAdvancedWrap: true },
 		};
@@ -318,4 +325,31 @@ export default class Common {
 		  this.messageBox = [];
 		}
 	}
+
+    // This is to display on messages
+    createButtonIcon = function (scene, x, y, buttonText) {
+		console.log('Add button icon at ' + x + ', ' + y + ' with text ' + buttonText);
+        var btn = scene.add.circle(x, y, 10, 0xFF0000).setAlpha(0.3);
+		btn.scrollFactorX = 0;
+		btn.scrollFactorY = 0;
+
+        // Add text to the circle
+        var textStyle = {
+            font: '24px Arial',
+            fill: '#ffffff'
+        };
+        var text = buttonText;
+        var textElement = scene.add.text(x, y, text, textStyle).setOrigin(0.5);
+        textElement.scrollFactorX = 0;
+        textElement.scrollFactorY = 0;
+
+        // Create a container to group the circle and text
+        var container = scene.add.container(0, 0, [btn, textElement]);
+        container.setSize(btn.width, btn.height);
+
+        // Enable touch input on the container
+        container.setInteractive({ useHandCursor: true });
+		
+		scene.add.container(x, y, [btn, textElement]);
+    }
 }

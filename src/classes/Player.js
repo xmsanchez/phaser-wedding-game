@@ -122,6 +122,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
 		if(scene.firstInteraction && scene.messageDisplaying){
 			console.log('First interaction! Destroy message');
+
+			scene.npcs.getChildren().forEach((npc) => {
+				console.log('Checking NPC ' + JSON.stringify(npc));
+				npc.setFrame(npc.default_frame);
+			});
+
 			scene.firstInteraction = false;
 			scene.messageDisplaying = false;
 			scene.common.destroyMessageBox();

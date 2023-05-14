@@ -1,7 +1,7 @@
 import Common from '../classes/Common.js';
 import Camera from '../classes/Camera.js';
 import HUD from '../classes/HUD.js';
-import Level1 from '../scenes/Level1.js';
+import Loading from '../classes/Loading';
 
 export default class Level2 extends Phaser.Scene
 {
@@ -24,69 +24,7 @@ export default class Level2 extends Phaser.Scene
 	}
 
 	preload()
-    {	
-		const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
-		const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
-
-		var progressBar = this.add.graphics();
-		var progressBox = this.add.graphics();
-		progressBox.fillStyle(0x222222, 0.8);
-		progressBox.fillRect(240, screenCenterY - 50, 320, 50);
-
-		this.load.on('progress', function (value) {
-			console.log(value);
-			progressBar.clear();
-			progressBar.fillStyle(0xffffff, 1);
-			progressBar.fillRect(250, screenCenterY - 40, 300 * value, 30);
-		});
-
-		var assetText = this.make.text({
-			x: screenCenterX,
-			y: screenCenterY + 50,
-			text: '',
-			style: {
-				font: '18px monospace'
-			}
-		});
-		assetText.setOrigin(0.5, 0.5);
-					
-		this.load.on('fileprogress', function (file) {
-			assetText.setText('Loading asset: ' + file.key);
-		});
-
-		this.load.on('complete', function () {
-			progressBar.destroy();
-			progressBox.destroy();
-		});
-
-		// Load plugins
-		var urlJoystick = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexvirtualjoystickplugin.min.js';
-		var urlButton = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbuttonplugin.min.js';
-		this.load.plugin('rexvirtualjoystickplugin', urlJoystick, true);
-		this.load.plugin('rexbuttonplugin', urlButton, true);
-    
-		// Load assets
-		this.load.image('tileset','assets/tilesets/tileset.png');
-		this.load.image('disney_castle_256','assets/tilesets/disney_castle_256.png');
-		this.load.tilemapTiledJSON('level2', 'assets/maps/level2.json');
-		this.load.audio('background_music', 'assets/audio/tangled.mp3');
-		this.load.audio('audio_coin', 'assets/audio/coin.mp3');
-		this.load.audio('audio_chest_opened', 'assets/audio/new_item.mp3');
-		this.load.spritesheet('player',
-			'assets/spritesheets/player.png',
-			{ frameWidth: 16, frameHeight: 16 }
-		);
-		// Load tileset as spritesheet for objects such as the treasure
-		this.load.spritesheet('treasure', 'assets/spritesheets/treasure.png', {
-			frameWidth: 16,
-			frameHeight: 16
-		});		
-		// Load tileset as spritesheet for objects such as the treasure
-		this.load.spritesheet('objects', 'assets/spritesheets/objects_16x16.png', {
-			frameWidth: 16,
-			frameHeight: 16
-		});
-    }
+    {}
 
 	create()
 	{
@@ -118,13 +56,15 @@ export default class Level2 extends Phaser.Scene
 		this.common = new Common(this);
 		this.camera = new Camera();
 
-		// this.common.spawnObjects(this, 'treasures', 'treasure');
-		// this.common.spawnObjects(this, 'coins', 'objects');
-		// this.common.spawnObjects(this, 'doors', 'objects');
+		// Spawn all interactable objects
 		this.common.spawnTreasures(this);
 		this.common.spawnCoins(this);
 		this.common.spawnDoors(this);
+
+		// Spawn player
 		this.player = this.common.addPlayer(this);
+
+		// Add colliders, input, hud, music
 		this.common.addColliders(this);
 		this.common.setCollisions(this);
 		this.joystick = this.common.addInput(this).joystick;

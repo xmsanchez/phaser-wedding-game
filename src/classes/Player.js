@@ -10,9 +10,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
 	// This function will run in the update loop
 	playerMovement(scene) {
-		const acceleration = 600; // Higher value for more aggressive acceleration
+		const acceleration = 500; // Higher value for more aggressive acceleration
 		const drag = 1200; // Higher value for more aggressive deceleration
-		const maxVelocityX = 220;
+		const maxVelocityX = 180;
 		const jumpVelocity = -450;
 
 		if (!scene.messageDisplaying) {
@@ -21,13 +21,21 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 				if (scene.player.body.velocity.x < -maxVelocityX) {
 					scene.player.setVelocityX(-maxVelocityX);
 				}
-				scene.player.anims.play('left', true);
+				if(scene.player.body.onFloor()){
+					scene.player.anims.play('left', true);
+				}else{
+					scene.player.anims.play('jumpLeft', true);
+				}
 			} else if (this.moveRight) {
 				scene.player.setAccelerationX(acceleration);
 				if (scene.player.body.velocity.x > maxVelocityX) {
 					scene.player.setVelocityX(maxVelocityX);
 				}
-				scene.player.anims.play('right', true);
+				if(scene.player.body.onFloor()){
+					scene.player.anims.play('right', true);
+				}else{
+					scene.player.anims.play('jumpRight', true);
+				}
 			} else {
 				// If no keys are pressed, the player decelerates
 				scene.player.setAccelerationX(0);
@@ -71,6 +79,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
 		// Add a listener for the 'pointerup' event, which fires when the button is released
 		scene.interactBtn.on('pointerdown', () => {
+            console.log('Pointer down!');
 			this.checkInteractBtn(scene);
 		});
 
@@ -93,6 +102,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		// Check overlaps
 		const overlappingTreasures = this.isOverlappingTreasures(scene);
 		const overlappingDoors = this.isOverlappingDoors(scene);
+		const overlappingNPCs = this.isOverlappingNpcs(scene);
 		console.log('Overlapping treasures: ' + overlappingTreasures.length);
 		console.log('Overlapping doors: ' + overlappingDoors.length);
 		if (overlappingTreasures.length > 0) {
@@ -102,9 +112,19 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 			});
 		} else if (overlappingDoors.length > 0) {
 			overlappingDoors.forEach((door) => {
-				//this.checkIfMessageBoxMustBeDestroyed(scene);
 				scene.common.checkIfCanOpenDoor(this, door, scene);
 			});
+		} else if (overlappingNPCs.length > 0) {
+			overlappingNPCs.forEach((npc) => {
+				scene.common.checkNpcActions(this, npc, scene);
+			})
+		}
+
+		if(scene.firstInteraction && scene.messageDisplaying){
+			console.log('First interaction! Destroy message');
+			scene.firstInteraction = false;
+			scene.messageDisplaying = false;
+			scene.common.destroyMessageBox();
 		}
 	}
 
@@ -208,6 +228,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		return overlaps;
 	}
 
+	isOverlappingNpcs(scene) {
+		const overlaps = [];
+		scene.physics.world.overlap(this, scene.npcs.getChildren(), (player, npc) => {
+			overlaps.push(npc);
+		});
+		return overlaps;
+	}
+
 	createAnimations(scene){
 
 		this.anims.create({
@@ -240,7 +268,21 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 	
 		this.anims.create({
 			key: 'jump',
-			frames: this.anims.generateFrameNumbers('player', { start: 0, end: 2 }),
+			frames: this.anims.generateFrameNumbers('player', { start: 4, end: 4 }),
+			frameRate: 10,
+			repeat: -1
+		});
+
+		this.anims.create({
+			key: 'jumpLeft',
+			frames: this.anims.generateFrameNumbers('player', { start: 4, end: 4 }),
+			frameRate: 10,
+			repeat: -1
+		});
+
+		this.anims.create({
+			key: 'jumpRight',
+			frames: this.anims.generateFrameNumbers('player', { start: 7, end: 7 }),
 			frameRate: 10,
 			repeat: -1
 		});

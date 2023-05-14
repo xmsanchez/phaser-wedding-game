@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import MainMenu from './scenes/MainMenu'
+import PreLevel from './scenes/PreLevel'
 import Level1 from './scenes/Level1'
 import Level2 from './scenes/Level2'
 
@@ -22,7 +23,7 @@ const config = {
         pixelArt: true,
         roundPixels: true
     },
-	scene: [ MainMenu, Level1, Level2 ]
+	scene: [ MainMenu, PreLevel, Level1, Level2 ]
 }
 
 export default new Phaser.Game(config)

@@ -1,6 +1,7 @@
-import Common from '../classes/Common.js';
-import Camera from '../classes/Camera.js';
-import HUD from '../classes/HUD.js';
+import Common from '../classes/Common';
+import Camera from '../classes/Camera';
+import HUD from '../classes/HUD';
+import Loading from '../classes/Loading';
 
 export default class Level1 extends Phaser.Scene
 {
@@ -18,73 +19,15 @@ export default class Level1 extends Phaser.Scene
 		this.joystick = null;
 		this.messageDisplaying = false;
 		this.startScene = false;
+		this.npcs = null;
+
+		this.firstInteraction = true;
 
 		this.common = null;
 	}
 
 	preload()
-    {	
-		const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
-		const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
-
-		var progressBar = this.add.graphics();
-		var progressBox = this.add.graphics();
-		progressBox.fillStyle(0x222222, 0.8);
-		progressBox.fillRect(240, screenCenterY - 50, 320, 50);
-
-		this.load.on('progress', function (value) {
-			console.log(value);
-			progressBar.clear();
-			progressBar.fillStyle(0xffffff, 1);
-			progressBar.fillRect(250, screenCenterY - 40, 300 * value, 30);
-		});
-
-		var assetText = this.make.text({
-			x: screenCenterX,
-			y: screenCenterY + 50,
-			text: '',
-			style: {
-				font: '18px monospace'
-			}
-		});
-		assetText.setOrigin(0.5, 0.5);
-					
-		this.load.on('fileprogress', function (file) {
-			assetText.setText('Loading asset: ' + file.key);
-		});
-
-		this.load.on('complete', function () {
-			progressBar.destroy();
-			progressBox.destroy();
-		});
-
-		// Load plugins
-		var urlJoystick = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexvirtualjoystickplugin.min.js';
-		var urlButton = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbuttonplugin.min.js';
-		this.load.plugin('rexvirtualjoystickplugin', urlJoystick, true);
-		this.load.plugin('rexbuttonplugin', urlButton, true);
-    
-		// Load assets
-		this.load.image('tileset','assets/tilesets/tileset.png');
-		this.load.tilemapTiledJSON('level1', 'assets/maps/level1.json');
-		this.load.audio('background_music', 'assets/audio/tangled.mp3');
-		this.load.audio('audio_coin', 'assets/audio/coin.mp3');
-		this.load.audio('audio_chest_opened', 'assets/audio/new_item.mp3');
-		this.load.spritesheet('player',
-			'assets/spritesheets/player.png',
-			{ frameWidth: 16, frameHeight: 16 }
-		);
-		// Load tileset as spritesheet for objects such as the treasure
-		this.load.spritesheet('treasure', 'assets/spritesheets/treasure.png', {
-			frameWidth: 16,
-			frameHeight: 16
-		});		
-		// Load tileset as spritesheet for objects such as the treasure
-		this.load.spritesheet('objects', 'assets/spritesheets/objects_16x16.png', {
-			frameWidth: 16,
-			frameHeight: 16
-		});
-    }
+    { }
 
 	create()
 	{
@@ -115,13 +58,17 @@ export default class Level1 extends Phaser.Scene
 		this.common = new Common(this);
 		this.camera = new Camera();
 
-		// this.common.spawnObjects(this, 'treasures', 'treasure');
-		// this.common.spawnObjects(this, 'coins', 'objects');
-		// this.common.spawnObjects(this, 'doors', 'objects');
+		// Spawn all interactable objects
 		this.common.spawnTreasures(this);
 		this.common.spawnCoins(this);
 		this.common.spawnDoors(this);
+		this.common.spawnNpcs(this, 'npc_mi', 4);
+		this.common.spawnNpcs(this, 'npc_xavi', 7);
+
+		// Spawn player
 		this.player = this.common.addPlayer(this);
+
+		// Add colliders, input, hud, music
 		this.common.addColliders(this);
 		this.common.setCollisions(this);
 		this.joystick = this.common.addInput(this).joystick;
@@ -134,21 +81,41 @@ export default class Level1 extends Phaser.Scene
 		this.player.setKeyboardControls(this);
 	}
 
-    update() {
+	update() {
 		// Update player movement based on events
 		this.player.playerMovement(this);
 		
 		// Setup camera bounds and zoom
 		this.camera.setCamera(this, 2.40);
-
+	
+		// Check for proximity to NPCs
+		this.npcs.getChildren().forEach((npc) => {
+			const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
+			if (distance < 50 && this.firstInteraction) {
+				console.log('Show message from NPCs');
+				let text = 'Som el Xavi i la Miriam!\nSaps què? Ens casem!!\nEl problema és que hem perdut el mapa de la ubicació.\nEns ajudes a trobar-lo?'
+				this.common.showMessage(this, text);
+			}
+			// this.input.on('pointerdown', (pointer) => {
+			// 	if(this.firstInteraction === true){
+			// 		console.log('This is first interaction? ' + this.firstInteraction + '. Message is displaying? ' + this.messageDisplaying);
+			// 		this.firstInteraction = false;
+			// 		this.messageDisplaying = false;
+			// 		this.common.destroyMessageBox();
+			// 	}
+			// })
+		});
+		
+	
 		if (this.startScene) {
 			console.log('Stop scene Level1, start scene Level2');
 			this.startScene = false; // Reset the flag
 			this.scene.stop('Level1');
 			this.backgroundMusic.stop();
-			this.scene.start('Level2');
+			this.scene.start('PreLevel', { levelKey: 'Level2', text: 'La Data' });
 		}
-    }
+	}
+	
 
 	loadMusic(){
 		// Create an instance of the audio object

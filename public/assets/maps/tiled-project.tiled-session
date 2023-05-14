@@ -22,17 +22,21 @@
         },
         "level1.json": {
             "expandedObjectLayers": [
+                27,
                 24,
-                27
+                28
             ],
-            "scale": 1.0182812499999998,
-            "selectedLayer": 13,
+            "scale": 2,
+            "selectedLayer": 16,
             "viewCenter": {
-                "x": 847.0154979284949,
-                "y": 431.6096363357374
+                "x": 367.75,
+                "y": 447.75
             }
         },
         "level1.json#objects_16x16": {
+            "scaleInDock": 1
+        },
+        "level1.json#player": {
             "scaleInDock": 1
         },
         "level1.json#tileset": {
@@ -41,17 +45,21 @@
         "level1.json#treasure": {
             "scaleInDock": 1
         },
+        "level1.json#xavi": {
+            "scaleInDock": 1
+        },
         "level2.json": {
             "expandedObjectLayers": [
+                19,
+                15,
                 16,
-                14,
-                15
+                14
             ],
             "scale": 1,
-            "selectedLayer": 14,
+            "selectedLayer": 16,
             "viewCenter": {
-                "x": 841.5,
-                "y": 318.5
+                "x": 9.5,
+                "y": 288.5
             }
         },
         "level2.json#disney_castle_256": {
@@ -59,6 +67,9 @@
         },
         "level2.json#objects_16x16": {
             "scaleInDock": 3
+        },
+        "level2.json#player": {
+            "scaleInDock": 1
         },
         "level2.json#tileset": {
             "scaleInDock": 0.5
@@ -93,21 +104,20 @@
         }
     },
     "last.externalTilesetPath": "/home/xavi/Projects/xavi/gpt/games/platform-new/public/assets/maps",
-    "last.imagePath": "/home/xavi/Projects/xavi/gpt/games/platform-new/public/assets/tilesets",
+    "last.imagePath": "/home/xavi/Projects/xavi/gpt/games/platform-new/public/assets/spritesheets",
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
     "openFiles": [
         "level1.json",
-        "level2.json",
-        "rule1.tmx"
+        "level2.json"
     ],
     "project": "tiled-project.tiled-project",
-    "property.type": "bool",
+    "property.type": "string",
     "recentFiles": [
-        "rule1.tmx",
-        "level1.json",
         "level2.json",
+        "level1.json",
+        "rule1.tmx",
         "test.tmx"
     ],
     "tileset.embedInMap": true,

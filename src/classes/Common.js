@@ -1,6 +1,5 @@
 import Player from './Player.js';
 import Joystick from './Joystick.js';
-import Level2 from '../scenes/Level2'
 
 export default class Common {
     constructor(scene) {
@@ -15,14 +14,20 @@ export default class Common {
 		this.coin_sound = scene.sound.add('audio_coin', { loop: false, forceRestart: true });
 	}
 	
-    addPlayer(scene) {
-        // Player
-        scene.player = new Player(scene, 170, 500, 'player').setScale(1).refreshBody();
-        scene.player.setBounce(0.1);
-        scene.player.setCollideWorldBounds(true);
-        scene.player.createAnimations(scene);
-        return scene.player;
-    }
+	addPlayer(scene) {
+		// Player Layer
+		const playerLayer = scene.map.getObjectLayer('player');
+	
+		// Extract player data
+		let playerData = playerLayer.objects.find(object => object.name === 'player');
+	
+		// Player
+		scene.player = new Player(scene, playerData.x, playerData.y, 'player').setScale(1).refreshBody();
+		scene.player.setBounce(0.1);
+		scene.player.setCollideWorldBounds(true);
+		scene.player.createAnimations(scene);
+		return scene.player;
+	}
 
 	addInput(scene) {
 		// Create input
@@ -70,6 +75,8 @@ export default class Common {
 		newTreasure.contents = contains.value;
 		if (contains.value == 'key'){
 			newTreasure.containsText = 'una clau';
+		}else if (contains.value == 'map'){
+			newTreasure.containsText = 'un mapa';
 		}else{
 			newTreasure.containsText = contains.value;
 		}
@@ -84,17 +91,34 @@ export default class Common {
 			treasure.opened = true;
 			treasure.setFrame(11);
 			console.log(treasure)
-				
-			
 			scene.common.chest_opened_sound.play();
+
 			// Show a message
 			scene.common.showMessage(this, 'Has trobat ' + treasure.containsText + '!');
 			
 			// Add a new object to the inventory
 			console.log('Add treasure contents to the inventory: ' + treasure.contents);
 			scene.hud.inventory.push(treasure.contents);
-			scene.hud.updateInventory(scene);
+			scene.hud.updateInventory(scene, treasure.contents);
 		}
+	}
+
+	checkNpcActions(player, npc, scene) {
+		console.log('Perform actions with NPCs here');
+	}
+
+	spawnNpcs(scene, layer, frame) {
+		scene.npcs = scene.physics.add.staticGroup();
+		scene.npcsLayer = scene.map.getObjectLayer(layer);
+		var count = 0;
+		scene.npcsLayer.objects.forEach((npc) => {
+			count += 1;
+			const newnpc = scene.physics.add.sprite(npc.x, npc.y, layer, frame).setOrigin(0, 1)
+			newnpc.setImmovable(true)
+			newnpc.body.setAllowGravity(false);
+			newnpc.id = count;
+			scene.npcs.add(newnpc);
+		});	
 	}
 
 	spawnTreasures(scene) {
@@ -236,34 +260,59 @@ export default class Common {
 	showMessage(scene, message) {
 		const padding = 20;
 		const boxWidth = this.scene.cameras.main.width / 2.3 - padding * 2;
-		const boxHeight = 100;
 		const centerX = this.scene.cameras.main.centerX;
 		const centerY = this.scene.cameras.main.centerY;
 		const boxX = centerX - boxWidth / 2;
-		const boxY = centerY - boxHeight / 2;
-	
+	  
+		const textConfig = {
+		  fontSize: '24px',
+		  fill: '#ffffff',
+		  wordWrap: { width: boxWidth - padding * 2, useAdvancedWrap: true },
+		};
+	  
 		const graphics = this.scene.add.graphics();
+		graphics.fillStyle(0x000000, 1);
+		graphics.setScrollFactor(0);
+		graphics.fillRect(boxX, centerY, boxWidth, 1); // Placeholder height for text measurement
+		graphics.lineStyle(4, 0xffffff);
+		graphics.strokeRect(boxX, centerY, boxWidth, 1); // Placeholder height for text measurement
+	  
+		const text = this.scene.add.text(centerX, centerY, message, textConfig);
+		text.setOrigin(0.5);
+		text.setScrollFactor(0);
+	  
+		const textHeight = text.height + padding * 2;
+		const boxHeight = Math.max(textHeight + 30, 100);
+		const boxY = centerY - boxHeight / 2;
+	  
+		graphics.clear();
 		graphics.fillStyle(0x000000, 1);
 		graphics.fillRect(boxX, boxY, boxWidth, boxHeight);
 		graphics.lineStyle(4, 0xffffff);
 		graphics.strokeRect(boxX, boxY, boxWidth, boxHeight);
-		
-		const text = this.scene.add.text(centerX, centerY, message, {
-			fontSize: '24px',
-			fill: '#ffffff'
-		});
-		text.setOrigin(0.5);
-	
-		graphics.setScrollFactor(0);
-		text.setScrollFactor(0);
+	  
+		text.setY(centerY - 10); // Adjust the text Y position based on the new box height
+	  
+		const additionalTextConfig = {
+		  font: 'italic 14px Arial',
+		  fill: '#ffffff',
+		};
+	  
+		const additionalText = this.scene.add.text(centerX, boxY + boxHeight + padding, "Prem 'B' per continuar", additionalTextConfig);
+		additionalText.setOrigin(0.5, 0);
+		additionalText.y = boxY + boxHeight - 30;
 
-		this.messageBox.push(graphics, text);
+		additionalText.setScrollFactor(0);
+	  
+		this.messageBox.push(graphics, text, additionalText);
 		this.scene.messageDisplaying = true;
-	}
-
+	  }
+	  
 	destroyMessageBox() {
+		console.log('We need to destroy the message');
 		if (this.messageBox && this.messageBox.length > 0) {
 		  this.messageBox.forEach(element => {
+			console.log('Destroying messageBox element');
 			element.destroy();
 		  });
 		  this.messageBox = [];

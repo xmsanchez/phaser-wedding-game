@@ -22,16 +22,27 @@ export default class HUD {
         this.updateInventory(scene);
     }
     
-    updateInventory(scene) {
+    updateInventory(scene, contents) {
         // Clear the previous inventory display
         this.inventoryDisplay.removeAll(true);
 
         const tileSize = 16;
         const spacing = 5;
 
+        if(contents !== undefined){
+            console.log('Contents: ' + JSON.stringify(contents));
+        }
+
+        let frame = 0;
+        if(contents == 'key'){
+            frame = 18;
+        }else if(contents == 'map'){
+            frame = 8;
+        }
+
         // Loop through the inventory array and create the display
         for (let i = 0; i < this.inventory.length; i++) {
-            const item = scene.add.sprite(-i * (tileSize + spacing), 0, 'objects', 18).setOrigin(0, 0).setScale(1);
+            const item = scene.add.sprite(-i * (tileSize + spacing), 0, 'objects', frame).setOrigin(0, 0).setScale(1);
             this.inventoryDisplay.add(item);
             console.log('Current inventory: ' + this.inventory);
         }

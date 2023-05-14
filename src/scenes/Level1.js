@@ -8,6 +8,7 @@ export default class Level1 extends Phaser.Scene
 	constructor()
 	{
 		super('Level1');
+
 		this.jumpKeyReleased = true;
 		this.jump = false;
 		this.moveLeft = false;
@@ -18,12 +19,24 @@ export default class Level1 extends Phaser.Scene
 		this.player = null;
 		this.joystick = null;
 		this.messageDisplaying = false;
-		this.startScene = false;
-		this.npcs = null;
 
+		this.startScene = false;
+		this.currentScene = 'Level1';
+
+		this.npcs = null;
+		this.treasures = null;
+		this.doors = null;
+
+		this.interactBtn = null;
 		this.firstInteraction = true;
 
 		this.common = null;
+
+		this.messages = [
+			'Hola! Saps què?!', 
+			'Ens casem!!!', 
+			'Ara tenim un problema, i és que hem perdut el mapa de la ubicació.\nEns ajudes a trobar-lo?'
+		];
 	}
 
 	preload()
@@ -89,18 +102,29 @@ export default class Level1 extends Phaser.Scene
 		// Setup camera bounds and zoom
 		this.camera.setCamera(this, 2.40);
 	
-		// Check for proximity to NPCs
 		this.npcs.getChildren().forEach((npc) => {
 			const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
-			if (distance < 50 && this.firstInteraction) {
+			if (distance < 75) {
 				npc.setFrame(4);
-				console.log('Show message from NPCs');
-				let text = 'Som el Xavi i la Miriam!\nSaps què? Ens casem!!\nEl problema és que hem perdut el mapa de la ubicació.\nEns ajudes a trobar-lo?'
-				this.common.showMessage(this, text);
+				
+				let currentIndex = 0;
+				if(this.messages.length > 0 && this.firstInteraction && !this.messageDisplaying){
+					console.log('Display message: ' + this.messages[currentIndex]);
+					console.log('Messages: ' + this.messages);
+					this.common.showMessage(this, this.messages[0]);
+					this.messages.shift();
+					console.log('Messages: ' + this.messages);
+				}else if(this.messages.length == 0){
+					this.firstInteraction = false;
+					npc.setFrame(npc.default_frame);
+				}
 			}
 		});
-		
-	
+
+		this.common.checkOverlaps(this.npcs, this);
+		this.common.checkOverlaps(this.treasures, this);
+		this.common.checkOverlaps(this.doors, this);
+
 		if (this.startScene) {
 			console.log('Stop scene Level1, start scene Level2');
 			this.startScene = false; // Reset the flag

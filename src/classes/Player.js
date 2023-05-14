@@ -16,6 +16,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		const jumpVelocity = -450;
 
 		if (!scene.messageDisplaying) {
+
+			scene.common.destroyMessageBox();
+
 			if (this.moveLeft) {
 				scene.player.setAccelerationX(-acceleration);
 				if (scene.player.body.velocity.x < -maxVelocityX) {
@@ -42,22 +45,21 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 				scene.player.setDragX(drag);
 				scene.player.anims.play('idle', true);
 			}
+			if (this.jump && scene.player.body.onFloor() && this.jumpKeyReleased) {
+				scene.player.setVelocityY(jumpVelocity);
+				scene.player.play('jump', true);
+				this.jump = false;
+				this.jumpKeyReleased = false;
+			}
+			
+			// Check if jump key is released
+			if (!scene.cursors.space.isDown) {
+				this.jumpKeyReleased = true;
+			}
 		}else{
 			scene.player.setAccelerationX(0);
 			scene.player.setDragX(drag);
 			scene.player.anims.play('idle', true);
-		}
-
-		if (this.jump && scene.player.body.onFloor() && this.jumpKeyReleased) {
-			scene.player.setVelocityY(jumpVelocity);
-			scene.player.play('jump', true);
-			this.jump = false;
-			this.jumpKeyReleased = false;
-		}
-		
-		// Check if jump key is released
-		if (!scene.cursors.space.isDown) {
-			this.jumpKeyReleased = true;
 		}
 
 		this.isOverlappingCoins(scene);
@@ -103,36 +105,35 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		const overlappingTreasures = this.isOverlappingTreasures(scene);
 		const overlappingDoors = this.isOverlappingDoors(scene);
 		const overlappingNPCs = this.isOverlappingNpcs(scene);
-		console.log('Overlapping treasures: ' + overlappingTreasures.length);
-		console.log('Overlapping doors: ' + overlappingDoors.length);
-		if (overlappingTreasures.length > 0) {
-			overlappingTreasures.forEach((treasure) => {
-				this.checkIfMessageBoxMustBeDestroyed(scene);
-				scene.common.openTreasure(this, treasure, scene);
-			});
-		} else if (overlappingDoors.length > 0) {
-			overlappingDoors.forEach((door) => {
-				scene.common.checkIfCanOpenDoor(this, door, scene);
-			});
-		} else if (overlappingNPCs.length > 0) {
-			overlappingNPCs.forEach((npc) => {
-				scene.common.checkNpcActions(this, npc, scene);
-			})
-		}
 
-		if(scene.firstInteraction && scene.messageDisplaying){
-			console.log('First interaction! Destroy message');
-
-			scene.npcs.getChildren().forEach((npc) => {
-				console.log('Checking NPC ' + JSON.stringify(npc));
-				npc.setFrame(npc.default_frame);
-			});
-
-			scene.firstInteraction = false;
+		if(scene.messageDisplaying){
+			console.log('Checking interact button. Destroying the message box.');
 			scene.messageDisplaying = false;
 			scene.common.destroyMessageBox();
-		}
-	}
+		}else{
+			if (overlappingTreasures.length > 0) {
+				overlappingTreasures.forEach((treasure) => {
+					if (scene.messageDisplaying) {
+						scene.common.destroyMessageBox();
+						scene.messageDisplaying = false;
+					}
+					scene.common.openTreasure(this, treasure, scene);
+				});
+			} else if (overlappingDoors.length > 0) {
+				overlappingDoors.forEach((door) => {
+					scene.common.checkIfCanOpenDoor(this, door, scene);
+				});
+			} else if (overlappingNPCs.length > 0) {
+				overlappingNPCs.forEach((npc) => {
+					if (scene.messageDisplaying) {
+						scene.common.destroyMessageBox();
+						scene.messageDisplaying = false;
+					}
+					scene.common.checkNpcActions(this, npc, scene);
+				})
+			}
+		}		
+	}	  
 
 	checkJumpBtn(scene) {
 		if (scene.player.body.onFloor()) {
@@ -195,21 +196,20 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	isOverlappingTreasures(scene) {
-		// console.log('Check if overlaps with TREASURES');
 		const overlaps = [];
-		scene.physics.world.overlap(this, scene.treasures.getChildren(), (player, treasure) => {
-			overlaps.push(treasure);
-		});
+		if(scene.treasures !== null){
+			scene.physics.world.overlap(this, scene.treasures.getChildren(), (player, treasure) => {
+				overlaps.push(treasure);
+			});
+		}
 		return overlaps;
 	}
 	
 	isOverlappingCoins(scene) {
-		// console.log('Check if overlaps with COINS');
 		const overlaps = [];
 		scene.physics.world.overlap(this, scene.coins.getChildren(), (player, coin) => {
 			console.log('Overlaps! Hide coin!');
 
-			// scene.common.colletCoin(coin);
 			// Stop the sound if it's already playing
 			if (scene.common.coin_sound.isPlaying) {
 				scene.common.coin_sound.stop();
@@ -228,17 +228,21 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 	
 	isOverlappingDoors(scene) {
 		const overlaps = [];
-		scene.physics.world.overlap(this, scene.doors.getChildren(), (player, door) => {
-			overlaps.push(door);
-		});
+		if(scene.doors !== null){
+			scene.physics.world.overlap(this, scene.doors.getChildren(), (player, door) => {
+				overlaps.push(door);
+			});
+		}
 		return overlaps;
 	}
 
 	isOverlappingNpcs(scene) {
 		const overlaps = [];
-		scene.physics.world.overlap(this, scene.npcs.getChildren(), (player, npc) => {
-			overlaps.push(npc);
-		});
+		if(scene.npcs !== null){
+			scene.physics.world.overlap(this, scene.npcs.getChildren(), (player, npc) => {
+				overlaps.push(npc);
+			});
+		}
 		return overlaps;
 	}
 

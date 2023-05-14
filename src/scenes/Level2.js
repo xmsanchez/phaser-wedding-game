@@ -8,6 +8,7 @@ export default class Level2 extends Phaser.Scene
 	constructor()
 	{
 		super('Level2');
+
 		this.jumpKeyReleased = true;
 		this.jump = false;
 		this.moveLeft = false;
@@ -18,7 +19,13 @@ export default class Level2 extends Phaser.Scene
 		this.player = null;
 		this.joystick = null;
 		this.messageDisplaying = false;
-		this.startScene = null;
+
+		this.startScene = false;
+		this.currentScene = 'Level2';
+		
+		this.npcs = null;
+		this.treasures = null;
+		this.doors = null;
 
 		this.common = null;
 	}
@@ -84,12 +91,10 @@ export default class Level2 extends Phaser.Scene
 		// Setup camera bounds and zoom
 		this.camera.setCamera(this, 2.40);
 
-		if(this.startScene != null){
-			console.log('Stop scene Level2, start scene Level1');
-			this.scene.stop('Level2');
-			this.backgroundMusic.stop();
-			this.scene.start('Level1');
-		}
+		// this.common.checkOverlaps(this.npcs, this);
+		this.common.checkOverlaps(this.treasures, this);
+		this.common.checkOverlaps(this.doors, this);
+
     }
 
 	loadMusic(){

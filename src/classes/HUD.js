@@ -14,8 +14,8 @@ export default class HUD {
 		console.log('Canvas width: ' + canvasWidth);
 		
 		// scene.joystick = new Joystick(scene, 300, (canvasHeight / 2) * 1.3);
-        this.scoreText = scene.add.text(250, (canvasHeight / 2) * 0.6, 'Score: 0', { font: '18px Arial' }).setScrollFactor(0);
-        this.inventoryText = scene.add.text(canvasWidth / 1.7, (canvasHeight / 2) * 0.6, 'Inventory', { font: '18px Arial' }).setScrollFactor(0);
+        this.scoreText = scene.add.text(250, (canvasHeight / 2) * 0.6, 'Punts: 0', { font: '18px Arial' }).setScrollFactor(0);
+        this.inventoryText = scene.add.text(canvasWidth / 1.7, (canvasHeight / 2) * 0.6, 'Inventari', { font: '18px Arial' }).setScrollFactor(0);
         this.inventoryDisplay = scene.add.container(canvasWidth / 1.5, (canvasHeight / 2) * 0.6 + 30).setScrollFactor(0);
 
         // Call updateInventory to create an initial empty inventory display
@@ -50,6 +50,6 @@ export default class HUD {
 
     updateScore(scene) {
         this.currentScore += 10;
-        this.scoreText.setText('Score: ' + this.currentScore);
+        this.scoreText.setText('Punts: ' + this.currentScore);
     }
 }

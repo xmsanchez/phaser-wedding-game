@@ -112,12 +112,61 @@ export default class Common {
 			var newTreasure = scene.physics.add.sprite(treasure.x, treasure.y, 'treasure', 8).setOrigin(0, 1);
 			newTreasure.id = count;
 			newTreasure = this.getTreasureContents(scene, treasure, newTreasure);
+
+			const container = this.drawHintContainer(scene, newTreasure);
+			newTreasure.container = container;
+			newTreasure.container.setVisible(false);
+
 			scene.treasures.add(newTreasure);
 			console.log('Newtreasure.contents is: ' + newTreasure.contents);
-		});	
+		});
 	}
+
+	npcActionsLevel1(player, npc, scene) {
+		console.log('Message not being displayed, yet: ' + scene.messageDisplaying);
+		if(scene.hud.inventory.length == 0){
+			if(npc.name == 'Xavi'){
+				this.showMessage(scene, npc.name + ": Encara no has trobat el mapa? Ha de ser dins d'un bagul");
+			}else if(npc.name == 'Miriam'){
+				this.showMessage(scene, npc.name + ': El mapa és en algun lloc sobre una plataforma, però no recordo ben bé on era...');
+			}
+		}else{
+			// Look for the map in the inventory
+			console.log('Objects in inventory: ' + scene.hud.inventory);
+			for (var i = 0; i < scene.hud.inventory.length; i++) {
+				console.log('Object in inventory: ' + scene.hud.inventory[i]);
+				if(scene.hud.inventory[i] === 'map'){
+					if(npc.name == 'Xavi'){
+						this.showMessage(scene, npc.name + ': Ja tens el mapa? Dona-li a la Miriam!')
+					}else if(npc.name == 'Miriam'){
+						if(npc.contents == ''){
+							console.log(npc.name + ': Ja tens la clau, corre cap a la porta!');
+						}else{
+							this.showMessage(scene, npc.name + ': Has trobat el mapa!\n\nEl casament serà a "LA VINYASSA". És a prop de Arbúcies!\n\nAquí tens la clau per obrir la porta, al proper nivell esbrinaràs la data del casament!');
+							scene.common.chest_opened_sound.play();
+							scene.hud.updateInventory(scene, npc.contents);
+							scene.hud.inventory.push(npc.contents);
+							npc.contents = '';
+							return;
+						}
+					}
+				}else if (scene.hud.inventory[i] === 'key'){
+					if(npc.name == 'Xavi'){
+						this.showMessage(scene, npc.name + ": La Miriam t'ha donat la clau? Doncs corre cap a la porta!");
+					}else if (npc.name == 'Miriam'){
+						this.showMessage(scene, npc.name + ': Ja tens la clau! Ja pots obrir la porta, corre cap allà!');
+					}
+				}
+			}
+		}
+	}
+
 	checkNpcActions(player, npc, scene) {
-		console.log('Perform actions with NPCs here');
+		console.log('Talking to an npc:' + JSON.stringify(npc));
+
+		if(scene.currentScene === 'Level1'){
+			this.npcActionsLevel1(player, npc, scene);
+		}
 	}
 
 	spawnNpcs(scene, layer, frame) {
@@ -125,21 +174,57 @@ export default class Common {
 		scene.npcsLayer = scene.map.getObjectLayer(layer);
 		var count = 0;
 		scene.npcsLayer.objects.forEach((npc) => {
-			count += 1;
-			const contains = npc.properties.find(obj => obj.name === "contains");
-			const default_frame = npc.properties.find(obj => obj.name === "default_frame");
-			const spritesheet = npc.properties.find(obj => obj.name === "spritesheet");
-			console.log('Contains.value is: ' + contains.value);
-			console.log('default_frame.value is: ' + default_frame.value);
-			var newnpc = scene.physics.add.sprite(npc.x, npc.y, spritesheet.value, default_frame.value).setOrigin(0, 1);
-			newnpc.contents = contains.value;
-			newnpc.default_frame = default_frame.value;
-			newnpc.setImmovable(true)
-			newnpc.body.setAllowGravity(false);
-			newnpc.id = count;
-			scene.npcs.add(newnpc);
-			console.log('Spawn NPC: ' + JSON.stringify(newnpc));
-		});	
+		  count += 1;
+		  const contains = npc.properties.find(obj => obj.name === "contains");
+		  const default_frame = npc.properties.find(obj => obj.name === "default_frame");
+		  const spritesheet = npc.properties.find(obj => obj.name === "spritesheet");
+		  console.log('Contains.value is: ' + contains.value);
+		  console.log('default_frame.value is: ' + default_frame.value);
+		  var newnpc = scene.physics.add.sprite(npc.x, npc.y, spritesheet.value, default_frame.value).setOrigin(0, 1);
+		  newnpc.contents = contains.value;
+		  newnpc.default_frame = default_frame.value;
+		  newnpc.name = npc.name;
+		  newnpc.setImmovable(true);
+		  newnpc.body.setAllowGravity(false);
+		  newnpc.id = count;
+	  
+		  const container = this.drawHintContainer(scene, newnpc);
+		  newnpc.container = container;
+		  newnpc.container.setVisible(false);
+	  	  
+		  scene.npcs.add(newnpc);
+		  console.log('Spawn NPC: ' + JSON.stringify(newnpc));
+		});
+	}
+
+	checkOverlaps(object, scene) {
+		object.getChildren().forEach((obj) => {
+			obj.container.setVisible(false);
+		});
+
+		scene.physics.world.overlap(scene.player, object.getChildren(), (player, obj) => {
+			// When opening a treasure, we will disable the hint
+			if(!obj.opened){
+				obj.container.setVisible(true);
+			}
+		});
+	}
+	
+	drawHintContainer(scene, obj) {
+		// Create a container for the circle and text
+		const container = scene.add.container(obj.x + (obj.width / 2) - 8, obj.y - obj.height - 9);
+	  
+		// Add the small circle as a child sprite of the container
+		const outerCircle = scene.add.circle(0, 0, 9, 0xFFFFFF);
+		const circle = scene.add.circle(0, 0, 8, 0xFF0000);
+		container.add(outerCircle);
+		container.add(circle);
+	
+		// Add the text as a child sprite of the container
+		const text = scene.add.text(-4, -7, 'B', { fontSize: '14px', fill: '#ffffff' });
+		container.add(text);
+
+		return container;
 	}
 
 	spawnCoins(scene) {
@@ -174,6 +259,10 @@ export default class Common {
 			newdoor.isEntry = door.properties.find(obj => obj.name === "isEntry").value;
 			newdoor.isExit = door.properties.find(obj => obj.name === "isExit").value;
 			newdoor.opened = door.properties.find(obj => obj.name === "opened").value;
+
+			const container = this.drawHintContainer(scene, newdoor);
+			newdoor.container = container;
+			newdoor.container.setVisible(false);
 
 			scene.doors.add(newdoor);
 		});	
@@ -264,6 +353,22 @@ export default class Common {
 		console.log('Door is opened: ' + door.opened);
 	}
 
+	showMessageList(scene, messages) {
+		console.log('Show messages: ' + JSON.stringify(messages));
+		let currentIndex = 0;
+		if (currentIndex < messages.length) {
+			this.showMessage(this, messages[currentIndex]);
+			console.log('Show first message: ' + messages[currentIndex]);
+			scene.interactBtn.once('pointerdown', () => {
+				scene.messageDisplaying = false;
+				this.destroyMessageBox();
+				currentIndex++;
+				console.log('Destroyed message ' + currentIndex);
+				this.showMessage();
+			});
+		}
+	}
+
 	showMessage(scene, message) {
 		const padding = 20;
 		const boxWidth = this.scene.cameras.main.width / 2.3 - padding * 2;
@@ -316,10 +421,8 @@ export default class Common {
 	  }
 	  
 	destroyMessageBox() {
-		console.log('We need to destroy the message');
 		if (this.messageBox && this.messageBox.length > 0) {
 		  this.messageBox.forEach(element => {
-			console.log('Destroying messageBox element');
 			element.destroy();
 		  });
 		  this.messageBox = [];

@@ -3,8 +3,8 @@ export default class PreLevel extends Phaser.Scene
     constructor()
     {
         super('PreLevel');
-        this.preLevelMilliseconds = 500;
-        // this.preLevelMilliseconds = 3000;
+        this.preLevelMilliseconds = 3000;
+        // this.preLevelMilliseconds = 2500;
     }
 
     create(data)

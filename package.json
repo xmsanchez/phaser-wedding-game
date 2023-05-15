@@ -1,37 +1,19 @@
 {
-	"name": "phaser3-parcel-template",
+	"name": "phaser3-wedding-day",
 	"version": "1.0.0",
-	"description": "A template project for Phaser 3 using Parceljs",
+	"description": "Wedding Day Game",
 	"scripts": {
-		"start": "parcel src/index.html -p 8000 --hmr-port=1235",
-		"build": "parcel build src/index.html --out-dir dist",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"start": "vite --host",
+		"build": "vite build",
+		"preview": "vite preview"
 	},
-	"author": "supertommy",
-	"license": "MIT",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/ourcade/phaser3-parcel-template.git"
-	},
-	"homepage": "https://github.com/ourcade/phaser3-parcel-template",
+	"author": "xmsanchez",
 	"devDependencies": {
-		"@babel/core": "^7.10.5",
-		"@babel/plugin-proposal-class-properties": "^7.10.4",
-		"babel-eslint": "^10.1.0",
-		"eslint": "^6.8.0",
-		"minimist": ">=1.2.2",
-		"parcel-plugin-clean-easy": "^1.0.2",
-		"parcel-plugin-static-files-copy": "^1.2.4"
+		"eslint": "^8.25.0",
+		"vite": "^3.1.0"
 	},
 	"dependencies": {
 		"phaser": "^3.60.0",
 		"phaser3-rex-plugins": "^1.60.1"
-	},
-	"parcelCleanPaths": [
-		"dist"
-	],
-	"staticFiles": {
-		"staticPath": "public",
-		"watcherGlob": "**"
 	}
 }

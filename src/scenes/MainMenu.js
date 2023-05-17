@@ -62,6 +62,10 @@ export default class MainMenu extends Phaser.Scene {
 		this.input.on('pointerdown', () => {
 			this.scene.start('PreLevel', { levelKey: 'Level1', text: 'El Mapa' });
 		});
+		const enterKey = this.input.keyboard.addKey('ENTER');
+		enterKey.on('down', () => {
+			this.scene.start('PreLevel', { levelKey: 'Level1', text: 'El Mapa' });
+		});
 	}
 
 	update() {}

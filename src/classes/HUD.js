@@ -52,4 +52,31 @@ export default class HUD {
         this.currentScore += 10;
         this.scoreText.setText('Punts: ' + this.currentScore);
     }
+
+    // This is to display on messages
+    createButtonIcon = function (scene, x, y, buttonText) {
+		console.log('Add button icon at ' + x + ', ' + y + ' with text ' + buttonText);
+        var btn = scene.add.circle(x, y, 10, 0xFF0000).setAlpha(0.3);
+		btn.scrollFactorX = 0;
+		btn.scrollFactorY = 0;
+
+        // Add text to the circle
+        var textStyle = {
+            font: '24px Arial',
+            fill: '#ffffff'
+        };
+        var text = buttonText;
+        var textElement = scene.add.text(x, y, text, textStyle).setOrigin(0.5);
+        textElement.scrollFactorX = 0;
+        textElement.scrollFactorY = 0;
+
+        // Create a container to group the circle and text
+        var container = scene.add.container(0, 0, [btn, textElement]);
+        container.setSize(btn.width, btn.height);
+
+        // Enable touch input on the container
+        container.setInteractive({ useHandCursor: true });
+		
+		scene.add.container(x, y, [btn, textElement]);
+    }
 }

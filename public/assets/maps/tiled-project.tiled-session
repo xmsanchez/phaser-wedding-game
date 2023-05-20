@@ -22,16 +22,19 @@
         },
         "level1.json": {
             "expandedObjectLayers": [
-                27,
                 24,
+                27,
                 28
             ],
-            "scale": 2,
+            "scale": 1.5,
             "selectedLayer": 16,
             "viewCenter": {
-                "x": 367.75,
-                "y": 447.75
+                "x": 574.3333333333334,
+                "y": 356.33333333333337
             }
+        },
+        "level1.json#mi_16": {
+            "scaleInDock": 1
         },
         "level1.json#objects_16x16": {
             "scaleInDock": 1
@@ -48,18 +51,21 @@
         "level1.json#xavi": {
             "scaleInDock": 1
         },
+        "level1.json#xavi_16": {
+            "scaleInDock": 1
+        },
         "level2.json": {
             "expandedObjectLayers": [
-                19,
-                15,
+                14,
                 16,
-                14
+                19,
+                15
             ],
-            "scale": 1,
-            "selectedLayer": 16,
+            "scale": 1.5,
+            "selectedLayer": 14,
             "viewCenter": {
-                "x": 9.5,
-                "y": 288.5
+                "x": 469.6666666666666,
+                "y": 339
             }
         },
         "level2.json#disney_castle_256": {
@@ -115,8 +121,8 @@
     "project": "tiled-project.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "level2.json",
         "level1.json",
+        "level2.json",
         "rule1.tmx",
         "test.tmx"
     ],

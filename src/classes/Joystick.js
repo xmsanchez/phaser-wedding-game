@@ -6,7 +6,7 @@ export default class Joystick {
             radius: 50,
             base: scene.add.circle(0, 0, 50, 0x888888).setAlpha(0.3),
             thumb: scene.add.circle(0, 0, 25, 0xcccccc).setAlpha(0.3),
-            dir: '8dir',
+            dir: '4dir',
             forceMin: 5,
             enable: true
         });

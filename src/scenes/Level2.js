@@ -85,8 +85,6 @@ export default class Level2 extends Phaser.Scene
 		// Add controls
 		this.player.addTouchScreenPointers(this);
 		this.player.setKeyboardControls(this);
-
-		// this.hud.createButtonIcon(this, this.player.x, this.player.y - 20, 'Test');
 	}
 
     update() {

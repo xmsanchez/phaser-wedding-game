@@ -77,7 +77,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
 		this.isOverlappingCoins(scene);
 		this.isOverlappingDoors(scene);
-		// this.isOverlappingCartells(scene);
+		this.isOverlappingCartells(scene);
+		this.isOverlappingBunny(scene);
 	}
 
 	// The following functions will be called in the create loop
@@ -123,8 +124,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		// Check overlaps
 		const overlappingTreasures = this.isOverlappingTreasures(scene);
 		const overlappingDoors = this.isOverlappingDoors(scene);
-		// const overlappingCartells = this.isOverlappingCartells(scene);
+		const overlappingCartells = this.isOverlappingCartells(scene);
 		const overlappingNPCs = this.isOverlappingNpcs(scene);
+		const overlappingBunny = this.isOverlappingBunny(scene);
 
 		if(scene.messageDisplaying && !scene.messageIsSelector){
 			console.log('Checking interact button. Destroy the message box.');
@@ -146,12 +148,16 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 				overlappingNPCs.forEach((npc) => {
 					scene.common.checkNpcActions(this, npc, scene);
 				})
-			// } else if (overlappingCartells.length > 0) {
-			// 	overlappingCartells.forEach((cartell) => {
-			// 		scene.common.readCartell(this, cartell, scene);
-			// 	})
+			} else if (overlappingCartells.length > 0) {
+				overlappingCartells.forEach((cartell) => {
+					scene.common.readCartell(this, cartell, scene);
+				})
+			} else if (overlappingBunny.length > 0) {
+				overlappingBunny.forEach((b) => {
+					scene.common.checkBunnyActions(this, b, scene);
+				})
 			}
-		}		
+		}
 	}	  
 
 	checkJumpBtn(scene) {
@@ -314,6 +320,16 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		if(scene.npcs !== null){
 			scene.physics.world.overlap(this, scene.npcs.getChildren(), (player, npc) => {
 				overlaps.push(npc);
+			});
+		}
+		return overlaps;
+	}
+
+	isOverlappingBunny(scene) {
+		const overlaps = [];
+		if(scene.bunny !== null){
+			scene.physics.world.overlap(this, scene.bunny, (player, b) => {
+				overlaps.push(b);
 			});
 		}
 		return overlaps;

@@ -22,28 +22,31 @@
         },
         "level1.json": {
             "expandedObjectLayers": [
-                24,
+                31,
+                28,
+                33,
+                32,
                 27,
-                28
+                24
             ],
-            "scale": 1.5,
-            "selectedLayer": 16,
+            "scale": 2,
+            "selectedLayer": 17,
             "viewCenter": {
-                "x": 574.3333333333334,
-                "y": 356.33333333333337
+                "x": 435,
+                "y": 429.75
             }
         },
         "level1.json#mi_16": {
             "scaleInDock": 1
         },
         "level1.json#objects_16x16": {
-            "scaleInDock": 1
+            "scaleInDock": 3
         },
         "level1.json#player": {
-            "scaleInDock": 1
+            "scaleInDock": 2
         },
         "level1.json#tileset": {
-            "scaleInDock": 1
+            "scaleInDock": 0.5
         },
         "level1.json#treasure": {
             "scaleInDock": 1
@@ -52,20 +55,21 @@
             "scaleInDock": 1
         },
         "level1.json#xavi_16": {
-            "scaleInDock": 1
+            "scaleInDock": 5.5
         },
         "level2.json": {
             "expandedObjectLayers": [
-                14,
-                16,
                 19,
-                15
+                16,
+                15,
+                20,
+                14
             ],
             "scale": 1.5,
-            "selectedLayer": 14,
+            "selectedLayer": 18,
             "viewCenter": {
-                "x": 469.6666666666666,
-                "y": 339
+                "x": 446.66666666666674,
+                "y": 338.33333333333337
             }
         },
         "level2.json#disney_castle_256": {

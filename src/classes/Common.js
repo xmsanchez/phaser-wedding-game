@@ -54,6 +54,10 @@ export default class Common {
 		scene.physics.add.collider(scene.treasures, scene.platforms);
 		scene.physics.add.collider(scene.player, scene.coins);
 		scene.physics.add.collider(scene.coins, scene.ground);
+		if(scene.bunny !== undefined){
+			scene.physics.add.collider(scene.bunny, scene.platforms);
+			scene.physics.add.collider(scene.bunny, scene.ground);
+		}
 	}
 
 	setCollisions(scene){
@@ -168,6 +172,70 @@ export default class Common {
 		}
 	}
 
+	spawnBunny(scene) {
+		const bunnyLayer = scene.map.getObjectLayer('bunny');		
+		var newbunny = null;
+		bunnyLayer.objects.forEach((bunny) => {
+			newbunny = scene.physics.add.sprite(bunny.x, bunny.y, 'objects', 24).setOrigin(0, 1)
+			newbunny.setImmovable(true)
+			newbunny.body.setAllowGravity(false);
+
+			const container = this.drawHintContainer(scene, newbunny);
+			newbunny.container = container;
+			newbunny.container.setVisible(true);
+		});
+		
+		return newbunny;
+	}
+
+	bunnyMovement(scene) {
+		// Bunny related code
+		var bunnySpeed = 200; 
+		if(!scene.bunnyCatched){
+			const playerDistance = Phaser.Math.Distance.Between(scene.player.x, scene.player.y, scene.bunny.x, scene.bunny.y);
+			if (scene.bunnyReverseFlag === undefined) { // Initialize reverseFlag if it doesn't exist
+				scene.bunnyReverseFlag = false;
+			}
+			console.log('Bunny reverseFlag: ' + scene.bunnyReverseFlag);
+
+			// // Check if the player is within a certain distance
+			// if (playerDistance < 50 && !scene.bunnyReverseFlag) {
+			// 	scene.bunnyReverseFlag = true;
+			// 	scene.pathPoints.reverse();
+			// } else if (playerDistance > 50 && scene.bunnyReverseFlag) {
+			// 	scene.bunnyReverseFlag = false;
+			// 	scene.pathPoints.reverse();
+			// }
+
+			const point = scene.pathPoints[0];
+
+			const distance = Phaser.Math.Distance.Between(scene.bunny.x, scene.bunny.y, point.x, point.y);
+
+			if (distance < 5) {
+				// Reached the current path point, move to the next one
+				scene.pathPoints.push(scene.pathPoints.shift());
+			}
+
+			// Move the bunny towards the current path point
+			scene.physics.velocityFromRotation(scene.bunny.rotation, bunnySpeed, scene.bunny.body.velocity);
+			scene.physics.moveToObject(scene.bunny, scene.pathPoints[0], bunnySpeed);
+		}else{
+				
+			// Stop bunny movement
+			scene.bunny.setVelocity(0, 0);
+
+			scene.bunny.body.setAllowGravity(true);
+			scene.bunny.body.gravity.y = 6000;
+		}
+	}
+
+	checkBunnyActions(player, bunny, scene) {
+		console.log('Interactuo amb el bunny!');
+		console.log('Cartell: ' + JSON.stringify(bunny));
+		scene.message.showMessage(this, "Oh! M'has atrapat!!");
+		scene.bunnyCatched = true;
+	}
+
 	spawnNpcs(scene, layer, frame) {
 		scene.npcs = scene.physics.add.staticGroup();
 		scene.npcsLayer = scene.map.getObjectLayer(layer);
@@ -212,7 +280,7 @@ export default class Common {
 				obj.container.setVisible(true);
 
 			// Door should be always interactable
-			}else if(name == 'door'){
+			}else if(name == 'door' || name == 'bunny'){
 				obj.container.setVisible(true);
 			}
 		});
@@ -248,11 +316,7 @@ export default class Common {
 			console.log('cartell ' + cartell.name + ' props:', cartell.properties);
 	
 			newcartell.textCartell = cartell.properties.find(obj => obj.name === "text").value;
-			// newcartell.isEntry = cartell.properties.find(obj => obj.name === "isEntry").value;
-			// newcartell.isExit = cartell.properties.find(obj => obj.name === "isExit").value;
-			// newcartell.opened = cartell.properties.find(obj => obj.name === "opened").value;
-			// newcartell.objectType = cartell.properties.find(obj => obj.name === "cartell"); 
-	
+
 			const container = this.drawHintContainer(scene, newcartell);
 			newcartell.container = container;
 			newcartell.container.setVisible(false);

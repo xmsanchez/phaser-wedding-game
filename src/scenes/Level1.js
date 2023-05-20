@@ -36,6 +36,7 @@ export default class Level1 extends Phaser.Scene
 		this.npcs = null;
 		this.treasures = null;
 		this.doors = null;
+		this.cartells = null;
 
 		this.interactBtn = null;
 		this.firstInteraction = true;
@@ -48,6 +49,11 @@ export default class Level1 extends Phaser.Scene
 			'Ens casem!!!', 
 			'Ara tenim un problema, i és que hem perdut el mapa de la ubicació.\nEns ajudes a trobar-lo?'
 		];
+
+		// Bunny related variables
+		this.pathPoints = null;
+		this.bunnyReverseFlag = false;
+		this.bunnyCatched = false;
 	}
 
 	preload()
@@ -60,7 +66,7 @@ export default class Level1 extends Phaser.Scene
 	
 		// Add the loaded tiles image asset to the map
 		const tileset = this.map.addTilesetImage('tileset', 'tileset');
-		const objects = this.map.addTilesetImage('objects', 'objects');
+		// const objects = this.map.addTilesetImage('objects', 'objects');
 
 		this.sky_bg = this.map.createLayer('sky_bg', tileset).scrollFactorX = 0.5;
 		this.sky_fg = this.map.createLayer('sky_fg', tileset).scrollFactorX = 0.6;
@@ -86,9 +92,12 @@ export default class Level1 extends Phaser.Scene
 		// Spawn all interactable objects
 		this.common.spawnTreasures(this);
 		this.common.spawnCoins(this);
-		// this.common.spawnCartells(this);
+		this.common.spawnCartells(this);
 		this.common.spawnDoors(this);
 		this.common.spawnNpcs(this, 'npcs', 4);
+
+		this.bunny = this.common.spawnBunny(this);
+		this.pathPoints = this.map.getObjectLayer('objectPath').objects;
 
 		// Spawn player
 		this.player = this.common.addPlayer(this);
@@ -137,6 +146,7 @@ export default class Level1 extends Phaser.Scene
 		this.common.checkOverlaps(this.npcs, this);
 		this.common.checkOverlaps(this.treasures, this);
 		this.common.checkOverlaps(this.doors, this);
+		this.common.checkOverlaps(this.cartells, this);
 
 		if (this.startScene) {
 			console.log('Stop scene Level1, start scene Level2');
@@ -151,6 +161,8 @@ export default class Level1 extends Phaser.Scene
 		if(!this.messageDisplaying){
 			// this.message.showMessageSelector(this, this.messageSelectorTexts);
 		}
+
+		this.common.bunnyMovement(this);
 	}
 
 	loadMusic(){

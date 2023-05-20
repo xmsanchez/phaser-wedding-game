@@ -37,6 +37,7 @@ export default class Level1 extends Phaser.Scene
 		this.treasures = null;
 		this.doors = null;
 		this.cartells = null;
+		this.bunnies = null;
 
 		this.interactBtn = null;
 		this.firstInteraction = true;
@@ -61,6 +62,11 @@ export default class Level1 extends Phaser.Scene
 
 	create()
 	{
+		// Create all resources
+		this.common = new Common(this);
+		this.message = new Message(this);
+		this.camera = new Camera();
+
 		// Create the tilemap using the loaded JSON file
 		this.map = this.make.tilemap({ key: 'level1'});
 	
@@ -68,26 +74,22 @@ export default class Level1 extends Phaser.Scene
 		const tileset = this.map.addTilesetImage('tileset', 'tileset');
 		// const objects = this.map.addTilesetImage('objects', 'objects');
 
-		this.sky_bg = this.map.createLayer('sky_bg', tileset).scrollFactorX = 0.5;
-		this.sky_fg = this.map.createLayer('sky_fg', tileset).scrollFactorX = 0.6;
-		this.mountains_bg = this.map.createLayer('sky_mountains_bg', tileset).scrollFactorX = 0.7;
-		this.mountains_fg = this.map.createLayer('sky_mountains_fg', tileset).scrollFactorX = 0.8;
-		this.trees_bg = this.map.createLayer('trees_bg', tileset).scrollFactorX = 0.9;
-		this.trees_fg = this.map.createLayer('trees_fg', tileset);
-		this.ground_bg = this.map.createLayer('ground_bg', tileset);
-		this.ground = this.map.createLayer('ground_fg', tileset);
-		this.rocks = this.map.createLayer('rocks', tileset);
-		this.walls = this.map.createLayer('walls', tileset);
-		this.bridge = this.map.createLayer('bridge', tileset);
-		this.platforms = this.map.createLayer('platforms', tileset);
-		this.grass = this.map.createLayer('grass', tileset)
+		// Create all the layers
+		this.sky_bg = this.common.createLevelLayer(this, 'sky_bg', tileset, 0.5);
+		this.sky_fg = this.common.createLevelLayer(this, 'sky_fg', tileset, 0.6);
+		this.mountains_bg = this.common.createLevelLayer(this, 'sky_mountains_bg', tileset, 0.7);
+		this.mountains_fg = this.common.createLevelLayer(this, 'sky_mountains_fg', tileset, 0.8);
+		this.trees_bg = this.common.createLevelLayer(this, 'trees_bg', tileset, 0.9);
+		this.trees_fg = this.common.createLevelLayer(this, 'trees_fg', tileset);
+		this.ground_bg = this.common.createLevelLayer(this, 'ground_bg', tileset);
+		this.ground = this.common.createLevelLayer(this, 'ground_fg', tileset);
+		this.rocks = this.common.createLevelLayer(this, 'rocks', tileset);
+		this.walls = this.common.createLevelLayer(this, 'walls', tileset);
+		this.bridge = this.common.createLevelLayer(this, 'bridge', tileset);
+		this.platforms = this.common.createLevelLayer(this, 'platforms', tileset);
+		this.grass = this.common.createLevelLayer(this, 'grass', tileset)
 		
 		this.physics.world.setBounds(50, 0, this.map.widthInPixels - 50, this.map.heightInPixels * tileset.tileHeight);
-
-		// Create all resources
-		this.common = new Common(this);
-		this.message = new Message(this);
-		this.camera = new Camera();
 
 		// Spawn all interactable objects
 		this.common.spawnTreasures(this);
@@ -97,8 +99,7 @@ export default class Level1 extends Phaser.Scene
 		this.common.spawnNpcs(this, 'npcs', 4);
 
 		this.bunny = this.common.spawnBunny(this);
-		this.pathPoints = this.map.getObjectLayer('objectPath').objects;
-
+		
 		// Spawn player
 		this.player = this.common.addPlayer(this);
 
@@ -113,8 +114,6 @@ export default class Level1 extends Phaser.Scene
 		// Add controls
 		this.player.addTouchScreenPointers(this);
 		this.player.setKeyboardControls(this);
-
-		// this.hud.createButtonIcon(this, this.player.x, this.player.y - 20, 'adasdsad');
 	}
 
 	update() {
@@ -143,10 +142,11 @@ export default class Level1 extends Phaser.Scene
 			}
 		});
 
-		this.common.checkOverlaps(this.npcs, this);
-		this.common.checkOverlaps(this.treasures, this);
-		this.common.checkOverlaps(this.doors, this);
-		this.common.checkOverlaps(this.cartells, this);
+		this.common.checkOverlapsStaticGroups(this.npcs, this);
+		this.common.checkOverlapsStaticGroups(this.treasures, this);
+		this.common.checkOverlapsStaticGroups(this.doors, this);
+		this.common.checkOverlapsStaticGroups(this.cartells, this);
+		this.common.checkOverlapsStaticGroups(this.bunnies, this);
 
 		if (this.startScene) {
 			console.log('Stop scene Level1, start scene Level2');

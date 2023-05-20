@@ -24,16 +24,19 @@ export default class MainMenu extends Phaser.Scene {
 		this.load.audio('audio_chest_opened', 'assets/audio/new_item.mp3');
 
 		// Level 1 assets
-		this.load.tilemapTiledJSON('level1', 'assets/maps/level1.json');
+		this.load.tilemapTiledJSON('level1', 'assets/maps/level1-bak.json');
+		// this.load.tilemapTiledJSON('level1', 'assets/maps/level1-bak.json');
 
 		// Level 2 assets+
 		this.load.image('disney_castle_256','assets/tilesets/disney_castle_256.png');
 		this.load.tilemapTiledJSON('level2', 'assets/maps/level2.json');
 		
 		// Load tilesets as spritesheets
-		this.load.spritesheet('player', 'assets/spritesheets/player_options_16/Lanto_Charas_9.png', { frameWidth: 16, frameHeight: 16 });
-		this.load.spritesheet('npc_xavi', 'assets/spritesheets/xavi_16.png', { frameWidth: 16, frameHeight: 16 });
-		this.load.spritesheet('npc_mi', 'assets/spritesheets/mi_16.png', { frameWidth: 16, frameHeight: 16 });
+		this.load.spritesheet('player', 'assets/spritesheets/player_options_32/Lanto_Charas_9.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.spritesheet('npc_xavi', 'assets/spritesheets/xavi_32.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.spritesheet('npc_mi', 'assets/spritesheets/mi_32.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.spritesheet('npc_bunny', 'assets/spritesheets/bunny.png', { frameWidth: 45, frameHeight: 45 });
+		this.load.spritesheet('npc_beast', 'assets/spritesheets/bestia.png', { frameWidth: 88, frameHeight: 88 });
 		this.load.spritesheet('treasure', 'assets/spritesheets/treasure.png', {frameWidth: 16, frameHeight: 16});		
 		this.load.spritesheet('objects', 'assets/spritesheets/objects_16x16.png', {frameWidth: 16, frameHeight: 16});
     }

@@ -55,8 +55,22 @@ export default class Common {
 		scene.physics.add.collider(scene.player, scene.coins);
 		scene.physics.add.collider(scene.coins, scene.ground);
 		if(scene.bunny !== undefined){
-			scene.physics.add.collider(scene.bunny, scene.platforms);
+			// scene.physics.add.collider(scene.bunny, scene.platforms);
 			scene.physics.add.collider(scene.bunny, scene.ground);
+		}
+	}
+
+	createLevelLayer(scene, layerName, tileset, scrollFactorX){
+		try {
+			var obj = scene.map.createLayer(layerName, tileset);
+			if(scrollFactorX != null){
+				obj.scrollFactorX = scrollFactorX;
+			}
+			console.log('Created layer ' + layerName);
+			return obj;
+		} catch (error) {
+			console.log('Error trying to create layer ' + layerName);
+			return null;
 		}
 	}
 
@@ -127,6 +141,9 @@ export default class Common {
 	}
 
 	npcActionsLevel1(player, npc, scene) {
+		if(npc.name == 'beast'){
+			scene.message.showMessage(scene, npc.name + ": Hola!");
+		}
 		if(scene.hud.inventory.length == 0){
 			if(npc.name == 'Xavi'){
 				scene.message.showMessage(scene, npc.name + ": Encara no has trobat el mapa? Ha de ser dins d'un bagul");
@@ -173,66 +190,119 @@ export default class Common {
 	}
 
 	spawnBunny(scene) {
-		const bunnyLayer = scene.map.getObjectLayer('bunny');		
-		var newbunny = null;
-		bunnyLayer.objects.forEach((bunny) => {
-			newbunny = scene.physics.add.sprite(bunny.x, bunny.y, 'objects', 24).setOrigin(0, 1)
-			newbunny.setImmovable(true)
-			newbunny.body.setAllowGravity(false);
-
-			const container = this.drawHintContainer(scene, newbunny);
-			newbunny.container = container;
-			newbunny.container.setVisible(true);
-		});
-		
-		return newbunny;
+		scene.bunnies = scene.physics.add.staticGroup();
+		try {
+			const bunnyLayer = scene.map.getObjectLayer('bunny');		
+			var newbunny = null;
+			bunnyLayer.objects.forEach((bunny) => {
+				newbunny = scene.physics.add.sprite(bunny.x, bunny.y, 'npc_bunny', 0).setOrigin(0, 1)
+				newbunny.setImmovable(true)
+				newbunny.body.setAllowGravity(false);
+				newbunny.name = bunny.name;
+				console.log('Bunny ' + bunny.name + ' props:', bunny.properties);
+	
+				const container = this.drawHintContainer(scene, newbunny);
+				newbunny.container = container;
+				newbunny.container.setVisible(false);
+	
+		 		scene.bunnies.add(newbunny);
+			});		
+			scene.pathPoints = scene.map.getObjectLayer('objectPath').objects;
+			newbunny = this.setBunnyAnimations(scene, newbunny);
+			return newbunny;
+		} catch (error) {
+			console.log('No bunnies found');
+		}
 	}
 
+	setBunnyAnimations(scene, newbunny) {
+		scene.anims.create({
+			key: 'bunny-left',
+			frames: scene.anims.generateFrameNumbers('npc_bunny', { start: 13, end: 18 }),
+			frameRate: 10,
+			repeat: -1,
+			duration: 100
+		});
+
+		scene.anims.create({
+			key: 'bunny-right',
+			frames: scene.anims.generateFrameNumbers('npc_bunny', { start: 13, end: 18 }),
+			frameRate: 10,
+			repeat: -1,
+			duration: 100
+		});
+
+		scene.anims.create({
+			key: 'bunny-idle',
+			frames: scene.anims.generateFrameNumbers('npc_bunny', { start: 0, end: 0 }),
+			frameRate: 10,
+			repeat: -1,
+			duration: 100
+		});
+
+		newbunny.flipX = false;
+		return newbunny;
+	}
+	
 	bunnyMovement(scene) {
 		// Bunny related code
-		var bunnySpeed = 200; 
-		if(!scene.bunnyCatched){
+		var bunnySpeed = 200;
+		if (!scene.bunnyCatched) {
 			const playerDistance = Phaser.Math.Distance.Between(scene.player.x, scene.player.y, scene.bunny.x, scene.bunny.y);
 			if (scene.bunnyReverseFlag === undefined) { // Initialize reverseFlag if it doesn't exist
 				scene.bunnyReverseFlag = false;
 			}
-			console.log('Bunny reverseFlag: ' + scene.bunnyReverseFlag);
-
+			// console.log('Bunny reverseFlag: ' + scene.bunnyReverseFlag);
+	
 			// // Check if the player is within a certain distance
 			// if (playerDistance < 50 && !scene.bunnyReverseFlag) {
-			// 	scene.bunnyReverseFlag = true;
-			// 	scene.pathPoints.reverse();
+			//     scene.bunnyReverseFlag = true;
+			//     scene.pathPoints.reverse();
 			// } else if (playerDistance > 50 && scene.bunnyReverseFlag) {
-			// 	scene.bunnyReverseFlag = false;
-			// 	scene.pathPoints.reverse();
+			//     scene.bunnyReverseFlag = false;
+			//     scene.pathPoints.reverse();
 			// }
-
+	
 			const point = scene.pathPoints[0];
-
+	
 			const distance = Phaser.Math.Distance.Between(scene.bunny.x, scene.bunny.y, point.x, point.y);
-
+	
 			if (distance < 5) {
 				// Reached the current path point, move to the next one
 				scene.pathPoints.push(scene.pathPoints.shift());
 			}
-
+	
 			// Move the bunny towards the current path point
 			scene.physics.velocityFromRotation(scene.bunny.rotation, bunnySpeed, scene.bunny.body.velocity);
 			scene.physics.moveToObject(scene.bunny, scene.pathPoints[0], bunnySpeed);
-		}else{
-				
+			scene.bunny.container.x = scene.bunny.x;
+			scene.bunny.container.y = scene.bunny.y - 20;
+	
+			// Set the appropriate animation based on the bunny's movement direction
+			if (scene.bunny.body.velocity.x < 0) {
+				scene.bunny.flipX = false;
+				scene.bunny.anims.play('bunny-left', true);
+			} else if (scene.bunny.body.velocity.x > 0) {
+				scene.bunny.flipX = true;
+				scene.bunny.anims.play('bunny-right', true);
+			}
+		} else {
+	
 			// Stop bunny movement
 			scene.bunny.setVelocity(0, 0);
-
+			// Bunny is not moving horizontally, play idle animation or set a default animation
+			scene.bunny.anims.play('bunny-idle', true);
+	
 			scene.bunny.body.setAllowGravity(true);
 			scene.bunny.body.gravity.y = 6000;
 		}
 	}
+	
 
 	checkBunnyActions(player, bunny, scene) {
 		console.log('Interactuo amb el bunny!');
-		console.log('Cartell: ' + JSON.stringify(bunny));
-		scene.message.showMessage(this, "Oh! M'has atrapat!!");
+		console.log('Bunny props: ' + JSON.stringify(bunny.name));
+		scene.message.showMessage(this, "Oh! M'has atrapat!!\nEl casament és el dia 30 de setembre!\nHauries d'arribar cap a les 16h.\nTIC-TAC. TIC-TAC.");
 		scene.bunnyCatched = true;
 	}
 
@@ -264,99 +334,123 @@ export default class Common {
 		});
 	}
 
-	checkOverlaps(object, scene) {
+	checkOverlapsStaticGroups(object, scene) {
 		object.getChildren().forEach((obj) => {
 			obj.container.setVisible(false);
 		});
 
 		scene.physics.world.overlap(scene.player, object.getChildren(), (player, obj) => {
-			// When opening a treasure, we will disable the hint
-			var name = '';
-			if(obj.hasOwnProperty('objectType')){
-				name = obj.objectType.name;
-			}
-			// If the object is a treasure then we will enable the hint only when not opened
-			if(!obj.opened && name != 'door'){
-				obj.container.setVisible(true);
-
-			// Door should be always interactable
-			}else if(name == 'door' || name == 'bunny'){
-				obj.container.setVisible(true);
-			}
+			this.manageOverlaps(obj, scene);
 		});
+	}
+
+	checkOverlapsObject(object, scene) {
+		object.container.setVisible(false);
+		this.manageOverlaps(object, scene);
+	}
+
+	manageOverlaps(obj, scene) {
+		// When opening a treasure, we will disable the hint
+		var name = '';
+		if(obj.hasOwnProperty('objectType')){
+			name = obj.objectType.name;
+		}
+		console.log('Managing overlaps for object: ' + name);
+		// If the object is a treasure then we will enable the hint only when not opened
+		if(!obj.opened && name != 'door'){
+			obj.container.setVisible(true);
+
+		// Door should be always interactable
+		}else if(name == 'door'){
+			obj.container.setVisible(true);
+		}else if(name == 'bunny'){
+			console.log('Overlapping with bunny!!');
+			obj.container.setVisible(true);
+		}
 	}
 
 	spawnCoins(scene) {
 		scene.coins = scene.physics.add.staticGroup();
-		scene.coinsLayer = scene.map.getObjectLayer('coins');
-		var count = 0;
-		scene.coinsLayer.objects.forEach((coin) => {
-			count += 1;
-			const newcoin = scene.physics.add.sprite(coin.x, coin.y, 'objects', 10).setOrigin(0, 1)
-			newcoin.setImmovable(true)
-			newcoin.body.setAllowGravity(false);
-			newcoin.id = count;
-			scene.coins.add(newcoin);
-		});	
+		try {
+			scene.coinsLayer = scene.map.getObjectLayer('coins');
+			var count = 0;
+			scene.coinsLayer.objects.forEach((coin) => {
+				count += 1;
+				const newcoin = scene.physics.add.sprite(coin.x, coin.y, 'objects', 10).setOrigin(0, 1)
+				newcoin.setImmovable(true)
+				newcoin.body.setAllowGravity(false);
+				newcoin.id = count;
+				scene.coins.add(newcoin);
+			});		
+		} catch (error) {
+			console.log('No coins found');
+		}
 	}
 		
 	spawnCartells(scene) {
 		scene.cartells = scene.physics.add.staticGroup();
-		scene.cartellsLayer = scene.map.getObjectLayer('cartells');
-		var count = 0;
-		scene.cartellsLayer.objects.forEach((cartell) => {
-			count += 1;
-			const newcartell = scene.physics.add.sprite(cartell.x, cartell.y, 'objects', 28).setOrigin(0, 1)
-			newcartell.setImmovable(true)
-			newcartell.body.setAllowGravity(false);
-			newcartell.id = count;
+		try {
+			scene.cartellsLayer = scene.map.getObjectLayer('cartells');
+			var count = 0;
+			scene.cartellsLayer.objects.forEach((cartell) => {
+				count += 1;
+				const newcartell = scene.physics.add.sprite(cartell.x, cartell.y, 'objects', 28).setOrigin(0, 1)
+				newcartell.setImmovable(true)
+				newcartell.body.setAllowGravity(false);
+				newcartell.id = count;
+		
+				// Custom data must be accessed from here and assigned to the new object...
+				newcartell.name = cartell.name;
+				console.log('cartell ' + cartell.name + ' props:', cartell.properties);
+		
+				newcartell.textCartell = cartell.properties.find(obj => obj.name === "text").value;
 	
-			// Custom data must be accessed from here and assigned to the new object...
-			newcartell.name = cartell.name;
-			console.log('cartell ' + cartell.name + ' props:', cartell.properties);
-	
-			newcartell.textCartell = cartell.properties.find(obj => obj.name === "text").value;
-
-			const container = this.drawHintContainer(scene, newcartell);
-			newcartell.container = container;
-			newcartell.container.setVisible(false);
-	
-			scene.cartells.add(newcartell);
-		});	
+				const container = this.drawHintContainer(scene, newcartell);
+				newcartell.container = container;
+				newcartell.container.setVisible(false);
+		
+				scene.cartells.add(newcartell);
+			});	
+		} catch (error) {
+			console.log('No cartells found');
+		}
 	}
 
 	readCartell(player, cartell, scene) {
-		console.log('Llegeixo el cartell!');
 		console.log('Cartell: ' + JSON.stringify(cartell.textCartell));
 		scene.message.showMessage(this, cartell.textCartell);
 	}
 
 	spawnDoors(scene) {
 		scene.doors = scene.physics.add.staticGroup();
-		scene.doorsLayer = scene.map.getObjectLayer('doors');
-		var count = 0;
-		scene.doorsLayer.objects.forEach((door) => {
-			count += 1;
-			const newdoor = scene.physics.add.sprite(door.x, door.y, 'objects', 19).setOrigin(0, 1)
-			newdoor.setImmovable(true)
-			newdoor.body.setAllowGravity(false);
-			newdoor.id = count;
-
-			// Custom data must be accessed from here and assigned to the new object...
-			newdoor.name = door.name;
-			console.log('Door ' + door.name + ' props:', door.properties);
-
-			newdoor.isEntry = door.properties.find(obj => obj.name === "isEntry").value;
-			newdoor.isExit = door.properties.find(obj => obj.name === "isExit").value;
-			newdoor.opened = door.properties.find(obj => obj.name === "opened").value;
-			newdoor.objectType = door.properties.find(obj => obj.name === "door"); 
-
-			const container = this.drawHintContainer(scene, newdoor);
-			newdoor.container = container;
-			newdoor.container.setVisible(false);
-
-			scene.doors.add(newdoor);
-		});	
+		try {
+			scene.doorsLayer = scene.map.getObjectLayer('doors');
+			var count = 0;
+			scene.doorsLayer.objects.forEach((door) => {
+				count += 1;
+				const newdoor = scene.physics.add.sprite(door.x, door.y, 'objects', 19).setOrigin(0, 1)
+				newdoor.setImmovable(true)
+				newdoor.body.setAllowGravity(false);
+				newdoor.id = count;
+	
+				// Custom data must be accessed from here and assigned to the new object...
+				newdoor.name = door.name;
+				console.log('Door ' + door.name + ' props:', door.properties);
+	
+				newdoor.isEntry = door.properties.find(obj => obj.name === "isEntry").value;
+				newdoor.isExit = door.properties.find(obj => obj.name === "isExit").value;
+				newdoor.opened = door.properties.find(obj => obj.name === "opened").value;
+				newdoor.objectType = door.properties.find(obj => obj.name === "door"); 
+	
+				const container = this.drawHintContainer(scene, newdoor);
+				newdoor.container = container;
+				newdoor.container.setVisible(false);
+	
+				scene.doors.add(newdoor);
+			});	
+		} catch (error) {
+			console.log('No doors found');
+		}
 	}
 	
 	drawHintContainer(scene, obj) {
@@ -383,7 +477,7 @@ export default class Common {
 		if (target) {
 			// Move the player to the location of door2_2
 			player.x = target.x + target.width / 2;
-			player.y = target.y;
+			player.y = target.y - target.height;
 		} else {
 			console.error("Door '" + target + "' not found in this.doors");
 		}

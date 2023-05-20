@@ -1099,8 +1099,8 @@
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":96,
-                 "y":544
+                 "x":528,
+                 "y":528
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1118,8 +1118,19 @@
          "visible":true,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":22,
+         "name":"objectPath",
+         "objects":[],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":22,
+ "nextlayerid":23,
  "nextobjectid":46,
  "orientation":"orthogonal",
  "renderorder":"right-down",

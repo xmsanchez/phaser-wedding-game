@@ -1,7 +1,7 @@
 import Common from '../classes/Common.js';
 import Camera from '../classes/Camera.js';
 import HUD from '../classes/HUD.js';
-import Loading from '../classes/Loading';
+import Message from '../classes/Message.js';
 
 export default class Level2 extends Phaser.Scene
 {
@@ -26,6 +26,7 @@ export default class Level2 extends Phaser.Scene
 		this.npcs = null;
 		this.treasures = null;
 		this.doors = null;
+		this.cartells = null;
 
 		this.common = null;
 	}
@@ -61,11 +62,13 @@ export default class Level2 extends Phaser.Scene
 
 		// Create all resources
 		this.common = new Common(this);
+		this.message = new Message(this);
 		this.camera = new Camera();
 
 		// Spawn all interactable objects
 		this.common.spawnTreasures(this);
 		this.common.spawnCoins(this);
+		this.common.spawnCartells(this);
 		this.common.spawnDoors(this);
 
 		// Spawn player
@@ -82,6 +85,8 @@ export default class Level2 extends Phaser.Scene
 		// Add controls
 		this.player.addTouchScreenPointers(this);
 		this.player.setKeyboardControls(this);
+
+		// this.hud.createButtonIcon(this, this.player.x, this.player.y - 20, 'Test');
 	}
 
     update() {
@@ -94,6 +99,7 @@ export default class Level2 extends Phaser.Scene
 		// this.common.checkOverlaps(this.npcs, this);
 		this.common.checkOverlaps(this.treasures, this);
 		this.common.checkOverlaps(this.doors, this);
+		this.common.checkOverlaps(this.cartells, this);
 
     }
 

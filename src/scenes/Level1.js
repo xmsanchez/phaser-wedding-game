@@ -1,7 +1,7 @@
 import Common from '../classes/Common';
 import Camera from '../classes/Camera';
 import HUD from '../classes/HUD';
-import Loading from '../classes/Loading';
+import Message from '../classes/Message.js';
 
 export default class Level1 extends Phaser.Scene
 {
@@ -13,12 +13,22 @@ export default class Level1 extends Phaser.Scene
 		this.jump = false;
 		this.moveLeft = false;
 		this.moveRight = false;
+		this.moveDown = false;
+		this.moveUp = false;
+		
 		this.touchMoveLeft = false;
 		this.touchMoveRight = false;
+		this.touchMoveDown = false;
+		this.touchMoveUp = false;
+
 		this.score = 0;
 		this.player = null;
 		this.joystick = null;
+		
 		this.messageDisplaying = false;
+		this.messageIsSelector = false;
+		this.messageSelectorTexts = [];
+		this.messageSelectorTextObjects = [];
 
 		this.startScene = false;
 		this.currentScene = 'Level1';
@@ -31,8 +41,9 @@ export default class Level1 extends Phaser.Scene
 		this.firstInteraction = true;
 
 		this.common = null;
+		this.message = null;
 
-		this.messages = [
+		this.messageList = [
 			'Hola! Saps què?!', 
 			'Ens casem!!!', 
 			'Ara tenim un problema, i és que hem perdut el mapa de la ubicació.\nEns ajudes a trobar-lo?'
@@ -69,11 +80,13 @@ export default class Level1 extends Phaser.Scene
 
 		// Create all resources
 		this.common = new Common(this);
+		this.message = new Message(this);
 		this.camera = new Camera();
 
 		// Spawn all interactable objects
 		this.common.spawnTreasures(this);
 		this.common.spawnCoins(this);
+		// this.common.spawnCartells(this);
 		this.common.spawnDoors(this);
 		this.common.spawnNpcs(this, 'npcs', 4);
 
@@ -92,7 +105,7 @@ export default class Level1 extends Phaser.Scene
 		this.player.addTouchScreenPointers(this);
 		this.player.setKeyboardControls(this);
 
-		this.common.createButtonIcon(this, this.player.x, this.player.y - 20, 'Test');
+		// this.hud.createButtonIcon(this, this.player.x, this.player.y - 20, 'adasdsad');
 	}
 
 	update() {
@@ -108,13 +121,13 @@ export default class Level1 extends Phaser.Scene
 				npc.setFrame(4);
 				
 				let currentIndex = 0;
-				if(this.messages.length > 0 && this.firstInteraction && !this.messageDisplaying){
-					console.log('Display message: ' + this.messages[currentIndex]);
-					console.log('Messages: ' + this.messages);
-					this.common.showMessage(this, this.messages[0]);
-					this.messages.shift();
-					console.log('Messages: ' + this.messages);
-				}else if(this.messages.length == 0){
+				if(this.messageList.length > 0 && this.firstInteraction && !this.messageDisplaying){
+					console.log('Display message: ' + this.messageList[currentIndex]);
+					console.log('Messages: ' + this.messageList);
+					this.message.showMessage(this, this.messageList[0]);
+					this.messageList.shift();
+					console.log('Messages: ' + this.messageList);
+				}else if(this.messageList.length == 0){
 					this.firstInteraction = false;
 					npc.setFrame(npc.default_frame);
 				}
@@ -132,8 +145,13 @@ export default class Level1 extends Phaser.Scene
 			this.backgroundMusic.stop();
 			this.scene.start('PreLevel', { levelKey: 'Level2', text: 'La Data' });
 		}
+
+		// this.messageSelectorTexts = ['Option 0 i text bastant llarg a veure què passa text bastant llarg a veure què passa',  'Option 1 i text bastant llarg a veure què passa', 'Option 2 i més text perquè també vull veure el què', 'Option 3', 'Option 4 també amb bastant text'];
+		this.messageSelectorTexts = ['Option 1', 'Option 2', 'Option 3'];
+		if(!this.messageDisplaying){
+			// this.message.showMessageSelector(this, this.messageSelectorTexts);
+		}
 	}
-	
 
 	loadMusic(){
 		// Create an instance of the audio object

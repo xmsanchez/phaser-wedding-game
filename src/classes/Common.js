@@ -78,7 +78,7 @@ export default class Common {
 			scene.common.chest_opened_sound.play();
 
 			// Show a message
-			scene.common.showMessage(this, 'Has trobat ' + treasure.containsText + '!');
+			scene.message.showMessage(this, 'Has trobat ' + treasure.containsText + '!');
 			
 			// Add a new object to the inventory
 			console.log('Add treasure contents to the inventory: ' + treasure.contents);
@@ -123,12 +123,11 @@ export default class Common {
 	}
 
 	npcActionsLevel1(player, npc, scene) {
-		console.log('Message not being displayed, yet: ' + scene.messageDisplaying);
 		if(scene.hud.inventory.length == 0){
 			if(npc.name == 'Xavi'){
-				this.showMessage(scene, npc.name + ": Encara no has trobat el mapa? Ha de ser dins d'un bagul");
+				scene.message.showMessage(scene, npc.name + ": Encara no has trobat el mapa? Ha de ser dins d'un bagul");
 			}else if(npc.name == 'Miriam'){
-				this.showMessage(scene, npc.name + ': El mapa és en algun lloc sobre una plataforma, però no recordo ben bé on era...');
+				scene.message.showMessage(scene, npc.name + ': El mapa és en algun lloc sobre una plataforma, però no recordo ben bé on era...');
 			}
 		}else{
 			// Look for the map in the inventory
@@ -137,12 +136,12 @@ export default class Common {
 				console.log('Object in inventory: ' + scene.hud.inventory[i]);
 				if(scene.hud.inventory[i] === 'map'){
 					if(npc.name == 'Xavi'){
-						this.showMessage(scene, npc.name + ': Ja tens el mapa? Dona-li a la Miriam!')
+						scene.message.showMessage(scene, npc.name + ': Ja tens el mapa? Dona-li a la Miriam!')
 					}else if(npc.name == 'Miriam'){
 						if(npc.contents == ''){
 							console.log(npc.name + ': Ja tens la clau, corre cap a la porta!');
 						}else{
-							this.showMessage(scene, npc.name + ': Has trobat el mapa!\n\nEl casament serà a "LA VINYASSA". És a prop de Arbúcies!\n\nAquí tens la clau per obrir la porta, al proper nivell esbrinaràs la data del casament!');
+							scene.message.showMessage(scene, npc.name + ': Has trobat el mapa!\n\nEl casament serà a "LA VINYASSA". És a prop de Arbúcies!\n\nAquí tens la clau per obrir la porta, al proper nivell esbrinaràs la data del casament!');
 							scene.common.chest_opened_sound.play();
 							scene.hud.updateInventory(scene, npc.contents);
 							scene.hud.inventory.push(npc.contents);
@@ -152,9 +151,9 @@ export default class Common {
 					}
 				}else if (scene.hud.inventory[i] === 'key'){
 					if(npc.name == 'Xavi'){
-						this.showMessage(scene, npc.name + ": La Miriam t'ha donat la clau? Doncs corre cap a la porta!");
+						scene.message.showMessage(scene, npc.name + ": La Miriam t'ha donat la clau? Doncs corre cap a la porta!");
 					}else if (npc.name == 'Miriam'){
-						this.showMessage(scene, npc.name + ': Ja tens la clau! Ja pots obrir la porta, corre cap allà!');
+						scene.message.showMessage(scene, npc.name + ': Ja tens la clau! Ja pots obrir la porta, corre cap allà!');
 					}
 				}
 			}
@@ -204,27 +203,19 @@ export default class Common {
 
 		scene.physics.world.overlap(scene.player, object.getChildren(), (player, obj) => {
 			// When opening a treasure, we will disable the hint
-			if(!obj.opened){
+			var name = '';
+			if(obj.hasOwnProperty('objectType')){
+				name = obj.objectType.name;
+			}
+			// If the object is a treasure then we will enable the hint only when not opened
+			if(!obj.opened && name != 'door'){
+				obj.container.setVisible(true);
+
+			// Door should be always interactable
+			}else if(name == 'door'){
 				obj.container.setVisible(true);
 			}
 		});
-	}
-	
-	drawHintContainer(scene, obj) {
-		// Create a container for the circle and text
-		const container = scene.add.container(obj.x + (obj.width / 2) - 8, obj.y - obj.height - 9);
-	  
-		// Add the small circle as a child sprite of the container
-		const outerCircle = scene.add.circle(0, 0, 9, 0xFFFFFF);
-		const circle = scene.add.circle(0, 0, 8, 0xFF0000);
-		container.add(outerCircle);
-		container.add(circle);
-	
-		// Add the text as a child sprite of the container
-		const text = scene.add.text(-4, -7, 'B', { fontSize: '14px', fill: '#ffffff' });
-		container.add(text);
-
-		return container;
 	}
 
 	spawnCoins(scene) {
@@ -241,6 +232,41 @@ export default class Common {
 		});	
 	}
 		
+	spawnCartells(scene) {
+		scene.cartells = scene.physics.add.staticGroup();
+		scene.cartellsLayer = scene.map.getObjectLayer('cartells');
+		var count = 0;
+		scene.cartellsLayer.objects.forEach((cartell) => {
+			count += 1;
+			const newcartell = scene.physics.add.sprite(cartell.x, cartell.y, 'objects', 28).setOrigin(0, 1)
+			newcartell.setImmovable(true)
+			newcartell.body.setAllowGravity(false);
+			newcartell.id = count;
+	
+			// Custom data must be accessed from here and assigned to the new object...
+			newcartell.name = cartell.name;
+			console.log('cartell ' + cartell.name + ' props:', cartell.properties);
+	
+			newcartell.textCartell = cartell.properties.find(obj => obj.name === "text").value;
+			// newcartell.isEntry = cartell.properties.find(obj => obj.name === "isEntry").value;
+			// newcartell.isExit = cartell.properties.find(obj => obj.name === "isExit").value;
+			// newcartell.opened = cartell.properties.find(obj => obj.name === "opened").value;
+			// newcartell.objectType = cartell.properties.find(obj => obj.name === "cartell"); 
+	
+			const container = this.drawHintContainer(scene, newcartell);
+			newcartell.container = container;
+			newcartell.container.setVisible(false);
+	
+			scene.cartells.add(newcartell);
+		});	
+	}
+
+	readCartell(player, cartell, scene) {
+		console.log('Llegeixo el cartell!');
+		console.log('Cartell: ' + JSON.stringify(cartell.textCartell));
+		scene.message.showMessage(this, cartell.textCartell);
+	}
+
 	spawnDoors(scene) {
 		scene.doors = scene.physics.add.staticGroup();
 		scene.doorsLayer = scene.map.getObjectLayer('doors');
@@ -259,6 +285,7 @@ export default class Common {
 			newdoor.isEntry = door.properties.find(obj => obj.name === "isEntry").value;
 			newdoor.isExit = door.properties.find(obj => obj.name === "isExit").value;
 			newdoor.opened = door.properties.find(obj => obj.name === "opened").value;
+			newdoor.objectType = door.properties.find(obj => obj.name === "door"); 
 
 			const container = this.drawHintContainer(scene, newdoor);
 			newdoor.container = container;
@@ -266,6 +293,23 @@ export default class Common {
 
 			scene.doors.add(newdoor);
 		});	
+	}
+	
+	drawHintContainer(scene, obj) {
+		// Create a container for the circle and text
+		const container = scene.add.container(obj.x + (obj.width / 2) - 8, obj.y - obj.height - 9);
+	  
+		// Add the small circle as a child sprite of the container
+		const outerCircle = scene.add.circle(0, 0, 9, 0xFFFFFF);
+		const circle = scene.add.circle(0, 0, 8, 0xFF0000);
+		container.add(outerCircle);
+		container.add(circle);
+	
+		// Add the text as a child sprite of the container
+		const text = scene.add.text(-4, -7, 'B', { fontSize: '14px', fill: '#ffffff' });
+		container.add(text);
+
+		return container;
 	}
 
 	translatePlayerPosition(player, door, targetDoor, scene) {
@@ -287,9 +331,9 @@ export default class Common {
 		console.log('Message is displaying? ' + scene.messageDisplaying);
 		if(scene.messageDisplaying){
 			scene.messageDisplaying = false;
-			this.destroyMessageBox();
+			scene.message.destroyMessageBox();
 		}else{
-			scene.common.showMessage(this, 'La porta està tancada.\nNecessites una clau!.');
+			scene.message.showMessage(this, 'La porta està tancada.\nNecessites una clau!.');
 		}
 	}
 
@@ -301,7 +345,7 @@ export default class Common {
 		scene.hud.inventory.pop('key');
 		scene.hud.updateInventory(scene);
 		
-		scene.common.showMessage(this, 'Utilitzes la clau!\nObres la porta...');
+		scene.message.showMessage(this, 'Utilitzes la clau!\nObres la porta...');
 	}
 
 	// Check if the door can be opened or is already opened.
@@ -328,11 +372,8 @@ export default class Common {
 			console.log('The player has the key OR the door is opened');
 			if(!door.opened && !scene.messageDisplaying){
 				this.doorOpenWithKey(player, door, scene);
-			}else{
-				scene.messageDisplaying = false;
-				this.destroyMessageBox();
 			}
-			console.log('The player has a key or the door was already opened');
+			console.log('The player has a key or the door was already opened. Door name: ' + door.name);
 
 			// Doors Level1
 			if (door.name == 'door1_1'){
@@ -347,112 +388,11 @@ export default class Common {
 			}else if (door.name == 'door2_2') {
 				// Move the player to the location of door number3
 				this.translatePlayerPosition(player, door.name, 'door1_2', scene);
+			}else if (door.name == 'door3_2') {
+				scene.message.showMessage(this, 'Encara no pots entrar! (estem fent obres :-))');
 			}
 		}
 		console.log(JSON.stringify(door))
 		console.log('Door is opened: ' + door.opened);
 	}
-
-	showMessageList(scene, messages) {
-		console.log('Show messages: ' + JSON.stringify(messages));
-		let currentIndex = 0;
-		if (currentIndex < messages.length) {
-			this.showMessage(this, messages[currentIndex]);
-			console.log('Show first message: ' + messages[currentIndex]);
-			scene.interactBtn.once('pointerdown', () => {
-				scene.messageDisplaying = false;
-				this.destroyMessageBox();
-				currentIndex++;
-				console.log('Destroyed message ' + currentIndex);
-				this.showMessage();
-			});
-		}
-	}
-
-	showMessage(scene, message) {
-		const padding = 20;
-		const boxWidth = this.scene.cameras.main.width / 2.3 - padding * 2;
-		const centerX = this.scene.cameras.main.centerX;
-		const centerY = this.scene.cameras.main.centerY;
-		const boxX = centerX - boxWidth / 2;
-	  
-		const textConfig = {
-		  fontSize: '18px',
-		  fill: '#ffffff',
-		  wordWrap: { width: boxWidth - padding * 2, useAdvancedWrap: true },
-		};
-	  
-		const graphics = this.scene.add.graphics();
-		graphics.fillStyle(0x000000, 1);
-		graphics.setScrollFactor(0);
-		graphics.fillRect(boxX, centerY, boxWidth, 1); // Placeholder height for text measurement
-		graphics.lineStyle(4, 0xffffff);
-		graphics.strokeRect(boxX, centerY, boxWidth, 1); // Placeholder height for text measurement
-	  
-		const text = this.scene.add.text(centerX, centerY, message, textConfig);
-		text.setOrigin(0.5);
-		text.setScrollFactor(0);
-	  
-		const textHeight = text.height + padding * 2;
-		const boxHeight = Math.max(textHeight + 30, 100);
-		const boxY = centerY - boxHeight / 2;
-	  
-		graphics.clear();
-		graphics.fillStyle(0x000000, 1);
-		graphics.fillRect(boxX, boxY, boxWidth, boxHeight);
-		graphics.lineStyle(4, 0xffffff);
-		graphics.strokeRect(boxX, boxY, boxWidth, boxHeight);
-	  
-		text.setY(centerY - 10); // Adjust the text Y position based on the new box height
-	  
-		const additionalTextConfig = {
-		  font: 'italic 14px Arial',
-		  fill: '#ffffff',
-		};
-	  
-		const additionalText = this.scene.add.text(centerX, boxY + boxHeight + padding, "Prem 'B' per continuar", additionalTextConfig);
-		additionalText.setOrigin(0.5, 0);
-		additionalText.y = boxY + boxHeight - 30;
-
-		additionalText.setScrollFactor(0);
-	  
-		this.messageBox.push(graphics, text, additionalText);
-		this.scene.messageDisplaying = true;
-	  }
-	  
-	destroyMessageBox() {
-		if (this.messageBox && this.messageBox.length > 0) {
-		  this.messageBox.forEach(element => {
-			element.destroy();
-		  });
-		  this.messageBox = [];
-		}
-	}
-
-    // This is to display on messages
-    createButtonIcon = function (scene, x, y, buttonText) {
-		console.log('Add button icon at ' + x + ', ' + y + ' with text ' + buttonText);
-        var btn = scene.add.circle(x, y, 10, 0xFF0000).setAlpha(0.3);
-		btn.scrollFactorX = 0;
-		btn.scrollFactorY = 0;
-
-        // Add text to the circle
-        var textStyle = {
-            font: '24px Arial',
-            fill: '#ffffff'
-        };
-        var text = buttonText;
-        var textElement = scene.add.text(x, y, text, textStyle).setOrigin(0.5);
-        textElement.scrollFactorX = 0;
-        textElement.scrollFactorY = 0;
-
-        // Create a container to group the circle and text
-        var container = scene.add.container(0, 0, [btn, textElement]);
-        container.setSize(btn.width, btn.height);
-
-        // Enable touch input on the container
-        container.setInteractive({ useHandCursor: true });
-		
-		scene.add.container(x, y, [btn, textElement]);
-    }
 }

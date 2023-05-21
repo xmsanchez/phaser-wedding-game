@@ -17,22 +17,36 @@ export default class MainMenu extends Phaser.Scene {
 		this.load.plugin('rexvirtualjoystickplugin', urlJoystick, true);
 		this.load.plugin('rexbuttonplugin', urlButton, true);
     
-		// Load common assets
 		this.load.image('tileset','assets/tilesets/tileset.png');
+
+		// Load audio music
 		this.load.audio('background_music', 'assets/audio/tangled.mp3');
+		this.load.audio('background_music_house', 'assets/audio/music/PerituneMaterial_Dawning_Tale.mp3');
+		this.load.audio('background_music_bunny1', 'assets/audio/music/Fluffing-a-Duck.mp3');
+		this.load.audio('background_music_bunny2', 'assets/audio/music/Run-Amok.mp3');
+		this.load.audio('background_music_woods1', 'assets/audio/music/PerituneMaterial_MoonForest.mp3');
+		
+		// Load audio sounds
 		this.load.audio('audio_coin', 'assets/audio/coin.mp3');
 		this.load.audio('audio_chest_opened', 'assets/audio/new_item.mp3');
 
 		// Level 1 assets
-		this.load.tilemapTiledJSON('level1', 'assets/maps/level1-bak.json');
+		this.load.tilemapTiledJSON('level1', 'assets/maps/level1.json');
+		this.load.image('livingroom', 'assets/tilesets/livingroom.png');
 		// this.load.tilemapTiledJSON('level1', 'assets/maps/level1-bak.json');
 
 		// Level 2 assets+
 		this.load.image('disney_castle_256','assets/tilesets/disney_castle_256.png');
+		this.load.image('house_warm_16','assets/tilesets/level1/house_warm_16.png');
+		this.load.tilemapTiledJSON('level2-prev', 'assets/maps/level2-prev.json');
 		this.load.tilemapTiledJSON('level2', 'assets/maps/level2.json');
+		// this.load.tilemapTiledJSON('level2', 'assets/maps/level2-bak.json');
+
+		// Level 3 assets
+		this.load.tilemapTiledJSON('level3-prev', 'assets/maps/level1.json');
 		
 		// Load tilesets as spritesheets
-		this.load.spritesheet('player', 'assets/spritesheets/player_options_32/Lanto_Charas_9.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.spritesheet('player', 'assets/spritesheets/player.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('npc_xavi', 'assets/spritesheets/xavi_32.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('npc_mi', 'assets/spritesheets/mi_32.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('npc_bunny', 'assets/spritesheets/bunny.png', { frameWidth: 45, frameHeight: 45 });
@@ -63,11 +77,11 @@ export default class MainMenu extends Phaser.Scene {
 
 		// add a click event listener to start the Level1 scene
 		this.input.on('pointerdown', () => {
-			this.scene.start('PreLevel', { levelKey: 'Level1', text: 'El Mapa' });
+			this.scene.start('PreLevel', { levelName: 'Nivell 1', levelKey: 'Level1', text: "L'arribada" });
 		});
 		const enterKey = this.input.keyboard.addKey('ENTER');
 		enterKey.on('down', () => {
-			this.scene.start('PreLevel', { levelKey: 'Level1', text: 'El Mapa' });
+			this.scene.start('PreLevel', { levelName: 'Nivell 1', levelKey: 'Level1', text: "L'arribada" });
 		});
 	}
 

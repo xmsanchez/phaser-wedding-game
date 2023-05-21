@@ -1,0 +1,47 @@
+import sys
+import os
+from PIL import Image
+
+def merge_images(image_files, output_path, direction='horizontal'):
+    images = [Image.open(x) for x in image_files]
+
+    if direction=='horizontal':
+        new_img = Image.new('RGB', (sum(i.width for i in images), max(i.height for i in images)))
+        x_offset = 0
+        for i in images:
+            new_img.paste(i, (x_offset,0))
+            x_offset += i.width
+
+    elif direction=='vertical':
+        new_img = Image.new('RGB', (max(i.width for i in images), sum(i.height for i in images)))
+        y_offset = 0
+        for i in images:
+            new_img.paste(i, (0,y_offset))
+            y_offset += i.height
+
+    new_img.save(output_path)
+
+def main(source_folder):
+    output_folder = "merged"
+    os.makedirs(output_folder, exist_ok=True)
+    
+    image_files = []
+    for subdir, dirs, files in os.walk(source_folder):
+        for file in files:
+            if file.endswith('.png'):
+                path = os.path.join(subdir, file)
+                image_files.append(path)
+
+    image_files.sort() # this sorts the images by name, modify if you need a different sorting
+    new_folder = os.path.join(output_folder)
+    os.makedirs(new_folder, exist_ok=True)
+    # new_file_path = os.path.join(new_folder, )
+    new_file_path = os.path.join(new_folder, f"{os.path.basename(os.path.normpath(source_folder))}.png")
+    merge_images(image_files, new_file_path, 'horizontal')
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Please provide the source folder path as a command line argument.")
+    else:
+        main(sys.argv[1])
+

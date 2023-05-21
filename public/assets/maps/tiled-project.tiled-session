@@ -35,7 +35,7 @@
             "selectedLayer": 11,
             "viewCenter": {
                 "x": 742.5,
-                "y": 187.5
+                "y": 47.5
             }
         },
         "level1-bak.json#bunny": {
@@ -138,16 +138,16 @@
         "level2-prev.json": {
             "expandedObjectLayers": [
                 29,
+                42,
                 28,
                 27,
-                41,
-                42
+                41
             ],
             "scale": 2,
-            "selectedLayer": 5,
+            "selectedLayer": 6,
             "viewCenter": {
-                "x": 240.75,
-                "y": 152.75
+                "x": 240.25,
+                "y": 152.25
             }
         },
         "level2-prev.json#bunny": {

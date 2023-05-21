@@ -339,7 +339,7 @@ export default class Common {
 		console.log('NPC animations for: ' + layer);
 		scene.anims.create({
 			key: name + '_left',
-			frames: scene.anims.generateFrameNumbers(layer, { frames: [0, 4] }),
+			frames: scene.anims.generateFrameNumbers(layer, { frames: [10, 8] }),
 			frameRate: 10,
 			repeat: 1,
 			duration: 100
@@ -347,7 +347,7 @@ export default class Common {
 	
 		scene.anims.create({
 			key: name + '_right',
-			frames: scene.anims.generateFrameNumbers(layer, { frames: [0, 7] }),
+			frames: scene.anims.generateFrameNumbers(layer, { frames: [7, 5] }),
 			frameRate: 10,
 			repeat: 1,
 			duration: 100

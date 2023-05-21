@@ -48,8 +48,8 @@ export default class MainMenu extends Phaser.Scene {
 		
 		// Load tilesets as spritesheets
 		this.load.spritesheet('player', 'assets/spritesheets/player.png', { frameWidth: 32, frameHeight: 32 });
-		this.load.spritesheet('npc_xavi', 'assets/spritesheets/xavi_32.png', { frameWidth: 32, frameHeight: 32 });
-		this.load.spritesheet('npc_mi', 'assets/spritesheets/mi_32.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.spritesheet('npc_xavi', 'assets/spritesheets/xavi_new.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.spritesheet('npc_mi', 'assets/spritesheets/mi_new.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('npc_bunny', 'assets/spritesheets/bunny.png', { frameWidth: 45, frameHeight: 45 });
 		this.load.spritesheet('npc_beast', 'assets/spritesheets/bestia.png', { frameWidth: 88, frameHeight: 88 });
 		this.load.spritesheet('treasure', 'assets/spritesheets/treasure.png', {frameWidth: 16, frameHeight: 16});		

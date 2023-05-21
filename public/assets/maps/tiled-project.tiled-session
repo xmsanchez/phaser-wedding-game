@@ -11,30 +11,35 @@
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "": {
-            "scaleInDock": 1,
-            "scaleInEditor": 1
+            "scaleInDock": 1.5,
+            "scaleInEditor": 1.5
         },
         "#tileset": {
             "scaleInDock": 1
         },
         ":/automap-tiles.tsx": {
-            "scaleInDock": 1
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "level1-bak.json": {
             "expandedObjectLayers": [
                 31,
+                29,
                 28,
-                33,
                 32,
+                33,
                 27,
                 24
             ],
-            "scale": 0.75,
-            "selectedLayer": 18,
+            "scale": 1,
+            "selectedLayer": 11,
             "viewCenter": {
-                "x": 623.9999999999999,
-                "y": 207.33333333333326
+                "x": 742.5,
+                "y": 187.5
             }
+        },
+        "level1-bak.json#bunny": {
+            "scaleInDock": 3
         },
         "level1-bak.json#mi_16": {
             "scaleInDock": 1
@@ -43,7 +48,8 @@
             "scaleInDock": 3
         },
         "level1-bak.json#player": {
-            "scaleInDock": 2
+            "scaleInDock": 2,
+            "scaleInEditor": 1
         },
         "level1-bak.json#tileset": {
             "scaleInDock": 0.5
@@ -58,20 +64,24 @@
             "expandedObjectLayers": [
                 29,
                 28,
-                27,
-                24,
-                34
+                27
             ],
-            "scale": 1.5,
-            "selectedLayer": 8,
+            "scale": 2,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 704.6666666666667,
-                "y": 488.99999999999994
+                "x": 349.25,
+                "y": 161.25
             }
         },
         "level1.json#bestia": {
             "scaleInDock": 2,
             "scaleInEditor": 1
+        },
+        "level1.json#livingroom": {
+            "scaleInDock": 1
+        },
+        "level1.json#mi": {
+            "scaleInDock": 1
         },
         "level1.json#mi_16": {
             "scaleInDock": 1
@@ -95,35 +105,137 @@
         "level1.json#xavi_16": {
             "scaleInDock": 5.5
         },
-        "level2.json": {
+        "level2-bak.json": {
             "expandedObjectLayers": [
-                19,
                 16,
-                15,
+                19,
                 20,
-                14
+                14,
+                15
             ],
-            "scale": 1.5,
-            "selectedLayer": 17,
+            "scale": 1,
+            "selectedLayer": 13,
             "viewCenter": {
-                "x": 467.99999999999994,
-                "y": 300.33333333333337
+                "x": 469.5,
+                "y": 325.5
             }
         },
+        "level2-bak.json#disney_castle_256": {
+            "scaleInDock": 1
+        },
+        "level2-bak.json#objects_16x16": {
+            "scaleInDock": 3
+        },
+        "level2-bak.json#player": {
+            "scaleInDock": 1
+        },
+        "level2-bak.json#tileset": {
+            "scaleInDock": 0.5
+        },
+        "level2-bak.json#treasure": {
+            "scaleInDock": 1
+        },
+        "level2-prev.json": {
+            "expandedObjectLayers": [
+                29,
+                28,
+                27,
+                41,
+                42
+            ],
+            "scale": 2,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 240.75,
+                "y": 152.75
+            }
+        },
+        "level2-prev.json#bunny": {
+            "scaleInDock": 1
+        },
+        "level2-prev.json#house": {
+            "scaleInDock": 0.33
+        },
+        "level2-prev.json#house16": {
+            "scaleInDock": 1
+        },
+        "level2-prev.json#house_warm_16": {
+            "scaleInDock": 0.75,
+            "scaleInEditor": 1
+        },
+        "level2-prev.json#livingroom": {
+            "scaleInDock": 1
+        },
+        "level2-prev.json#mi": {
+            "scaleInDock": 1
+        },
+        "level2-prev.json#objects": {
+            "scaleInDock": 1
+        },
+        "level2-prev.json#objects_16x16": {
+            "scaleInDock": 3,
+            "scaleInEditor": 1
+        },
+        "level2-prev.json#player": {
+            "scaleInDock": 2,
+            "scaleInEditor": 1
+        },
+        "level2-prev.json#xavi": {
+            "scaleInDock": 1
+        },
+        "level2-temp.json": {
+            "scale": 1.5,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 402.33333333333337,
+                "y": 82.33333333333331
+            }
+        },
+        "level2-temp.json#player": {
+            "scaleInDock": 1
+        },
+        "level2.json": {
+            "expandedObjectLayers": [
+                28,
+                27,
+                45,
+                44,
+                43
+            ],
+            "scale": 1.5,
+            "selectedLayer": 12,
+            "viewCenter": {
+                "x": 340.33333333333337,
+                "y": 328.33333333333337
+            }
+        },
+        "level2.json#bunny": {
+            "scaleInDock": 1
+        },
         "level2.json#disney_castle_256": {
+            "scaleInDock": 1
+        },
+        "level2.json#livingroom": {
+            "scaleInDock": 1.5
+        },
+        "level2.json#mi": {
             "scaleInDock": 1
         },
         "level2.json#objects_16x16": {
             "scaleInDock": 3
         },
         "level2.json#player": {
-            "scaleInDock": 1
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "level2.json#tileset": {
             "scaleInDock": 0.5,
             "scaleInEditor": 2
         },
         "level2.json#treasure": {
+            "scaleInDock": 1
+        },
+        "level2.json#xavi": {
             "scaleInDock": 1
         },
         "rule1.tmx": {
@@ -162,10 +274,14 @@
         "level2.json"
     ],
     "project": "tiled-project.tiled-project",
-    "property.type": "bool",
+    "property.type": "string",
     "recentFiles": [
+        "level1-bak.json",
+        "level2-bak.json",
         "level1.json",
         "level2.json",
+        "level2-temp.json",
+        ":/automap-tiles.tsx",
         "rule1.tmx",
         "test.tmx"
     ],

@@ -12,12 +12,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		this.scene = scene;
     }
 
-	// This function will run in the update loop
-	playerMovement(scene) {
+	playerMovementRPGStyle(scene) {
 		const acceleration = 500; // Higher value for more aggressive acceleration
 		const drag = 1200; // Higher value for more aggressive deceleration
 		const maxVelocityX = 180;
-		const jumpVelocity = -450;
+		const maxVelocityY = 180;
 
 		if (!scene.messageDisplaying) {
 			if (this.moveLeft) {
@@ -25,42 +24,40 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 				if (scene.player.body.velocity.x < -maxVelocityX) {
 					scene.player.setVelocityX(-maxVelocityX);
 				}
-				if(scene.player.body.onFloor()){
-					scene.player.anims.play('left', true);
-				}else{
-					scene.player.anims.play('jumpLeft', true);
-				}
+				scene.player.anims.play('left', true);
 			} else if (this.moveRight) {
 				scene.player.setAccelerationX(acceleration);
 				if (scene.player.body.velocity.x > maxVelocityX) {
 					scene.player.setVelocityX(maxVelocityX);
 				}
-				if(scene.player.body.onFloor()){
-					scene.player.anims.play('right', true);
-				}else{
-					scene.player.anims.play('jumpRight', true);
+				scene.player.anims.play('right', true);
+			} else if (this.moveUp) {
+				console.log('Move up!')
+				scene.player.setAccelerationY(acceleration);
+				if (scene.player.body.velocity.y > maxVelocityY) {
+					scene.player.setVelocityY(maxVelocityY);
 				}
+				scene.player.anims.play('up', true);
+			} else if (this.moveDown) {
+				scene.player.setAccelerationY(acceleration);
+				if (scene.player.body.velocity.y > maxVelocityY) {
+					scene.player.setVelocityY(maxVelocityY);
+				}
+				scene.player.anims.play('down', true);
 			} else {
 				// If no keys are pressed, the player decelerates
 				scene.player.setAccelerationX(0);
 				scene.player.setDragX(drag);
+				scene.player.setAccelerationY(0);
+				scene.player.setDragY(drag);
 				scene.player.anims.play('idle', true);
-			}
-			if (this.jump && scene.player.body.onFloor() && this.jumpKeyReleased) {
-				scene.player.setVelocityY(jumpVelocity);
-				scene.player.play('jump', true);
-				this.jump = false;
-				this.jumpKeyReleased = false;
-			}
-			
-			// Check if jump key is released
-			if (!scene.cursors.space.isDown) {
-				this.jumpKeyReleased = true;
 			}
 		}else{
 			// While message is displaying the character will stop
 			scene.player.setAccelerationX(0);
 			scene.player.setDragX(drag);
+			scene.player.setAccelerationY(0);
+			scene.player.setDragY(drag);
 			scene.player.anims.play('idle', true);
 
 			// Update the text on the messageSelectorBox
@@ -79,6 +76,80 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		this.isOverlappingDoors(scene);
 		this.isOverlappingCartells(scene);
 		this.isOverlappingBunny(scene);
+	}
+
+	// This function will run in the update loop
+	playerMovement(scene) {
+		if(scene.rpgStyle){
+			this.playerMovementRPGStyle(scene);
+		}else{
+				
+			const acceleration = 500; // Higher value for more aggressive acceleration
+			const drag = 1200; // Higher value for more aggressive deceleration
+			const maxVelocityX = 180;
+			const jumpVelocity = -450;
+
+			if (!scene.messageDisplaying) {
+				if (this.moveLeft) {
+					scene.player.setAccelerationX(-acceleration);
+					if (scene.player.body.velocity.x < -maxVelocityX) {
+						scene.player.setVelocityX(-maxVelocityX);
+					}
+					if(scene.player.body.onFloor()){
+						scene.player.anims.play('left', true);
+					}else{
+						scene.player.anims.play('jumpLeft', true);
+					}
+				} else if (this.moveRight) {
+					scene.player.setAccelerationX(acceleration);
+					if (scene.player.body.velocity.x > maxVelocityX) {
+						scene.player.setVelocityX(maxVelocityX);
+					}
+					if(scene.player.body.onFloor()){
+						scene.player.anims.play('right', true);
+					}else{
+						scene.player.anims.play('jumpRight', true);
+					}
+				} else {
+					// If no keys are pressed, the player decelerates
+					scene.player.setAccelerationX(0);
+					scene.player.setDragX(drag);
+					scene.player.anims.play('idle', true);
+				}
+				if (this.jump && scene.player.body.onFloor() && this.jumpKeyReleased) {
+					scene.player.setVelocityY(jumpVelocity);
+					scene.player.play('jump', true);
+					this.jump = false;
+					this.jumpKeyReleased = false;
+				}
+				
+				// Check if jump key is released
+				if (!scene.cursors.space.isDown) {
+					this.jumpKeyReleased = true;
+				}
+			}else{
+				// While message is displaying the character will stop
+				scene.player.setAccelerationX(0);
+				scene.player.setDragX(drag);
+				scene.player.anims.play('idle', true);
+
+				// Update the text on the messageSelectorBox
+				if (scene.messageIsSelector) {
+					for (let i = 0; i < scene.messageSelectorTextObjects.length; i++) {
+						if (this.msgSelectedIndex === i) {
+							scene.messageSelectorTextObjects[i].setText("-> " + scene.messageSelectorTexts[i]);						
+						} else {
+							scene.messageSelectorTextObjects[i].setText(scene.messageSelectorTexts[i]);
+						}
+					}
+				}
+			}
+
+			this.isOverlappingCoins(scene);
+			this.isOverlappingDoors(scene);
+			this.isOverlappingCartells(scene);
+			this.isOverlappingBunny(scene);
+		}
 	}
 
 	// The following functions will be called in the create loop
@@ -131,10 +202,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		if(scene.messageDisplaying && !scene.messageIsSelector){
 			console.log('Checking interact button. Destroy the message box.');
 			scene.message.destroyMessageBox();
+			
 		}else if (scene.messageDisplaying && this.scene.messageIsSelector){
 			console.log('Select message option and destroy the box!');
 			this.msgSelectedOnAccept = this.msgSelectedIndex;
 			console.log('Message selected is: ' + scene.messageSelectorTexts[this.msgSelectedOnAccept]);
+			scene.message.destroyMessageBox();
 		}else{
 			if (overlappingTreasures.length > 0) {
 				overlappingTreasures.forEach((treasure) => {
@@ -206,7 +279,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	setKeyboardControls(scene) {
-		// Keyboard ccontrols
+		// Keyboard controls
 		const enterKey = scene.input.keyboard.addKey('ENTER');
 		scene.cursors = scene.input.keyboard.createCursorKeys();
 		scene.cursors.left.on('down', () => {
@@ -225,8 +298,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 			this.moveLeft = false;
 			this.moveDown = false;
 			this.moveUp = true;
-			if(this.msgSelectedIndex > 0 && this.msgSelectedIndex < this.scene.messageSelectorTexts.length){
-				this.msgSelectedIndex -= 1;
+			try {
+				if(this.msgSelectedIndex > 0 && this.msgSelectedIndex < this.scene.messageSelectorTexts.length){
+					this.msgSelectedIndex -= 1;
+				}
+			} catch (error) {
+				
 			}
 		});
 		scene.cursors.down.on('down', () => {
@@ -234,9 +311,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 			this.moveRight = false;
 			this.moveLeft = false;
 			this.moveDown = true;
-			this.moveUp = false;
-			if(this.msgSelectedIndex >= 0 && this.msgSelectedIndex < this.scene.messageSelectorTexts.length - 1){
-				this.msgSelectedIndex += 1;
+			try {
+				this.moveUp = false;
+				if(this.msgSelectedIndex >= 0 && this.msgSelectedIndex < this.scene.messageSelectorTexts.length - 1){
+					this.msgSelectedIndex += 1;
+				}
+			} catch (error) {
+				
 			}
 		})
 		scene.cursors.space.on('down', () => {
@@ -275,88 +356,122 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 	
 	isOverlappingCoins(scene) {
-		const overlaps = [];
-		scene.physics.world.overlap(this, scene.coins.getChildren(), (player, coin) => {
-			console.log('Overlaps! Hide coin!');
-
-			// Stop the sound if it's already playing
-			if (scene.common.coin_sound.isPlaying) {
-				scene.common.coin_sound.stop();
-			}
+		try {
+			const overlaps = [];
+			scene.physics.world.overlap(this, scene.coins.getChildren(), (player, coin) => {
+				console.log('Overlaps! Hide coin!');
+	
+				// Stop the sound if it's already playing
+				if (scene.common.coin_sound.isPlaying) {
+					scene.common.coin_sound.stop();
+				}
+				
+				// Play the sound
+				scene.common.coin_sound.play();
+				
+				scene.score += 10;
+				scene.hud.updateScore(scene.score);
+				coin.destroy();
+				overlaps.push(coin);
+			});
+			return overlaps;
+		} catch (error) {
 			
-			// Play the sound
-			scene.common.coin_sound.play();
-			
-			scene.score += 10;
-			scene.hud.updateScore(scene.score);
-			coin.destroy();
-			overlaps.push(coin);
-		});
-		return overlaps;
+		}
 	}
 	
 	isOverlappingDoors(scene) {
-		const overlaps = [];
-		if(scene.doors !== null){
-			scene.physics.world.overlap(this, scene.doors.getChildren(), (player, door) => {
-				overlaps.push(door);
-			});
+		try {
+			const overlaps = [];
+			if(scene.doors !== null){
+				scene.physics.world.overlap(this, scene.doors.getChildren(), (player, door) => {
+					overlaps.push(door);
+				});
+			}
+			return overlaps;
+		} catch (error) {
+			
 		}
-		return overlaps;
 	}
 	
 	isOverlappingCartells(scene) {
-		const overlaps = [];
-		if(scene.cartells !== null){
-			scene.physics.world.overlap(this, scene.cartells.getChildren(), (player, cartell) => {
-				overlaps.push(cartell);
-			});
+		try {
+			const overlaps = [];
+			if(scene.cartells !== null){
+				scene.physics.world.overlap(this, scene.cartells.getChildren(), (player, cartell) => {
+					overlaps.push(cartell);
+				});
+			}
+			return overlaps;
+		} catch (error) {
+			
 		}
-		return overlaps;
 	}
 
 	isOverlappingNpcs(scene) {
-		const overlaps = [];
-		if(scene.npcs !== null){
-			scene.physics.world.overlap(this, scene.npcs.getChildren(), (player, npc) => {
-				overlaps.push(npc);
-			});
+		try {
+			const overlaps = [];
+			if(scene.npcs !== null){
+				scene.physics.world.overlap(this, scene.npcs.getChildren(), (player, npc) => {
+					overlaps.push(npc);
+				});
+			}
+			return overlaps;
+		} catch (error) {
+			
 		}
-		return overlaps;
 	}
 
 	isOverlappingBunny(scene) {
-		const overlaps = [];
-		if(scene.bunny !== null){
-			scene.physics.world.overlap(this, scene.bunny, (player, b) => {
-				overlaps.push(b);
-			});
+		try {
+			const overlaps = [];
+			if(scene.bunny !== null){
+				scene.physics.world.overlap(this, scene.bunny, (player, b) => {
+					overlaps.push(b);
+				});
+			}
+			return overlaps;
+		} catch (error) {
+			
 		}
-		return overlaps;
 	}
 
 	createAnimations(scene){
 		this.anims.create({
 			key: 'idle',
-			frames: this.anims.generateFrameNumbers('player', { start: 0, end: 0 }),
+			frames: this.anims.generateFrameNumbers('player', { start: 3, end: 3 }),
 			frameRate: 10,
 			repeat: -1
 		});
 
 		this.anims.create({
 			key: 'left',
-			frames: this.anims.generateFrameNumbers('player', { start: 3, end: 5 }),
+			frames: this.anims.generateFrameNumbers('player', { start: 8, end: 10 }),
 			frameRate: 10,
 			repeat: -1
 		});
 		
 		this.anims.create({
 			key: 'right',
-			frames: this.anims.generateFrameNumbers('player', { start: 6, end: 8 }),
+			frames: this.anims.generateFrameNumbers('player', { start: 5, end: 7 }),
 			frameRate: 10,
 			repeat: -1
 		});
 	
+		this.anims.create({
+			key: 'up',
+			frames: this.anims.generateFrameNumbers('player', { frames: [4, 0, 1] }),
+			frameRate: 10,
+			repeat: -1
+		});
+
+		this.anims.create({
+			key: 'down',
+			frames: this.anims.generateFrameNumbers('player', { frames: [3, 2, 11] }),
+			frameRate: 10,
+			repeat: -1
+		});
+
 		this.anims.create({
 			key: 'climb',
 			frames: this.anims.generateFrameNumbers('player', { start: 9, end: 11 }),
@@ -366,14 +481,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 	
 		this.anims.create({
 			key: 'jump',
-			frames: this.anims.generateFrameNumbers('player', { start: 4, end: 4 }),
+			frames: this.anims.generateFrameNumbers('player', { start: 3, end: 3 }),
 			frameRate: 10,
 			repeat: -1
 		});
 
 		this.anims.create({
 			key: 'jumpLeft',
-			frames: this.anims.generateFrameNumbers('player', { start: 4, end: 4 }),
+			frames: this.anims.generateFrameNumbers('player', { start: 10, end: 10 }),
 			frameRate: 10,
 			repeat: -1
 		});
@@ -387,8 +502,64 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
 		this.anims.create({
 			key: 'turn',
-			frames: [{ key: 'player', frame: 1 }],
+			frames: [{ key: 'player', frame: 3 }],
 			frameRate: 20
 		});
+
+	// createAnimations(scene){
+	// 	this.anims.create({
+	// 		key: 'idle',
+	// 		frames: this.anims.generateFrameNumbers('player', { start: 0, end: 0 }),
+	// 		frameRate: 10,
+	// 		repeat: -1
+	// 	});
+
+	// 	this.anims.create({
+	// 		key: 'left',
+	// 		frames: this.anims.generateFrameNumbers('player', { start: 3, end: 5 }),
+	// 		frameRate: 10,
+	// 		repeat: -1
+	// 	});
+		
+	// 	this.anims.create({
+	// 		key: 'right',
+	// 		frames: this.anims.generateFrameNumbers('player', { start: 6, end: 8 }),
+	// 		frameRate: 10,
+	// 		repeat: -1
+	// 	});
+	
+	// 	this.anims.create({
+	// 		key: 'climb',
+	// 		frames: this.anims.generateFrameNumbers('player', { start: 9, end: 11 }),
+	// 		frameRate: 10,
+	// 		repeat: -1
+	// 	});
+	
+	// 	this.anims.create({
+	// 		key: 'jump',
+	// 		frames: this.anims.generateFrameNumbers('player', { start: 4, end: 4 }),
+	// 		frameRate: 10,
+	// 		repeat: -1
+	// 	});
+
+	// 	this.anims.create({
+	// 		key: 'jumpLeft',
+	// 		frames: this.anims.generateFrameNumbers('player', { start: 4, end: 4 }),
+	// 		frameRate: 10,
+	// 		repeat: -1
+	// 	});
+
+	// 	this.anims.create({
+	// 		key: 'jumpRight',
+	// 		frames: this.anims.generateFrameNumbers('player', { start: 7, end: 7 }),
+	// 		frameRate: 10,
+	// 		repeat: -1
+	// 	});
+
+	// 	this.anims.create({
+	// 		key: 'turn',
+	// 		frames: [{ key: 'player', frame: 1 }],
+	// 		frameRate: 20
+	// 	});
 	}
 }

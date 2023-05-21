@@ -29,6 +29,15 @@ export default class Level2 extends Phaser.Scene
 		this.cartells = null;
 
 		this.common = null;
+
+		// Bunny related variables
+		this.bunnies = null;
+		this.pathPoints = null;
+		this.bunnyReverseFlag = false;
+		this.bunnyCatched = false;
+		this.bunny = null;
+
+		this.levelFinished = false;
 	}
 
 	preload()
@@ -49,28 +58,18 @@ export default class Level2 extends Phaser.Scene
 		const disney_castle_256 = this.map.addTilesetImage('disney_castle_256', 'disney_castle_256');
 
 		// Create all the layers
-		this.sky_bg = this.common.createLevelLayer(this, 'sky_bg', tileset, 0.5);
-		this.sky_fg = this.common.createLevelLayer(this, 'sky_fg', tileset, 0.6);
-		this.mountains_bg = this.common.createLevelLayer(this, 'sky_mountains_bg', tileset, 0.7);
-		this.mountains_fg = this.common.createLevelLayer(this, 'sky_mountains_fg', tileset, 0.8);
-		this.trees_bg = this.common.createLevelLayer(this, 'trees_bg', tileset, 0.9);
-		this.trees_fg = this.common.createLevelLayer(this, 'trees_fg', tileset);
-		this.ground_bg = this.common.createLevelLayer(this, 'ground_bg', tileset);
-		this.ground = this.common.createLevelLayer(this, 'ground_fg', tileset);
-		this.castle = this.map.createLayer('castle', disney_castle_256);
-		this.rocks = this.common.createLevelLayer(this, 'rocks', tileset);
-		this.walls = this.common.createLevelLayer(this, 'walls', tileset);
-		this.bridge = this.common.createLevelLayer(this, 'bridge', tileset);
+		this.common.createLevelLayer(this, 'bg_background', tileset, 0.6);
+		this.common.createLevelLayer(this, 'fg_background', tileset, 0.7);
+		this.common.createLevelLayer(this, 'ground_bg', tileset, 0.8);
+		this.ground = this.common.createLevelLayer(this, 'ground_fg', tileset, 0.9);
+		this.common.createLevelLayer(this, 'rocks', tileset);
 		this.platforms = this.common.createLevelLayer(this, 'platforms', tileset);
-		this.grass = this.common.createLevelLayer(this, 'grass', tileset)
 		
-		this.physics.world.setBounds(50, 0, this.map.widthInPixels - 50, this.map.heightInPixels * tileset.tileHeight);
+		this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels * tileset.tileHeight);
 
 		// Spawn all interactable objects
-		this.common.spawnTreasures(this);
-		this.common.spawnCoins(this);
-		this.common.spawnCartells(this);
-		this.common.spawnDoors(this);
+		// this.common.spawnTreasures(this);
+		this.bunny = this.common.spawnBunny(this);
 
 		// Spawn player
 		this.player = this.common.addPlayer(this);
@@ -93,18 +92,38 @@ export default class Level2 extends Phaser.Scene
 		this.player.playerMovement(this);
 		
 		// Setup camera bounds and zoom
-		this.camera.setCamera(this, 2.40);
+		this.camera.setCamera(this, 2);
 
 		// this.common.checkOverlapsStaticGroups(this.npcs, this);
-		this.common.checkOverlapsStaticGroups(this.treasures, this);
-		this.common.checkOverlapsStaticGroups(this.doors, this);
-		this.common.checkOverlapsStaticGroups(this.cartells, this);
+		// this.common.checkOverlapsStaticGroups(this.treasures, this);
+		// this.common.checkOverlapsStaticGroups(this.doors, this);
+		// this.common.checkOverlapsStaticGroups(this.cartells, this);
+		this.common.checkOverlapsStaticGroups(this.bunnies, this);
 
+
+		this.bunny.container.y = this.bunny.y - 20;
+		this.common.bunnyMovement(this);
+
+		if(this.bunny.contents == null && !this.messageDisplaying){
+			// Set a timeout before showing the message.
+			setTimeout(() => {
+				console.log('We can start the next level!');
+				this.message.showMessage(this, 'Felicitats! Ja tens el rellotge.\nPodràs aconseguir la resta de coses?');
+				this.levelFinished = true;
+			}, 100);
+		}
+		if(this.levelFinished && !this.messageDisplaying){
+			this.startScene = false;
+			this.scene.stop('Level1');
+			this.backgroundMusic.stop();
+			this.scene.start('PreLevel', { levelName: 'Nivell 3\nPròleg', levelKey: 'Level3Prev', text: 'El vestit' });
+		}
     }
+	
 
 	loadMusic(){
 		// Create an instance of the audio object
-		this.backgroundMusic = this.sound.add('background_music', { loop: true, volume: 0.2});
+		this.backgroundMusic = this.sound.add('background_music_bunny2', { loop: true, volume: 0.2});
 		// Play the audio file
 		this.backgroundMusic.play();
 	}

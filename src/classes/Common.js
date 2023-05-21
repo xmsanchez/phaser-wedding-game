@@ -43,20 +43,31 @@ export default class Common {
 		return scene.joystick;
 	}
 	
+	addCollider(scene, obj1, obj2) {
+		// Ensure that the objects actually exists
+		if(obj1 !== undefined && obj2 !== undefined && obj1 !== null && obj2 !== null){
+			try {
+				console.log('Add collider for ' + obj1 + ' and ' + obj2);
+				scene.physics.add.collider(obj1, obj2);
+			} catch (error) {
+				console.log('Error while trying to add collider... error: ' + error);
+			}
+		}
+	}
 	addColliders(scene) {
 		// Add colliders
-		scene.physics.add.collider(scene.player, scene.ground);
-		scene.physics.add.collider(scene.player, scene.platforms);
-		scene.physics.add.collider(scene.player, scene.walls);
-		scene.physics.add.collider(scene.player, scene.bridge);
-		scene.physics.add.collider(scene.player, scene.rocks);
-		scene.physics.add.collider(scene.treasures, scene.ground);
-		scene.physics.add.collider(scene.treasures, scene.platforms);
-		scene.physics.add.collider(scene.player, scene.coins);
-		scene.physics.add.collider(scene.coins, scene.ground);
+		console.log('Adding colliders!');
+		this.addCollider(scene, scene.player, scene.ground);
+		this.addCollider(scene, scene.player, scene.platforms);
+		this.addCollider(scene, scene.player, scene.walls);
+		this.addCollider(scene, scene.player, scene.bridge);
+		this.addCollider(scene, scene.player, scene.rocks);
+		this.addCollider(scene, scene.treasures, scene.ground);
+		this.addCollider(scene, scene.treasures, scene.platforms);
+		this.addCollider(scene, scene.player, scene.coins);
+		this.addCollider(scene, scene.coins, scene.ground);
 		if(scene.bunny !== undefined){
-			// scene.physics.add.collider(scene.bunny, scene.platforms);
-			scene.physics.add.collider(scene.bunny, scene.ground);
+			this.addCollider(scene, scene.bunny, scene.platforms);
 		}
 	}
 
@@ -74,13 +85,22 @@ export default class Common {
 		}
 	}
 
-	setCollisions(scene){
+	setCollisions(scene, from, to){
+		console.log('Setting collisions!')
+		console.log('from, to are: ' + from + ', ' + to);
+		if(from === undefined || from === null){
+			from = 6
+		}
+		if(to === undefined || from === null){
+			to = 300
+		}
+		scene.map.setCollisionBetween(from, to, true, true);
 		//Before you can use the collide function you need to set what tiles can collide
-		scene.map.setCollisionBetween(6, 270, true, true, 'ground_fg');
-		scene.map.setCollisionBetween(6, 270, true, true, 'platforms');
-		scene.map.setCollisionBetween(6, 270, true, true, 'walls');
-		scene.map.setCollisionBetween(6, 270, true, true, 'bridge');
-		scene.map.setCollisionBetween(6, 270, true, true, 'rocks');
+		scene.map.setCollisionBetween(from, to, true, true, 'ground_fg');
+		scene.map.setCollisionBetween(from, to, true, true, 'platforms');
+		scene.map.setCollisionBetween(from, to, true, true, 'walls');
+		scene.map.setCollisionBetween(from, to, true, true, 'bridge');
+		scene.map.setCollisionBetween(from, to, true, true, 'rocks');
 		scene.map.setCollisionByProperty('collects', true, 'solid');
 
 		// Enable physics for the scene (e.g., using Arcade Physics)
@@ -140,53 +160,11 @@ export default class Common {
 		});
 	}
 
-	npcActionsLevel1(player, npc, scene) {
-		if(npc.name == 'beast'){
-			scene.message.showMessage(scene, npc.name + ": Hola!");
-		}
-		if(scene.hud.inventory.length == 0){
-			if(npc.name == 'Xavi'){
-				scene.message.showMessage(scene, npc.name + ": Encara no has trobat el mapa? Ha de ser dins d'un bagul");
-			}else if(npc.name == 'Miriam'){
-				scene.message.showMessage(scene, npc.name + ': El mapa és en algun lloc sobre una plataforma, però no recordo ben bé on era...');
-			}
-		}else{
-			// Look for the map in the inventory
-			console.log('Objects in inventory: ' + scene.hud.inventory);
-			for (var i = 0; i < scene.hud.inventory.length; i++) {
-				console.log('Object in inventory: ' + scene.hud.inventory[i]);
-				if(scene.hud.inventory[i] === 'map'){
-					if(npc.name == 'Xavi'){
-						scene.message.showMessage(scene, npc.name + ': Ja tens el mapa? Dona-li a la Miriam!')
-					}else if(npc.name == 'Miriam'){
-						if(npc.contents == ''){
-							console.log(npc.name + ': Ja tens la clau, corre cap a la porta!');
-						}else{
-							scene.message.showMessage(scene, npc.name + ': Has trobat el mapa!\n\nEl casament serà a "LA VINYASSA". És a prop de Arbúcies!\n\nAquí tens la clau per obrir la porta, al proper nivell esbrinaràs la data del casament!');
-							scene.common.chest_opened_sound.play();
-							scene.hud.updateInventory(scene, npc.contents);
-							scene.hud.inventory.push(npc.contents);
-							npc.contents = '';
-							return;
-						}
-					}
-				}else if (scene.hud.inventory[i] === 'key'){
-					if(npc.name == 'Xavi'){
-						scene.message.showMessage(scene, npc.name + ": La Miriam t'ha donat la clau? Doncs corre cap a la porta!");
-					}else if (npc.name == 'Miriam'){
-						scene.message.showMessage(scene, npc.name + ': Ja tens la clau! Ja pots obrir la porta, corre cap allà!');
-					}
-				}
-			}
-		}
-	}
-
 	checkNpcActions(player, npc, scene) {
 		console.log('Talking to an npc:' + JSON.stringify(npc));
 
-		if(scene.currentScene === 'Level1'){
-			this.npcActionsLevel1(player, npc, scene);
-		}
+		console.log('Check NPC actions');
+		scene.npcActions(player, npc);
 	}
 
 	spawnBunny(scene) {
@@ -195,6 +173,7 @@ export default class Common {
 			const bunnyLayer = scene.map.getObjectLayer('bunny');		
 			var newbunny = null;
 			bunnyLayer.objects.forEach((bunny) => {
+				const contains = bunny.properties.find(obj => obj.name === "contains");
 				newbunny = scene.physics.add.sprite(bunny.x, bunny.y, 'npc_bunny', 0).setOrigin(0, 1)
 				newbunny.setImmovable(true)
 				newbunny.body.setAllowGravity(false);
@@ -204,18 +183,24 @@ export default class Common {
 				const container = this.drawHintContainer(scene, newbunny);
 				newbunny.container = container;
 				newbunny.container.setVisible(false);
-	
+				newbunny.contents = contains.value;
+
+				console.log('Add bunny to scene: ' + scene.bunnies);
 		 		scene.bunnies.add(newbunny);
 			});		
-			scene.pathPoints = scene.map.getObjectLayer('objectPath').objects;
+			
+			try {
+				scene.pathPoints = scene.map.getObjectLayer('objectPath').objects;
+			}catch{}
 			newbunny = this.setBunnyAnimations(scene, newbunny);
 			return newbunny;
 		} catch (error) {
-			console.log('No bunnies found');
+			console.log('No bunnies found. Error: ' + error);
 		}
 	}
 
 	setBunnyAnimations(scene, newbunny) {
+		console.log('Setting bunny animations!');
 		scene.anims.create({
 			key: 'bunny-left',
 			frames: scene.anims.generateFrameNumbers('npc_bunny', { start: 13, end: 18 }),
@@ -239,6 +224,7 @@ export default class Common {
 			repeat: -1,
 			duration: 100
 		});
+		console.log('scene.anims: ' + scene.anims);
 
 		newbunny.flipX = false;
 		return newbunny;
@@ -302,7 +288,20 @@ export default class Common {
 	checkBunnyActions(player, bunny, scene) {
 		console.log('Interactuo amb el bunny!');
 		console.log('Bunny props: ' + JSON.stringify(bunny.name));
-		scene.message.showMessage(this, "Oh! M'has atrapat!!\nEl casament és el dia 30 de setembre!\nHauries d'arribar cap a les 16h.\nTIC-TAC. TIC-TAC.");
+		scene.messageListShowing = [
+			bunny.name + ": Oh! M'has atrapat!!\nEl casament és el dia 30 de setembre!\nHauries d'arribar cap a les 16h.",
+			bunny.name + ': Aquí tens el rellotge.\nTIC-TAC. TIC-TAC. TIC-TAC.'
+		]
+		// Passem un callback per actualitzar l'inventari
+		scene.message.showMessageList(scene, scene.messageListShowing, function() {
+											if(bunny.contents != null){
+												console.log('Bunny contents: ' + bunny.contents);
+												scene.hud.inventory.push(bunny.contents);
+												scene.hud.updateInventory(scene, bunny.contents);
+												bunny.contents = null;
+												scene.common.chest_opened_sound.play();
+											}
+										});
 		scene.bunnyCatched = true;
 	}
 
@@ -328,20 +327,45 @@ export default class Common {
 		  const container = this.drawHintContainer(scene, newnpc);
 		  newnpc.container = container;
 		  newnpc.container.setVisible(false);
+
+		  this.setNpcAnimations(scene, spritesheet.value, npc.name);
 	  	  
 		  scene.npcs.add(newnpc);
 		  console.log('Spawn NPC: ' + JSON.stringify(newnpc));
 		});
 	}
 
-	checkOverlapsStaticGroups(object, scene) {
-		object.getChildren().forEach((obj) => {
-			obj.container.setVisible(false);
+	setNpcAnimations(scene, layer, name) {
+		console.log('NPC animations for: ' + layer);
+		scene.anims.create({
+			key: name + '_left',
+			frames: scene.anims.generateFrameNumbers(layer, { frames: [0, 4] }),
+			frameRate: 10,
+			repeat: 1,
+			duration: 100
 		});
+	
+		scene.anims.create({
+			key: name + '_right',
+			frames: scene.anims.generateFrameNumbers(layer, { frames: [0, 7] }),
+			frameRate: 10,
+			repeat: 1,
+			duration: 100
+		});
+	}
 
-		scene.physics.world.overlap(scene.player, object.getChildren(), (player, obj) => {
-			this.manageOverlaps(obj, scene);
-		});
+	checkOverlapsStaticGroups(object, scene) {
+		try {
+			object.getChildren().forEach((obj) => {
+				obj.container.setVisible(false);
+			});
+	
+			scene.physics.world.overlap(scene.player, object.getChildren(), (player, obj) => {
+				this.manageOverlaps(obj, scene);
+			});
+		} catch (error) {
+			
+		}
 	}
 
 	checkOverlapsObject(object, scene) {
@@ -355,7 +379,7 @@ export default class Common {
 		if(obj.hasOwnProperty('objectType')){
 			name = obj.objectType.name;
 		}
-		console.log('Managing overlaps for object: ' + name);
+		// console.log('Managing overlaps for object: ' + name);
 		// If the object is a treasure then we will enable the hint only when not opened
 		if(!obj.opened && name != 'door'){
 			obj.container.setVisible(true);
@@ -364,7 +388,7 @@ export default class Common {
 		}else if(name == 'door'){
 			obj.container.setVisible(true);
 		}else if(name == 'bunny'){
-			console.log('Overlapping with bunny!!');
+			// console.log('Overlapping with bunny!!');
 			obj.container.setVisible(true);
 		}
 	}
@@ -424,34 +448,35 @@ export default class Common {
 	spawnDoors(scene) {
 		scene.doors = scene.physics.add.staticGroup();
 		try {
-			scene.doorsLayer = scene.map.getObjectLayer('doors');
-			var count = 0;
-			scene.doorsLayer.objects.forEach((door) => {
-				count += 1;
-				const newdoor = scene.physics.add.sprite(door.x, door.y, 'objects', 19).setOrigin(0, 1)
-				newdoor.setImmovable(true)
-				newdoor.body.setAllowGravity(false);
-				newdoor.id = count;
-	
-				// Custom data must be accessed from here and assigned to the new object...
-				newdoor.name = door.name;
-				console.log('Door ' + door.name + ' props:', door.properties);
-	
-				newdoor.isEntry = door.properties.find(obj => obj.name === "isEntry").value;
-				newdoor.isExit = door.properties.find(obj => obj.name === "isExit").value;
-				newdoor.opened = door.properties.find(obj => obj.name === "opened").value;
-				newdoor.objectType = door.properties.find(obj => obj.name === "door"); 
-	
-				const container = this.drawHintContainer(scene, newdoor);
-				newdoor.container = container;
-				newdoor.container.setVisible(false);
-	
-				scene.doors.add(newdoor);
-			});	
+		  scene.doorsLayer = scene.map.getObjectLayer('doors');
+		  var count = 0;
+		  scene.doorsLayer.objects.forEach((door) => {
+			count += 1;
+			const doorRect = scene.add.rectangle(door.x, door.y + door.height, door.width, door.height);
+			console.log('DoorRect is: ' + JSON.stringify(doorRect));
+			doorRect.setOrigin(0, 1);
+			doorRect.id = count;
+	  
+			// Custom data must be accessed from here and assigned to the new object...
+			doorRect.name = door.name;
+			console.log('Door ' + door.name + ' props:', door.properties);
+	  
+			doorRect.isEntry = door.properties.find(obj => obj.name === "isEntry").value;
+			doorRect.isExit = door.properties.find(obj => obj.name === "isExit").value;
+			doorRect.opened = door.properties.find(obj => obj.name === "opened").value;
+			doorRect.objectType = door.properties.find(obj => obj.name === "door");
+	  
+			const container = this.drawHintContainer(scene, doorRect);
+			doorRect.container = container;
+			doorRect.container.setVisible(false);
+	  
+			scene.doors.add(doorRect);
+		  });
 		} catch (error) {
-			console.log('No doors found');
+		  console.log('No doors found. Error: ' + error);
 		}
 	}
+
 	
 	drawHintContainer(scene, obj) {
 		// Create a container for the circle and text

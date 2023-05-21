@@ -38,6 +38,8 @@ export default class HUD {
             frame = 18;
         }else if(contents == 'map'){
             frame = 8;
+        }else if(contents == 'clock'){
+            frame = 5;
         }
 
         // Loop through the inventory array and create the display

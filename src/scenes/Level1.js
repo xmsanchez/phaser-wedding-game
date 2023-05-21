@@ -195,7 +195,7 @@ export default class Level1 extends Phaser.Scene
 			if(this.player.x > npc.x + npc.width / 2){
 				npc.setFrame(7);
 			}else{
-				npc.setFrame(3);
+				npc.setFrame(10);
 			}
 		})
 	}

@@ -5,6 +5,7 @@ import Level1 from './scenes/Level1'
 import Level2Prev from './scenes/Level2Prev'
 import Level2 from './scenes/Level2'
 import Level3Prev from './scenes/Level3Prev'
+import Level3 from './scenes/Level3'
 
 const config = {
 	type: Phaser.AUTO,
@@ -25,7 +26,7 @@ const config = {
         pixelArt: true,
         roundPixels: true
     },
-	scene: [ MainMenu, PreLevel, Level1, Level2Prev, Level2, Level3Prev ]
+	scene: [ MainMenu, PreLevel, Level1, Level2Prev, Level2, Level3Prev, Level3 ]
 }
 
 export default new Phaser.Game(config)

@@ -43,6 +43,7 @@ export default class MainMenu extends Phaser.Scene {
 		// this.load.tilemapTiledJSON('level2', 'assets/maps/level2-bak.json');
 
 		// Level 3 assets
+		// For Level3Prev we will reuse level1 map (the house)
 		this.load.tilemapTiledJSON('level3-prev', 'assets/maps/level1.json');
 		
 		// Load tilesets as spritesheets
@@ -60,17 +61,17 @@ export default class MainMenu extends Phaser.Scene {
 		const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
 
 		var titleText = 'The Wedding';
-		this.add.text(screenCenterX, screenCenterY, titleText, { font: '70px Arial' }).setOrigin(0.5);
+		this.add.text(screenCenterX, screenCenterY - 100, titleText, { font: '115px Arial' }).setOrigin(0.5);
 
-		var startText = this.add.text(screenCenterX, screenCenterY + 120, 'Toca la pantalla per continuar', {
-			font: 'italic 20px Arial',
+		var startText = this.add.text(screenCenterX, screenCenterY + 40, 'Toca la pantalla per continuar', {
+			font: 'italic 30px Arial',
 		}).setOrigin(0.5);
 
 		var instructionsText =
 			'Instruccions: Utilitza el joystick esquerre per moure el personatge. Utilitza el botó dret per saltar/interactuar.';
-		this.add.text(screenCenterX, screenCenterY + 230, instructionsText, {
-				font: '20px Arial',
-				wordWrap: { width: 450, useAdvancedWrap: true },
+		this.add.text(screenCenterX, screenCenterY + 190, instructionsText, {
+				font: '25px Arial',
+				wordWrap: { width: 500, useAdvancedWrap: true },
 			}).setOrigin(0.5);
 
 		TweenHelper.flashElement(this, startText);

@@ -14,8 +14,10 @@ export default class MainMenu extends Phaser.Scene {
 		// Load plugins
 		var urlJoystick = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexvirtualjoystickplugin.min.js';
 		var urlButton = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbuttonplugin.min.js';
+		var urlBBCode = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbbcodetextplugin.min.js';
 		this.load.plugin('rexvirtualjoystickplugin', urlJoystick, true);
 		this.load.plugin('rexbuttonplugin', urlButton, true);
+		this.load.plugin('rexbbcodetextplugin', urlBBCode, true);
     
 		this.load.image('tileset','assets/tilesets/tileset.png');
 
@@ -30,22 +32,35 @@ export default class MainMenu extends Phaser.Scene {
 		this.load.audio('audio_coin', 'assets/audio/coin.mp3');
 		this.load.audio('audio_chest_opened', 'assets/audio/new_item.mp3');
 
-		// Level 1 assets
+		// Load maps
+		// House inside (pròlegs)
+		this.load.tilemapTiledJSON('house-inside', 'assets/maps/house-inside.json');
+		// House outside (pròlegs)
+		this.load.tilemapTiledJSON('house-outside', 'assets/maps/house-outside.json');
+		// El Mapa
 		this.load.tilemapTiledJSON('level1', 'assets/maps/level1.json');
+		// La Data
+		this.load.tilemapTiledJSON('level2', 'assets/maps/level2.json');
+		// L'hora
+		this.load.tilemapTiledJSON('level3', 'assets/maps/level3.json');
+		// El Vestit
+		this.load.tilemapTiledJSON('level4', 'assets/maps/level4.json');
+
+		// Level 1 assets
 		this.load.image('livingroom', 'assets/tilesets/livingroom.png');
-		// this.load.tilemapTiledJSON('level1', 'assets/maps/level1-bak.json');
 
 		// Level 2 assets+
 		this.load.image('disney_castle_256','assets/tilesets/disney_castle_256.png');
 		this.load.image('house_warm_16','assets/tilesets/level1/house_warm_16.png');
-		this.load.tilemapTiledJSON('level2-prev', 'assets/maps/level2-prev.json');
-		this.load.tilemapTiledJSON('level2', 'assets/maps/level2.json');
-		// this.load.tilemapTiledJSON('level2', 'assets/maps/level2-bak.json');
 
 		// Level 3 assets
 		// For Level3Prev we will reuse level1 map (the house)
 		this.load.tilemapTiledJSON('level3-prev', 'assets/maps/level1.json');
 		
+		// Level 4 assets
+		// For Level4Prev we will reuse level1 map (the house)
+		this.load.tilemapTiledJSON('level4-prev', 'assets/maps/level1.json');
+
 		// Load tilesets as spritesheets
 		this.load.spritesheet('player', 'assets/spritesheets/player.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('npc_xavi', 'assets/spritesheets/xavi_new.png', { frameWidth: 32, frameHeight: 32 });
@@ -57,6 +72,12 @@ export default class MainMenu extends Phaser.Scene {
     }
 
 	create() {
+		// Set common vars
+        this.registry.set('firstInteraction', true);
+		this.registry.set('inventory', []);
+
+
+
 		const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
 		const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
 
@@ -78,11 +99,11 @@ export default class MainMenu extends Phaser.Scene {
 
 		// add a click event listener to start the Level1 scene
 		this.input.on('pointerdown', () => {
-			this.scene.start('PreLevel', { levelName: 'Nivell 1', levelKey: 'Level1', text: "L'arribada" });
+			this.scene.start('PreLevel', { levelName: 'Nivell 1', levelKey: 'Level0', text: "L'arribada" });
 		});
 		const enterKey = this.input.keyboard.addKey('ENTER');
 		enterKey.on('down', () => {
-			this.scene.start('PreLevel', { levelName: 'Nivell 1', levelKey: 'Level1', text: "L'arribada" });
+			this.scene.start('PreLevel', { levelName: 'Nivell 1', levelKey: 'Level0', text: "L'arribada" });
 		});
 	}
 

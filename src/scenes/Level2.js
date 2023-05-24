@@ -68,7 +68,6 @@ export default class Level2 extends Phaser.Scene
 		this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels * tileset.tileHeight);
 
 		// Spawn all interactable objects
-		// this.common.spawnTreasures(this);
 		this.bunny = this.common.spawnBunny(this);
 
 		// Spawn player
@@ -94,13 +93,10 @@ export default class Level2 extends Phaser.Scene
 		// Setup camera bounds and zoom
 		this.camera.setCamera(this, 2);
 
-		// this.common.checkOverlapsStaticGroups(this.npcs, this);
-		// this.common.checkOverlapsStaticGroups(this.treasures, this);
-		// this.common.checkOverlapsStaticGroups(this.doors, this);
-		// this.common.checkOverlapsStaticGroups(this.cartells, this);
+		// Check overlaps (show the 'B' button hint)
 		this.common.checkOverlapsStaticGroups(this.bunnies, this);
 
-
+		// Bunny stuff
 		this.bunny.container.y = this.bunny.y - 20;
 		this.common.bunnyMovement(this);
 
@@ -116,7 +112,7 @@ export default class Level2 extends Phaser.Scene
 			this.startScene = false;
 			this.scene.stop('Level1');
 			this.backgroundMusic.stop();
-			this.scene.start('PreLevel', { levelName: 'Nivell 3\nPròleg', levelKey: 'Level3Prev', text: 'El vestit' });
+			this.scene.start('PreLevel', { levelName: 'Nivell 3\nPròleg', levelKey: 'Level3Prev', text: 'La Data' });
 		}
     }
 	

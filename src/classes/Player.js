@@ -192,7 +192,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	checkInteractBtn(scene) {
-		// Check overlaps
+		// Check overlaps (show the 'B' button hint)
 		const overlappingTreasures = this.isOverlappingTreasures(scene);
 		const overlappingDoors = this.isOverlappingDoors(scene);
 		const overlappingCartells = this.isOverlappingCartells(scene);

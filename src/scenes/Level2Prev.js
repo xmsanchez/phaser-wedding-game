@@ -25,6 +25,7 @@ export default class Level2Prev extends Phaser.Scene
 		this.messageSelectorTextObjects = [];
 		this.messageListShowing = [];
 		this.firstInteraction = true;
+		this.bunnyFirstInteractionJump = false;
 
 		this.startScene = false;
 		this.currentScene = 'Level2Prev';
@@ -54,11 +55,10 @@ export default class Level2Prev extends Phaser.Scene
 		this.camera = new Camera();
 
 		// Create the tilemap using the loaded JSON file
-		this.map = this.make.tilemap({ key: 'level2-prev'});
+		this.map = this.make.tilemap({ key: 'house-outside'});
 	
 		// Add the loaded tiles image asset to the map
 		const tileset = this.map.addTilesetImage('house_warm_16', 'house_warm_16');
-		// const objects = this.map.addTilesetImage('objects', 'objects');
 
 		// Create all the layers
 		this.common.createLevelLayer(this, 'bg_background', tileset);
@@ -67,8 +67,6 @@ export default class Level2Prev extends Phaser.Scene
 		this.physics.world.setBounds(-30, 0, this.map.widthInPixels + 30, this.map.heightInPixels * tileset.tileHeight);
 
 		// Spawn all interactable objects
-		// this.common.spawnDoors(this);
-		// this.common.spawnNpcs(this, 'npcs', 4);
 		this.common.spawnCartells(this);
 		this.bunny = this.common.spawnBunny(this);
 
@@ -101,32 +99,41 @@ export default class Level2Prev extends Phaser.Scene
 				this.playerLookDirection(bunny);
 				this.messageListShowing = [];
 				
-				// For first interaction, show a message list when approaching NPCs
-				if(this.firstInteraction && !this.messageDisplaying){
-					this.messageListShowing = [
-						bunny.name + ': Oh, no! Vaig tard, vaig tard.', 
-						bunny.name + ': Aquest rellotge marca el dia i la hora del casament. Vaig tard, vaig tard!!'
-					];
-					this.message.showMessageList(this, this.messageListShowing);
-					this.firstInteraction = false;
-				}
-				if(!this.messageDisplaying && this.messageListShowing.length == 0){
-					bunny.flipX = false;
-					bunny.anims.play('bunny-left', true);
-					bunny.setVelocityX(-200);
-				}
+				setTimeout(() => {
+					// For first interaction, show a message list when approaching NPCs
+					if(this.firstInteraction && !this.messageDisplaying){
+						this.messageListShowing = [
+							bunny.name + ': Oh, no! Vaig tard, vaig tard.', 
+							bunny.name + ': Aquest rellotge marca el dia i la hora del casament. Vaig tard, vaig tard!!'
+						];
+						this.message.showMessageList(this, this.messageListShowing);
+						this.firstInteraction = false;
+						setTimeout(() => {
+							this.bunny.setVelocityY(-350);	
+						}, 400);
+					}	
+				}, 400);
+				
+				setTimeout(() => {
+					if(!this.messageDisplaying && this.messageListShowing.length == 0){
+						bunny.flipX = false;
+						bunny.anims.play('bunny-left', true);
+						bunny.setVelocityX(-200);
+					}
+				}, 800);
 			}
 		});
 
+		// Check overlaps (show the 'B' button hint)
 		this.common.checkOverlapsStaticGroups(this.cartells, this);
-		// this.common.checkOverlapsStaticGroups(this.bunnies, this);
 
+		// If player goes out of the screen to the left, start next scene
 		if(this.player.x < 0){
 			console.log('Stop scene Level2Prev, start scene Level2');
 			this.startScene = false;
 			this.scene.stop('Level2Prev');
 			this.backgroundMusic.stop();
-			this.scene.start('PreLevel', { levelName: 'Nivell 2', levelKey: 'Level2', text: 'La Data' });
+			this.scene.start('PreLevel', { levelName: 'Nivell 2', levelKey: 'Level2', text: "La Data" });
 		}
     }
 

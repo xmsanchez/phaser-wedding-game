@@ -4,7 +4,7 @@ export default class HUD {
         this.currentScore = 0;
         this.inventoryText = null;
         this.inventoryDisplay = null;
-		this.inventory = [];
+        this.inventory = scene.registry.get('inventory');
     }
 
     addHud(scene) {
@@ -23,9 +23,8 @@ export default class HUD {
     }
     
     updateInventory(scene, contents) {
-        // Clear the previous inventory display
-        this.inventoryDisplay.removeAll(true);
-
+        console.log('UPDATING INVENTORY');
+        console.log('This.inventory is: ' + this.inventory);
         const tileSize = 16;
         const spacing = 5;
 
@@ -34,16 +33,17 @@ export default class HUD {
         }
 
         let frame = 0;
-        if(contents == 'key'){
-            frame = 18;
-        }else if(contents == 'map'){
-            frame = 8;
-        }else if(contents == 'clock'){
-            frame = 5;
-        }
 
         // Loop through the inventory array and create the display
         for (let i = 0; i < this.inventory.length; i++) {
+            var currentObject = this.inventory[i];
+            if(currentObject == 'key'){
+                frame = 18;
+            }else if(currentObject == 'map'){
+                frame = 8;
+            }else if(currentObject == 'clock'){
+                frame = 5;
+            }
             const item = scene.add.sprite(-i * (tileSize + spacing), 0, 'objects', frame).setOrigin(0, 0).setScale(1);
             this.inventoryDisplay.add(item);
             console.log('Current inventory: ' + this.inventory);

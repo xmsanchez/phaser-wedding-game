@@ -10,7 +10,7 @@ export default class Common {
 		this.scene = scene;
 
 		// Preload audios
-		this.chest_opened_sound = scene.sound.add('audio_chest_opened', { loop: false });
+		this.chest_opened_sound = scene.sound.add('audio_chest_opened', { loop: false, volume: 0.4 });
 		this.coin_sound = scene.sound.add('audio_coin', { loop: false, forceRestart: true });
 	}
 	
@@ -66,6 +66,7 @@ export default class Common {
 		this.addCollider(scene, scene.treasures, scene.platforms);
 		this.addCollider(scene, scene.player, scene.coins);
 		this.addCollider(scene, scene.coins, scene.ground);
+		this.addCollider(scene, scene.bunny, scene.ground);
 		if(scene.bunny !== undefined){
 			this.addCollider(scene, scene.bunny, scene.platforms);
 		}
@@ -176,7 +177,7 @@ export default class Common {
 				const contains = bunny.properties.find(obj => obj.name === "contains");
 				newbunny = scene.physics.add.sprite(bunny.x, bunny.y, 'npc_bunny', 0).setOrigin(0, 1)
 				newbunny.setImmovable(true)
-				newbunny.body.setAllowGravity(false);
+				newbunny.body.setAllowGravity(true);
 				newbunny.name = bunny.name;
 				console.log('Bunny ' + bunny.name + ' props:', bunny.properties);
 	
@@ -289,8 +290,8 @@ export default class Common {
 		console.log('Interactuo amb el bunny!');
 		console.log('Bunny props: ' + JSON.stringify(bunny.name));
 		scene.messageListShowing = [
-			bunny.name + ": Oh! M'has atrapat!!\nEl casament és el dia 30 de setembre!\nHauries d'arribar cap a les 16h.",
-			bunny.name + ': Aquí tens el rellotge.\nTIC-TAC. TIC-TAC. TIC-TAC.'
+			bunny.name + ": Oh! M'has atrapat!!\nHas d'arribar el dia del casament **a les 16 hores.**",
+			bunny.name + ': Aquí tens **el rellotge.**\nTIC-TAC. TIC-TAC. TIC-TAC.'
 		]
 		// Passem un callback per actualitzar l'inventari
 		scene.message.showMessageList(scene, scene.messageListShowing, function() {
@@ -411,7 +412,7 @@ export default class Common {
 		}
 	}
 		
-	spawnCartells(scene) {
+	spawnCartells(scene, levelName) {
 		scene.cartells = scene.physics.add.staticGroup();
 		try {
 			scene.cartellsLayer = scene.map.getObjectLayer('cartells');
@@ -426,8 +427,12 @@ export default class Common {
 				// Custom data must be accessed from here and assigned to the new object...
 				newcartell.name = cartell.name;
 				console.log('cartell ' + cartell.name + ' props:', cartell.properties);
-		
-				newcartell.textCartell = cartell.properties.find(obj => obj.name === "text").value;
+				
+				if(levelName == 'level1'){
+					newcartell.textCartell = '<-- Camí en obres.\nCap al **bosc** -->';
+				}else{
+					newcartell.textCartell = cartell.properties.find(obj => obj.name === "text").value;
+				}
 	
 				const container = this.drawHintContainer(scene, newcartell);
 				newcartell.container = container;
@@ -451,6 +456,7 @@ export default class Common {
 		  scene.doorsLayer = scene.map.getObjectLayer('doors');
 		  var count = 0;
 		  scene.doorsLayer.objects.forEach((door) => {
+			console.log('Door object is: ' + JSON.stringify(door));
 			count += 1;
 			const doorRect = scene.add.rectangle(door.x, door.y + door.height, door.width, door.height);
 			console.log('DoorRect is: ' + JSON.stringify(doorRect));
@@ -516,7 +522,7 @@ export default class Common {
 			scene.messageDisplaying = false;
 			scene.message.destroyMessageBox();
 		}else{
-			scene.message.showMessage(this, 'La porta està tancada.\nNecessites una clau!.');
+			scene.message.showMessage(this, 'La porta està **tancada**. Necessites una **clau** per obrir-la!.');
 		}
 	}
 
@@ -558,11 +564,17 @@ export default class Common {
 			}
 			console.log('The player has a key or the door was already opened. Door name: ' + door.name);
 
-			// Doors Level1
-			if (door.name == 'door1_1'){
+			// Doors Level0
+			if (door.name == 'door0_1'){
 				// Start a new scene
-				console.log('door1_1 interacted. Start a new scene');
+				console.log('door0_1 interacted. Start a new scene');
 				this.scene.startScene = true;
+
+			// If we are outside, allow the player to come back in
+			}else if(door.name == 'door-outside') {
+				this.scene.scene.start('Level0');
+				this.scene.scene.stop();
+				this.scene.backgroundMusic.stop();
 
 			// Doors Level2
 			}else if (door.name == 'door1_2') {

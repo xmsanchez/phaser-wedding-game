@@ -86,6 +86,8 @@ export default class Message {
     }
       
     showMessage(scene, message, callback) {
+        message = message.replace(/\*\*(.*?)\*\*/g, '[color=#ff0000]$1[/color]');
+
         console.log('Show message: ' + message);
         const padding = 20;
         const boxWidth = this.scene.cameras.main.width / 2.3 - padding * 2;
@@ -96,7 +98,10 @@ export default class Message {
         const textConfig = {
             fontSize: '18px',
             fill: '#ffffff',
-            wordWrap: { width: boxWidth - padding * 2, useAdvancedWrap: true },
+            wrap: {
+                mode: 'word', // Wrap by word
+                width: boxWidth - padding * 2 // Set the wrap width
+            }
         };
     
         const graphics = this.scene.add.graphics();
@@ -106,7 +111,11 @@ export default class Message {
         graphics.lineStyle(2, 0xffffff);
         graphics.strokeRect(boxX, centerY, boxWidth, 1); // Placeholder height for text measurement
         
-        const text = this.scene.add.text(centerX, centerY, message, textConfig);
+        const text = this.scene.add.rexBBCodeText(centerX, centerY, message, textConfig);
+        text.style.wrapMode = 1;
+        text.style.width = 5;
+        console.log('Wrap mode: ' + text.style.wrapMode)
+        // text.setWordWrapWidth(5);
         text.setOrigin(0.5);
         text.setScrollFactor(0);
     

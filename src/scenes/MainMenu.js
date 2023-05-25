@@ -19,7 +19,9 @@ export default class MainMenu extends Phaser.Scene {
 		this.load.plugin('rexbuttonplugin', urlButton, true);
 		this.load.plugin('rexbbcodetextplugin', urlBBCode, true);
     
+		// Load tilesets
 		this.load.image('tileset','assets/tilesets/tileset.png');
+		this.load.image('tileset_jungle','assets/tilesets/tileset_jungle/tileset_jungle_embed.png');
 
 		// Load audio music
 		this.load.audio('background_music', 'assets/audio/tangled.mp3');

@@ -1017,7 +1017,7 @@
          "name":"npcs",
          "objects":[
                 {
-                 "gid":2735,
+                 "gid":2764,
                  "height":16,
                  "id":101,
                  "name":"Xavi",
@@ -1045,7 +1045,7 @@
                  "y":544
                 }, 
                 {
-                 "gid":2720,
+                 "gid":2756,
                  "height":16,
                  "id":102,
                  "name":"Miriam",
@@ -1409,47 +1409,47 @@
          "tilewidth":16
         }, 
         {
-         "columns":12,
+         "columns":24,
          "firstgid":2704,
          "image":"..\/spritesheets\/player.png",
-         "imageheight":16,
-         "imagewidth":192,
+         "imageheight":32,
+         "imagewidth":384,
          "margin":0,
          "name":"player",
          "spacing":0,
-         "tilecount":12,
+         "tilecount":48,
          "tileheight":16,
          "tilewidth":16
         }, 
         {
          "columns":3,
-         "firstgid":2716,
+         "firstgid":2752,
          "image":"..\/spritesheets\/mi_16.png",
          "imageheight":64,
          "imagewidth":48,
          "margin":0,
          "name":"mi_16",
          "spacing":0,
-         "tilecount":12,
+         "tilecount":0,
          "tileheight":16,
          "tilewidth":16
         }, 
         {
          "columns":3,
-         "firstgid":2728,
+         "firstgid":2757,
          "image":"..\/spritesheets\/xavi_16.png",
          "imageheight":64,
          "imagewidth":48,
          "margin":0,
          "name":"xavi_16",
          "spacing":0,
-         "tilecount":12,
+         "tilecount":0,
          "tileheight":16,
          "tilewidth":16
         }, 
         {
          "columns":13,
-         "firstgid":2740,
+         "firstgid":2765,
          "image":"..\/spritesheets\/bunny.png",
          "imageheight":178,
          "imagewidth":596,
@@ -1459,6 +1459,53 @@
          "tilecount":39,
          "tileheight":45,
          "tilewidth":45
+        }, 
+        {
+         "columns":0,
+         "firstgid":2804,
+         "grid":
+            {
+             "height":1,
+             "orientation":"orthogonal",
+             "width":1
+            },
+         "margin":0,
+         "name":"background",
+         "spacing":0,
+         "tilecount":5,
+         "tileheight":216,
+         "tiles":[
+                {
+                 "id":0,
+                 "image":"..\/tilesets\/tileset_jungle\/plx-5.png",
+                 "imageheight":216,
+                 "imagewidth":384
+                }, 
+                {
+                 "id":1,
+                 "image":"..\/tilesets\/tileset_jungle\/plx-4.png",
+                 "imageheight":216,
+                 "imagewidth":384
+                }, 
+                {
+                 "id":2,
+                 "image":"..\/tilesets\/tileset_jungle\/plx-3.png",
+                 "imageheight":216,
+                 "imagewidth":384
+                }, 
+                {
+                 "id":3,
+                 "image":"..\/tilesets\/tileset_jungle\/plx-2.png",
+                 "imageheight":216,
+                 "imagewidth":384
+                }, 
+                {
+                 "id":4,
+                 "image":"..\/tilesets\/tileset_jungle\/plx-1.png",
+                 "imageheight":216,
+                 "imagewidth":384
+                }],
+         "tilewidth":384
         }],
  "tilewidth":16,
  "type":"map",

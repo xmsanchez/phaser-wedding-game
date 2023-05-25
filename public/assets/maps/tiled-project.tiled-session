@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level3.json",
+    "activeFile": "level1.json",
     "automapping.whileDrawing": true,
     "expandedProjectPaths": [
         "."
@@ -11,31 +11,33 @@
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "": {
-            "scaleInDock": 1.5,
+            "scaleInDock": 1,
             "scaleInEditor": 1.5
         },
         "#tileset": {
             "scaleInDock": 1
         },
         ":/automap-tiles.tsx": {
+            "dynamicWrapping": false,
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
         "house-inside.json": {
             "expandedObjectLayers": [
+                29,
                 28,
-                27,
-                29
+                27
             ],
             "scale": 2,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 347.75,
+                "x": 320.25,
                 "y": 159.75
             }
         },
         "house-inside.json#livingroom": {
-            "scaleInDock": 1
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "house-inside.json#mi": {
             "scaleInDock": 1
@@ -51,17 +53,17 @@
         },
         "house-outside.json": {
             "expandedObjectLayers": [
-                28,
+                29,
                 42,
+                28,
                 41,
-                43,
-                29
+                43
             ],
             "scale": 2,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 255.25,
-                "y": 191.25
+                "x": 256.25,
+                "y": 192.25
             }
         },
         "house-outside.json#bunny": {
@@ -117,16 +119,21 @@
         },
         "level1.json": {
             "expandedObjectLayers": [
+                29,
                 28,
-                27,
-                29
+                27
             ],
-            "scale": 2,
-            "selectedLayer": 6,
+            "scale": 4,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": 348.25,
-                "y": 161.25
+                "x": 132.125,
+                "y": 710.125
             }
+        },
+        "level1.json#background": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "level1.json#bestia": {
             "scaleInDock": 2,
@@ -136,6 +143,7 @@
             "scaleInDock": 1
         },
         "level1.json#mi": {
+            "dynamicWrapping": false,
             "scaleInDock": 1
         },
         "level1.json#mi_16": {
@@ -148,8 +156,12 @@
             "scaleInDock": 2
         },
         "level1.json#tileset": {
-            "scaleInDock": 0.5,
-            "scaleInEditor": 1.5
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "level1.json#tileset_jungle": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1
         },
         "level1.json#treasure": {
             "scaleInDock": 1
@@ -425,36 +437,72 @@
         },
         "tileset_rules.tsx": {
             "scaleInDock": 1
+        },
+        "z.level1-bak.json": {
+            "scale": 0.9418291284403669,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 872.238896837235,
+                "y": 312.68941584731056
+            }
+        },
+        "z.level1-bak.json#background": {
+            "dynamicWrapping": true,
+            "scaleInEditor": 1
+        },
+        "z.level1-bak.json#bunny": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1
+        },
+        "z.level1-bak.json#mi_16": {
+            "scaleInDock": 1
+        },
+        "z.level1-bak.json#objects_16x16": {
+            "scaleInDock": 1
+        },
+        "z.level1-bak.json#player": {
+            "scaleInDock": 1
+        },
+        "z.level1-bak.json#tileset": {
+            "scaleInDock": 1
+        },
+        "z.level1-bak.json#treasure": {
+            "scaleInDock": 1
+        },
+        "z.level1-bak.json#xavi_16": {
+            "scaleInDock": 1
         }
     },
     "last.externalTilesetPath": "/home/xavi/Projects/xavi/gpt/games/platform-new/public/assets/maps",
-    "last.imagePath": "/home/xavi/Projects/xavi/gpt/games/platform-new/public/assets/spritesheets",
+    "last.imagePath": "/home/xavi/Projects/xavi/gpt/games/platform-new/public/assets/tilesets/tileset_jungle",
     "map.lastUsedFormat": "json",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
     "openFiles": [
         "house-inside.json",
-        "level3.json"
+        "house-outside.json",
+        "level1.json"
     ],
     "project": "tiled-project.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "level3.json",
+        "house-inside.json",
+        "house-outside.json",
         "level1.json",
+        "z.level1-bak.json",
+        "level3.json",
         "level2.json",
         "level4.json",
         "level2-bak.json",
         "level1-bak.json",
-        "house-inside.json",
         "level4-prev.json",
-        "house-outside.json",
         "level2-temp.json",
-        "level2-prev.json",
-        ":/automap-tiles.tsx"
+        "level2-prev.json"
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {
-        "height": 45,
-        "width": 45
-    }
+        "height": 16,
+        "width": 16
+    },
+    "tileset.type": 0
 }

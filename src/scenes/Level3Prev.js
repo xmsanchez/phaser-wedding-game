@@ -77,7 +77,7 @@ export default class Level3Prev extends Phaser.Scene
 		this.common.addColliders(this);
 		this.common.setCollisions(this, 0, 1400);
 		this.joystick = this.common.addInput(this).joystick;
-		this.hud = new HUD();
+		this.hud = new HUD(this);
 		this.hud.addHud(this);
 		this.loadMusic();
 

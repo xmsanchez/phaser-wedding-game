@@ -66,6 +66,7 @@ export default class Level1 extends Phaser.Scene
 		this.common = new Common(this);
 		this.message = new Message(this);
 		this.camera = new Camera();
+		this.common.addInput(this);
 
 		// Create the tilemap using the loaded JSON file
 		this.map = this.make.tilemap({ key: 'level1'});
@@ -106,7 +107,6 @@ export default class Level1 extends Phaser.Scene
 		// Add colliders, input, hud, music
 		this.common.addColliders(this);
 		this.common.setCollisions(this);
-		this.joystick = this.common.addInput(this).joystick;
 		this.hud = new HUD(this);
 		this.hud.addHud(this);
 		this.loadMusic();

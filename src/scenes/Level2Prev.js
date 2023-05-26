@@ -53,12 +53,13 @@ export default class Level2Prev extends Phaser.Scene
 		this.common = new Common(this);
 		this.message = new Message(this);
 		this.camera = new Camera();
+		this.common.addInput(this);
 
 		// Create the tilemap using the loaded JSON file
 		this.map = this.make.tilemap({ key: 'house-outside'});
 	
 		// Add the loaded tiles image asset to the map
-		const tileset = this.map.addTilesetImage('house_warm_16', 'house_warm_16');
+		const tileset = this.map.addTilesetImage('house-outside', 'house-outside');
 
 		// Create all the layers
 		this.common.createLevelLayer(this, 'bg_background', tileset);
@@ -76,7 +77,6 @@ export default class Level2Prev extends Phaser.Scene
 		// Add colliders, input, hud, music
 		this.common.addColliders(this);
 		this.common.setCollisions(this, 0, 1400);
-		this.joystick = this.common.addInput(this).joystick;
 		this.hud = new HUD(this);
 		this.hud.addHud(this);
 		this.loadMusic();
@@ -93,48 +93,7 @@ export default class Level2Prev extends Phaser.Scene
 		// Setup camera bounds and zoom
 		this.camera.setCamera(this, 2.40);
 
-		this.bunnies.getChildren().forEach((bunny) => {
-			const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, bunny.x, bunny.y);
-			if (distance < 125) {		
-				this.playerLookDirection(bunny);
-				this.messageListShowing = [];
-				
-				setTimeout(() => {
-					// For first interaction, show a message list when approaching NPCs
-					if(this.firstInteraction && !this.messageDisplaying){
-						this.messageListShowing = [
-							bunny.name + ': Oh, no! Vaig tard, vaig tard.', 
-							bunny.name + ': Aquest rellotge marca el dia i la hora del casament. Vaig tard, vaig tard!!'
-						];
-						this.message.showMessageList(this, this.messageListShowing);
-						this.firstInteraction = false;
-						setTimeout(() => {
-							this.bunny.setVelocityY(-350);	
-						}, 400);
-					}	
-				}, 400);
-				
-				setTimeout(() => {
-					if(!this.messageDisplaying && this.messageListShowing.length == 0){
-						bunny.flipX = false;
-						bunny.anims.play('bunny-left', true);
-						bunny.setVelocityX(-200);
-					}
-				}, 800);
-			}
-		});
-
-		// Check overlaps (show the 'B' button hint)
-		this.common.checkOverlapsStaticGroups(this.cartells, this);
-
-		// If player goes out of the screen to the left, start next scene
-		if(this.player.x < 0){
-			console.log('Stop scene Level2Prev, start scene Level2');
-			this.startScene = false;
-			this.scene.stop('Level2Prev');
-			this.backgroundMusic.stop();
-			this.scene.start('PreLevel', { levelName: 'Nivell 2', levelKey: 'Level2', text: "La Data" });
-		}
+		
     }
 
 	playerLookDirection(bunny) {

@@ -49,13 +49,14 @@ export default class Level2 extends Phaser.Scene
 		this.common = new Common(this);
 		this.message = new Message(this);
 		this.camera = new Camera();
+		this.common.addInput(this);
 
 		// Create the tilemap using the loaded JSON file
 		this.map = this.make.tilemap({ key: 'level2' });
 	
 		// Add the loaded tiles image asset to the map
-		const tileset = this.map.addTilesetImage('tileset', 'tileset');
-		const disney_castle_256 = this.map.addTilesetImage('disney_castle_256', 'disney_castle_256');
+		const tileset = this.map.addTilesetImage('tileset_field', 'tileset_field');
+		// const disney_castle_256 = this.map.addTilesetImage('disney_castle_256', 'disney_castle_256');
 
 		// Create all the layers
 		this.common.createLevelLayer(this, 'bg_background', tileset, 0.6);
@@ -76,7 +77,6 @@ export default class Level2 extends Phaser.Scene
 		// Add colliders, input, hud, music
 		this.common.addColliders(this);
 		this.common.setCollisions(this);
-		this.joystick = this.common.addInput(this).joystick;
 		this.hud = new HUD(this);
 		this.hud.addHud(this);
 		this.loadMusic();
@@ -93,27 +93,7 @@ export default class Level2 extends Phaser.Scene
 		// Setup camera bounds and zoom
 		this.camera.setCamera(this, 2);
 
-		// Check overlaps (show the 'B' button hint)
-		this.common.checkOverlapsStaticGroups(this.bunnies, this);
-
-		// Bunny stuff
-		this.bunny.container.y = this.bunny.y - 20;
-		this.common.bunnyMovement(this);
-
-		if(this.bunny.contents == null && !this.messageDisplaying){
-			// Set a timeout before showing the message.
-			setTimeout(() => {
-				console.log('We can start the next level!');
-				this.message.showMessage(this, 'Felicitats! Ja tens el rellotge.\nPodràs aconseguir la resta de coses?');
-				this.levelFinished = true;
-			}, 100);
-		}
-		if(this.levelFinished && !this.messageDisplaying){
-			this.startScene = false;
-			this.scene.stop('Level1');
-			this.backgroundMusic.stop();
-			this.scene.start('PreLevel', { levelName: 'Nivell 3\nPròleg', levelKey: 'Level3Prev', text: 'La Data' });
-		}
+		
     }
 	
 

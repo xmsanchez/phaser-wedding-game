@@ -38,6 +38,11 @@ export default class Level1 extends Phaser.Scene
 		this.bunny = null;
 
 		this.levelFinished = false;
+
+		this.UIInfo = '';
+
+		this.firstInteraction = true;
+		this.hasMap = false;
 	}
 
 	preload()
@@ -49,34 +54,48 @@ export default class Level1 extends Phaser.Scene
 		this.common = new Common(this);
 		this.message = new Message(this);
 		this.camera = new Camera();
+		this.common.addInput(this);
+
+		this.initialCameraZoom = 1;
+		this.joystickBaseScale = null;
 
 		// Create the tilemap using the loaded JSON file
 		this.map = this.make.tilemap({ key: 'level1' });
 	
 		// Add the loaded tiles image asset to the map
-		const tileset = this.map.addTilesetImage('tileset', 'tileset_jungle');
+		const tileset_field = this.map.addTilesetImage('tileset_field', 'tileset_field');
+		const tileset_jungle = this.map.addTilesetImage('tileset_jungle', 'tileset_jungle');
 
 		// Create all the layers
-		this.common.createLevelLayer(this, 'bg_5', tileset, 0.4);
-		this.common.createLevelLayer(this, 'bg_4', tileset, 0.5);
-		this.common.createLevelLayer(this, 'bg_3', tileset, 0.6);
-		this.common.createLevelLayer(this, 'bg_2', tileset, 0.7);
-		this.common.createLevelLayer(this, 'bg_1', tileset, 0.8);
-		this.common.createLevelLayer(this, 'fg_background', tileset, 0.9);
-		this.common.createLevelLayer(this, 'ground_bg', tileset, 0.8);
-		this.ground = this.common.createLevelLayer(this, 'ground_fg', tileset, 0.9);
-		this.common.createLevelLayer(this, 'rocks', tileset);
-		this.platforms = this.common.createLevelLayer(this, 'platforms', tileset);
+		this.common.createLevelLayer(this, 'bg_5', tileset_jungle, 0.4);
+		this.common.createLevelLayer(this, 'bg_4', tileset_jungle, 0.5);
+		this.common.createLevelLayer(this, 'bg_3', tileset_jungle, 0.6);
+		this.common.createLevelLayer(this, 'bg_2', tileset_jungle, 0.7);
+		this.common.createLevelLayer(this, 'top_bg4', tileset_field, 0.4);
+		this.common.createLevelLayer(this, 'top_bg3', tileset_field, 0.5);
+		this.common.createLevelLayer(this, 'top_bg2', tileset_field, 0.6);
+		this.common.createLevelLayer(this, 'top_bg1', tileset_field, 0.7);
+		this.common.createLevelLayer(this, 'bg_1', tileset_jungle, 0.8);
+		this.common.createLevelLayer(this, 'fg_background', tileset_jungle, 0.9);
+		this.common.createLevelLayer(this, 'ground_bg', tileset_jungle, 0.8);
+		this.ground = this.common.createLevelLayer(this, 'ground_fg', tileset_jungle);
+		this.common.createLevelLayer(this, 'rocks', tileset_jungle);
+		this.platforms = this.common.createLevelLayer(this, 'platforms', tileset_jungle);
 		
-		this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels * tileset.tileHeight);
+		this.physics.world.setBounds(-30, 0, this.map.widthInPixels, this.map.heightInPixels * tileset_jungle.tileHeight);
+
+		// Spawn all interactable objects
+		this.common.spawnNpcs(this, 'npcs', 4);
+		this.common.spawnTreasures(this);
+		this.common.spawnCartells(this);
 
 		// Spawn player
 		this.player = this.common.addPlayer(this);
 
 		// Add colliders, input, hud, music
 		this.common.addColliders(this);
-		this.common.setCollisions(this);
-		this.joystick = this.common.addInput(this).joystick;
+		this.common.setCollisions(this, 0, 2000);
+
 		this.hud = new HUD(this);
 		this.hud.addHud(this);
 		this.loadMusic();
@@ -84,27 +103,114 @@ export default class Level1 extends Phaser.Scene
 		// Add controls
 		this.player.addTouchScreenPointers(this);
 		this.player.setKeyboardControls(this);
+
+		// Setup camera bounds and zoom
+		this.camera.setCamera(this, 3);
+
+		this.scenesVisited = this.registry.get('scenesVisited');
+		this.previousScene = this.registry.get('previousScene');
+		this.scenesVisited.push(this.currentScene);
+		console.log('this.scenesVisited: ' + this.scenesVisited);
 	}
 
     update() {
 		// Update player movement based on events
 		this.player.playerMovement(this);
-		
-		// Setup camera bounds and zoom
-		this.camera.setCamera(this, 2);
-		
-		if(this.levelFinished && !this.messageDisplaying){
-			this.startScene = false;
-			this.scene.stop('Level1');
-			this.backgroundMusic.stop();
-			this.scene.start('PreLevel', { levelName: 'Nivell 2\nPròleg', levelKey: 'Level2Prev', text: 'La Data' });
-		}
-    }
-	
 
+		// Check overlaps (show the 'B' button hint)
+		this.common.checkOverlapsStaticGroups(this.npcs, this);
+		this.common.checkOverlapsStaticGroups(this.treasures, this);
+		this.common.checkOverlapsStaticGroups(this.cartells, this);
+		
+		let dialog = [];
+		this.npcs.getChildren().forEach((npc) => {
+			const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
+			if (distance < 55) {
+				if(this.firstInteraction && !this.messageDisplaying){
+					dialog = [
+						'Ei, Hola!', 'Soc l\'Stan!',
+						'No estaràs pas buscant el mapa cap a Monkey Island, no?',
+						'Potser busques un vaixell?',
+						'Tinc els millors vaixells del mon.',
+						'Que per què venc vaixells en un bosc?',
+						'És una pregunta excelent! Doncs veuràs, tot va començar el dia en que...',
+						'Que tens pressa? Que busques **el mapa** d\'un casament?',
+						'Bé, doncs si trobes **la clau** per obrir aquest bagul, et donaré **el mapa** que busques!'
+					];
+					this.message.showMessageList(this, dialog, function(scene){
+						scene.firstInteraction = false;
+					})
+				}
+			}
+		});
+
+		if(this.player.x < 0){
+			console.log('Stop scene Level1, if user has the map, start Level2Prev. Otherwise, return to scene Level1Prev');
+			if(this.hasMap){
+				this.startScene = false;
+				this.scene.stop('Level1');
+				this.registry.set('previousScene', 'Level1');
+				this.backgroundMusic.stop();
+				this.scene.start('PreLevel', { levelName: 'Nivell 3', levelKey: 'Level3Prev', text: "El Conill" });
+			}else{
+				this.startScene = false;
+				this.scene.stop('Level1');
+				this.registry.set('previousScene', 'Level1');
+				this.backgroundMusic.stop();
+				this.scene.start('PreLevel', { levelKey: 'Level1Prev' });
+			}
+		}
+
+		if(this.levelFinished && !this.messageDisplaying){
+			this.common.stopScene(this);
+			this.scene.start('PreLevel', { levelName: 'Nivell 3\nPròleg', levelKey: 'Level3Prev', text: 'La Data' });
+		}
+    }	
+
+	npcActions(player, npc) {
+		console.log('NpcActions. NPC is: ' + npc.name);
+		let dialog = [];
+		let inventoryLength = this.hud.inventory.length;
+		let hasKey = false;
+
+		if(!this.firstInteraction){
+			for (var i = 0; i < inventoryLength; i++) {
+				console.log('Object in inventory: ' + this.hud.inventory[i]);
+				if(this.hud.inventory[i] === 'key'){
+					hasKey = true;
+				}
+			}
+			if(hasKey){
+				dialog = [
+					'**(!!!!!)**',
+					'Veig que has trobat **la clau!** (D\'on carai l\haurà tret???)',
+					'Segur que no estàs interessat en comprar un vaixell?',
+					'Bé, crec que no em deixes alternativa',
+					'Una promesa és una promesa. Aquí tens **el mapa**'];
+				this.message.showMessageList(this, dialog, function(scene){
+					console.log('Update inventory');
+					scene.hud.inventory.push(npc.contents);
+					scene.hud.updateInventory(scene, npc.contents);
+					scene.common.chest_opened_sound.play();
+					scene.hasMap = true;
+				})
+			}else{
+				console.log('Not first interaction, plus nothing in inventory');
+				dialog = [
+					'Hola de nou!',
+					'Ja has trobat la clau?',
+					'T\'he explicat ja que venc els millors vaixells del món?',
+					'Que no estàs interessat? Bé, és una llàstima! Sort amb la cerca de **la clau**!',
+					'(el tindré donant voltes sense saber que no hi ha cap **per molt amunt que pugi** no trobarà cap **clau**...)'
+				]
+				this.message.showMessageList(this, dialog);
+			}
+		}
+	}
+	
 	loadMusic(){
 		// Create an instance of the audio object
-		this.backgroundMusic = this.sound.add('background_music_bunny2', { loop: true, volume: 0.2});
+		this.backgroundMusic = this.sound.add('background_music_woods2', { loop: true, volume: 0.2});
 		// Play the audio file
 		this.backgroundMusic.play();
 	}

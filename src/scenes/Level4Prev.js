@@ -56,13 +56,13 @@ export default class Level4Prev extends Phaser.Scene
 		this.common = new Common(this);
 		this.message = new Message(this);
 		this.camera = new Camera();
+		this.common.addInput(this);
 
 		// Create the tilemap using the loaded JSON file
-		this.map = this.make.tilemap({ key: 'level4-prev'});
+		this.map = this.make.tilemap({ key: 'house-inside'});
 	
 		// Add the loaded tiles image asset to the map
 		const tileset = this.map.addTilesetImage('livingroom', 'livingroom');
-		// const objects = this.map.addTilesetImage('objects', 'objects');
 
 		// Create all the layers
 		this.common.createLevelLayer(this, 'bg_background', tileset);
@@ -84,7 +84,6 @@ export default class Level4Prev extends Phaser.Scene
 		// Add colliders, input, hud, music
 		this.common.addColliders(this);
 		this.common.setCollisions(this, 0, 1400);
-		this.joystick = this.common.addInput(this).joystick;
 		this.hud = new HUD(this);
 		this.hud.addHud(this);
 		this.loadMusic();

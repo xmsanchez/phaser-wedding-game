@@ -53,12 +53,13 @@ export default class Level3Prev extends Phaser.Scene
 		this.common = new Common(this);
 		this.message = new Message(this);
 		this.camera = new Camera();
+		this.common.addInput(this);
 
 		// Create the tilemap using the loaded JSON file
 		this.map = this.make.tilemap({ key: 'house-outside'});
 	
 		// Add the loaded tiles image asset to the map
-		const tileset = this.map.addTilesetImage('house_warm_16', 'house_warm_16');
+		const tileset = this.map.addTilesetImage('house-outside', 'house-outside');
 
 		// Create all the layers
 		this.common.createLevelLayer(this, 'bg_background', tileset);
@@ -76,7 +77,6 @@ export default class Level3Prev extends Phaser.Scene
 		// Add colliders, input, hud, music
 		this.common.addColliders(this);
 		this.common.setCollisions(this, 0, 1400);
-		this.joystick = this.common.addInput(this).joystick;
 		this.hud = new HUD(this);
 		this.hud.addHud(this);
 		this.loadMusic();
@@ -104,7 +104,7 @@ export default class Level3Prev extends Phaser.Scene
 					if(this.firstInteraction && !this.messageDisplaying){
 						this.messageListShowing = [
 							bunny.name + ': Oh, no! Vaig tard, vaig tard.', 
-							bunny.name + ': Aquest **rellotge** marca **el dia i l\'hora** del casament. Vaig tard, vaig tard!!'
+							bunny.name + ': Aquest rellotge marca el dia i la hora del casament. Vaig tard, vaig tard!!'
 						];
 						this.message.showMessageList(this, this.messageListShowing);
 						this.firstInteraction = false;
@@ -133,7 +133,7 @@ export default class Level3Prev extends Phaser.Scene
 			this.startScene = false;
 			this.scene.stop('Level3Prev');
 			this.backgroundMusic.stop();
-			this.scene.start('PreLevel', { levelName: 'Nivell 3', levelKey: 'Level3', text: "L'hora" });
+			this.scene.start('PreLevel', { levelName: 'Nivell 3', levelKey: 'Level3', text: "L\hora" });
 		}
     }
 

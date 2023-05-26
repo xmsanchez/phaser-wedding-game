@@ -53,12 +53,13 @@ export default class Level1Prev extends Phaser.Scene
 		this.common = new Common(this);
 		this.message = new Message(this);
 		this.camera = new Camera();
+		this.common.addInput(this);
 
 		// Create the tilemap using the loaded JSON file
 		this.map = this.make.tilemap({ key: 'house-outside'});
 	
 		// Add the loaded tiles image asset to the map
-		const tileset = this.map.addTilesetImage('house_warm_16', 'house_warm_16');
+		const tileset = this.map.addTilesetImage('house-outside', 'house-outside');
 
 		// Create all the layers
 		this.common.createLevelLayer(this, 'bg_background', tileset);
@@ -76,7 +77,6 @@ export default class Level1Prev extends Phaser.Scene
 		// Add colliders, input, hud, music
 		this.common.addColliders(this);
 		this.common.setCollisions(this, 0, 1400);
-		this.joystick = this.common.addInput(this).joystick;
 		this.hud = new HUD(this);
 		this.hud.addHud(this);
 		this.loadMusic();
@@ -84,15 +84,25 @@ export default class Level1Prev extends Phaser.Scene
 		// Add controls
 		this.player.addTouchScreenPointers(this);
 		this.player.setKeyboardControls(this);
+
+		// Setup camera bounds and zoom
+		this.camera.setCamera(this, 2.40);
+
+		this.scenesVisited = this.registry.get('scenesVisited');
+		this.previousScene = this.registry.get('previousScene');
+		this.scenesVisited.push(this.currentScene);
+		console.log('this.scenesVisited: ' + this.scenesVisited);
+		console.log('this.previousScene: ' + this.previousScene);
+
+		if(this.previousScene == 'Level1'){
+			this.player.x = this.map.widthInPixels - 30;
+		}
 	}
 
     update() {
 		// Update player movement based on events
 		this.player.playerMovement(this);
 		
-		// Setup camera bounds and zoom
-		this.camera.setCamera(this, 2.40);
-
 		// Check overlaps (show the 'B' button hint)
 		this.common.checkOverlapsStaticGroups(this.cartells, this);
 		this.common.checkOverlapsStaticGroups(this.doors, this);
@@ -100,9 +110,8 @@ export default class Level1Prev extends Phaser.Scene
 		// If player goes out of the screen to the left, start next scene
 		if(this.player.x > this.map.widthInPixels){
 			console.log('Stop scene Level1Prev, start scene Level1');
-			this.startScene = false;
-			this.scene.stop('Level1Prev');
-			this.backgroundMusic.stop();
+			this.common.stopScene(this);
+			this.registry.set('previousScene', 'Level1Prev');
 			this.scene.start('PreLevel', { levelName: 'Nivell 1', levelKey: 'Level1', text: "El Mapa" });
 		}
     }

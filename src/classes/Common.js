@@ -13,6 +13,13 @@ export default class Common {
 		this.chest_opened_sound = scene.sound.add('audio_chest_opened', { loop: false, volume: 0.4 });
 		this.coin_sound = scene.sound.add('audio_coin', { loop: false, forceRestart: true });
 	}
+
+	stopScene(scene) {
+		scene.startScene = false;
+		scene.scene.stop('UIScene');
+		scene.scene.stop();
+		scene.backgroundMusic.stop();
+	}
 	
 	addPlayer(scene) {
 		// Player Layer
@@ -30,17 +37,13 @@ export default class Common {
 	}
 
 	addInput(scene) {
-		// Create input
-		const canvasWidth = scene.cameras.main.width;
-		const canvasHeight = scene.cameras.main.height;
-		console.log('Canvas height: ' + canvasHeight);
-		console.log('Canvas width: ' + canvasWidth);
-		scene.input.addPointer(1);
-		scene.joystick = new Joystick(scene, 300, (canvasHeight / 2) * 1.3);
-		scene.jumpBtn = scene.joystick.createJumpButton(scene, canvasWidth - 300, (canvasHeight / 2) * 1.3);
-		scene.interactBtn = scene.joystick.createInteractButton(scene, canvasWidth - 380, (canvasHeight / 2) * 1.34);
-
-		return scene.joystick;
+		scene.joystick = scene.registry.get('joystick');
+		scene.interactBtn = scene.registry.get('interactBtn');
+		scene.jumpBtn = scene.registry.get('jumpBtn');
+		scene.UIScene = scene.registry.get('UI');
+		
+		scene.UIScene.scene.setVisible(true);
+		scene.UIScene.scene.bringToTop();
 	}
 	
 	addCollider(scene, obj1, obj2) {
@@ -78,7 +81,7 @@ export default class Common {
 			if(scrollFactorX != null){
 				obj.scrollFactorX = scrollFactorX;
 			}
-			console.log('Created layer ' + layerName);
+			// console.log('Created layer ' + layerName);
 			return obj;
 		} catch (error) {
 			console.log('Error trying to create layer ' + layerName);
@@ -380,6 +383,10 @@ export default class Common {
 		if(obj.hasOwnProperty('objectType')){
 			name = obj.objectType.name;
 		}
+
+		if(obj.name == 'StanLeftArm' || obj.name == 'StanRightArm'){
+			return;
+		}
 		// console.log('Managing overlaps for object: ' + name);
 		// If the object is a treasure then we will enable the hint only when not opened
 		if(!obj.opened && name != 'door'){
@@ -447,7 +454,7 @@ export default class Common {
 
 	readCartell(player, cartell, scene) {
 		console.log('Cartell: ' + JSON.stringify(cartell.textCartell));
-		scene.message.showMessage(this, cartell.textCartell);
+		scene.message.showMessage(scene, cartell.textCartell);
 	}
 
 	spawnDoors(scene) {

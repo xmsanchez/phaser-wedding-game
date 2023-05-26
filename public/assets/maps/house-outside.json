@@ -234,7 +234,7 @@
         {
          "columns":12,
          "firstgid":6,
-         "image":"..\/spritesheets\/player.png",
+         "image":"..\/spritesheets\/player\/player.png",
          "imageheight":32,
          "imagewidth":384,
          "margin":0,
@@ -247,11 +247,11 @@
         {
          "columns":32,
          "firstgid":18,
-         "image":"..\/tilesets\/level1\/house_warm_16.png",
+         "image":"..\/tilesets\/house-outside\/house-outside.png",
          "imageheight":384,
          "imagewidth":512,
          "margin":0,
-         "name":"house_warm_16",
+         "name":"house-outside",
          "spacing":0,
          "tilecount":768,
          "tileheight":16,
@@ -260,7 +260,7 @@
         {
          "columns":13,
          "firstgid":786,
-         "image":"..\/spritesheets\/bunny.png",
+         "image":"..\/spritesheets\/npcs\/bunny.png",
          "imageheight":178,
          "imagewidth":596,
          "margin":0,
@@ -273,7 +273,7 @@
         {
          "columns":5,
          "firstgid":825,
-         "image":"..\/spritesheets\/objects_16x16.png",
+         "image":"..\/spritesheets\/objects\/objects.png",
          "imageheight":96,
          "imagewidth":80,
          "margin":0,

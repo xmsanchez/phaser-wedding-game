@@ -2,7 +2,6 @@ import Common from '../classes/Common';
 import Camera from '../classes/Camera';
 import HUD from '../classes/HUD';
 import Message from '../classes/Message.js';
-import MainMenu from '../scenes/MainMenu.js';
 
 export default class Level0 extends Phaser.Scene
 {
@@ -55,19 +54,18 @@ export default class Level0 extends Phaser.Scene
 	create()
 	{
 		this.firstInteraction = this.registry.get('firstInteraction');
-		console.log('First interaction is: ' + this.firstInteraction);
 
 		// Create all resources
 		this.common = new Common(this);
 		this.message = new Message(this);
 		this.camera = new Camera();
+		this.common.addInput(this);
 
 		// Create the tilemap using the loaded JSON file
 		this.map = this.make.tilemap({ key: 'house-inside'});
 	
 		// Add the loaded tiles image asset to the map
 		const tileset = this.map.addTilesetImage('livingroom', 'livingroom');
-		// const objects = this.map.addTilesetImage('objects', 'objects');
 
 		// Create all the layers
 		this.common.createLevelLayer(this, 'bg_background', tileset);
@@ -89,7 +87,6 @@ export default class Level0 extends Phaser.Scene
 		// Add colliders, input, hud, music
 		this.common.addColliders(this);
 		this.common.setCollisions(this, 0, 1400);
-		this.joystick = this.common.addInput(this).joystick;
 		this.hud = new HUD(this);
 		this.hud.addHud(this);
 		this.loadMusic();
@@ -97,15 +94,20 @@ export default class Level0 extends Phaser.Scene
 		// Add controls
 		this.player.addTouchScreenPointers(this);
 		this.player.setKeyboardControls(this);
+		
+		// Setup camera bounds and zoom
+		this.camera.setCamera(this, 2.40);
+
+		this.scenesVisited = this.registry.get('scenesVisited');
+		this.previousScene = this.registry.get('previousScene');
+		this.scenesVisited.push(this.currentScene);
+		console.log('this.scenesVisited: ' + this.scenesVisited);
 	}
 
 	update() {
 		// Update player movement based on events
 		this.player.playerMovement(this);
 		
-		// Setup camera bounds and zoom
-		this.camera.setCamera(this, 2.40);
-
 		// NPCs will always look at the player
 		this.npcLookDirection();
 	
@@ -137,14 +139,15 @@ export default class Level0 extends Phaser.Scene
 		if (this.startScene) {
 			console.log('Stop scene Level0, start scene Level1');
 			this.startScene = false;
-			this.scene.stop();
-			this.backgroundMusic.stop();
-			this.scene.start('Level1Prev');
+			this.registry.set('previousScene', 'Level0');
+			// We need to stop current UIScene
+			this.common.stopScene(this);
+			this.scene.start('PreLevel', { levelKey: 'Level1Prev' });
 		}
 	}
 
 	npcActions(player, npc) {
-		console.log('NpcActions, checking if inventory is empty or not');
+		console.log('NpcActions, checking if inventory is empty or not. NPC is: ' + npc.name);
 		if(this.hud.inventory.length == 0){
 			console.log('Inventory is empty!');
 			if(npc.name == 'Xavi'){
@@ -183,7 +186,7 @@ export default class Level0 extends Phaser.Scene
 							this.common.chest_opened_sound.play();
 							this.hud.updateInventory(this, npc.contents);
 							this.hud.inventory.push(npc.contents);
-							//npc.contents = '';
+							npc.contents = '';
 							return;
 						}
 					}

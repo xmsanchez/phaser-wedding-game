@@ -22,8 +22,9 @@ export default class Message {
     }    
 
     showMessageSelector(scene, messageList) {
+        const currentZoom = scene.cameras.main.zoom;
         const padding = 20;
-        const boxWidth = this.scene.cameras.main.width / 2.3 - padding * 2;
+        const boxWidth = this.scene.cameras.main.width / currentZoom - padding * 2;
         const centerX = this.scene.cameras.main.centerX;
         const centerY = this.scene.cameras.main.centerY - 80;
         const boxX = centerX - boxWidth / 2;
@@ -89,8 +90,9 @@ export default class Message {
         message = message.replace(/\*\*(.*?)\*\*/g, '[color=#ff0000]$1[/color]');
 
         console.log('Show message: ' + message);
+        const currentZoom = scene.cameras.main.zoom;
         const padding = 20;
-        const boxWidth = this.scene.cameras.main.width / 2.3 - padding * 2;
+        const boxWidth = this.scene.cameras.main.width / currentZoom - padding * 2;
         const centerX = this.scene.cameras.main.centerX;
         const centerY = this.scene.cameras.main.centerY - 80;
         const boxX = centerX - boxWidth / 2;

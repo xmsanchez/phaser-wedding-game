@@ -12,7 +12,7 @@ export default class Loading {
 		progressBox.fillRect(240, screenCenterY - 50, 320, 50);
 
 		scene.load.on('progress', function (value) {
-			console.log(value);
+			// console.log(value);
 			progressBar.clear();
 			progressBar.fillStyle(0xffffff, 1);
 			progressBar.fillRect(250, screenCenterY - 40, 300 * value, 30);

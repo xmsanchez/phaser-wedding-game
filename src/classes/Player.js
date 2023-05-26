@@ -10,55 +10,62 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		this.msgSelectedOnAccept = 0;
 		this.msgSelectedIndex = 0;
 		this.scene = scene;
+
+		this.lastMove = 'idle';
     }
 
-	playerMovementRPGStyle(scene) {
+	// This function will run in the update loop
+	playerMovement(scene) {
 		const acceleration = 500; // Higher value for more aggressive acceleration
 		const drag = 1200; // Higher value for more aggressive deceleration
 		const maxVelocityX = 180;
-		const maxVelocityY = 180;
+		const jumpVelocity = -450;
 
 		if (!scene.messageDisplaying) {
 			if (this.moveLeft) {
+				this.lastMove = 'idleLeft';
 				scene.player.setAccelerationX(-acceleration);
 				if (scene.player.body.velocity.x < -maxVelocityX) {
 					scene.player.setVelocityX(-maxVelocityX);
 				}
-				scene.player.anims.play('left', true);
+				if(scene.player.body.onFloor()){
+					scene.player.anims.play('left', true);
+				}else{
+					scene.player.anims.play('jumpLeft', true);
+				}
 			} else if (this.moveRight) {
+				this.lastMove = 'idleRight';
 				scene.player.setAccelerationX(acceleration);
 				if (scene.player.body.velocity.x > maxVelocityX) {
 					scene.player.setVelocityX(maxVelocityX);
 				}
-				scene.player.anims.play('right', true);
-			} else if (this.moveUp) {
-				console.log('Move up!')
-				scene.player.setAccelerationY(acceleration);
-				if (scene.player.body.velocity.y > maxVelocityY) {
-					scene.player.setVelocityY(maxVelocityY);
+				if(scene.player.body.onFloor()){
+					scene.player.anims.play('right', true);
+				}else{
+					scene.player.anims.play('jumpRight', true);
 				}
-				scene.player.anims.play('up', true);
-			} else if (this.moveDown) {
-				scene.player.setAccelerationY(acceleration);
-				if (scene.player.body.velocity.y > maxVelocityY) {
-					scene.player.setVelocityY(maxVelocityY);
-				}
-				scene.player.anims.play('down', true);
 			} else {
 				// If no keys are pressed, the player decelerates
 				scene.player.setAccelerationX(0);
 				scene.player.setDragX(drag);
-				scene.player.setAccelerationY(0);
-				scene.player.setDragY(drag);
-				scene.player.anims.play('idle', true);
+				scene.player.anims.play(this.lastMove, true);
+			}
+			if (this.jump && scene.player.body.onFloor() && this.jumpKeyReleased) {
+				scene.player.setVelocityY(jumpVelocity);
+				scene.player.play('jump', true);
+				this.jump = false;
+				this.jumpKeyReleased = false;
+			}
+			
+			// Check if jump key is released
+			if (!scene.cursors.space.isDown) {
+				this.jumpKeyReleased = true;
 			}
 		}else{
 			// While message is displaying the character will stop
 			scene.player.setAccelerationX(0);
 			scene.player.setDragX(drag);
-			scene.player.setAccelerationY(0);
-			scene.player.setDragY(drag);
-			scene.player.anims.play('idle', true);
+			scene.player.anims.play(this.lastMove, true);
 
 			// Update the text on the messageSelectorBox
 			if (scene.messageIsSelector) {
@@ -78,88 +85,19 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		this.isOverlappingBunny(scene);
 	}
 
-	// This function will run in the update loop
-	playerMovement(scene) {
-		if(scene.rpgStyle){
-			this.playerMovementRPGStyle(scene);
-		}else{
-				
-			const acceleration = 500; // Higher value for more aggressive acceleration
-			const drag = 1200; // Higher value for more aggressive deceleration
-			const maxVelocityX = 180;
-			const jumpVelocity = -450;
-
-			if (!scene.messageDisplaying) {
-				if (this.moveLeft) {
-					scene.player.setAccelerationX(-acceleration);
-					if (scene.player.body.velocity.x < -maxVelocityX) {
-						scene.player.setVelocityX(-maxVelocityX);
-					}
-					if(scene.player.body.onFloor()){
-						scene.player.anims.play('left', true);
-					}else{
-						scene.player.anims.play('jumpLeft', true);
-					}
-				} else if (this.moveRight) {
-					scene.player.setAccelerationX(acceleration);
-					if (scene.player.body.velocity.x > maxVelocityX) {
-						scene.player.setVelocityX(maxVelocityX);
-					}
-					if(scene.player.body.onFloor()){
-						scene.player.anims.play('right', true);
-					}else{
-						scene.player.anims.play('jumpRight', true);
-					}
-				} else {
-					// If no keys are pressed, the player decelerates
-					scene.player.setAccelerationX(0);
-					scene.player.setDragX(drag);
-					scene.player.anims.play('idle', true);
-				}
-				if (this.jump && scene.player.body.onFloor() && this.jumpKeyReleased) {
-					scene.player.setVelocityY(jumpVelocity);
-					scene.player.play('jump', true);
-					this.jump = false;
-					this.jumpKeyReleased = false;
-				}
-				
-				// Check if jump key is released
-				if (!scene.cursors.space.isDown) {
-					this.jumpKeyReleased = true;
-				}
-			}else{
-				// While message is displaying the character will stop
-				scene.player.setAccelerationX(0);
-				scene.player.setDragX(drag);
-				scene.player.anims.play('idle', true);
-
-				// Update the text on the messageSelectorBox
-				if (scene.messageIsSelector) {
-					for (let i = 0; i < scene.messageSelectorTextObjects.length; i++) {
-						if (this.msgSelectedIndex === i) {
-							scene.messageSelectorTextObjects[i].setText("-> " + scene.messageSelectorTexts[i]);						
-						} else {
-							scene.messageSelectorTextObjects[i].setText(scene.messageSelectorTexts[i]);
-						}
-					}
-				}
-			}
-
-			this.isOverlappingCoins(scene);
-			this.isOverlappingDoors(scene);
-			this.isOverlappingCartells(scene);
-			this.isOverlappingBunny(scene);
-		}
-	}
-
 	// The following functions will be called in the create loop
 	addTouchScreenPointers(scene) {
-		scene.joystick.on('update', this.readTouchInput, scene);
+		const UIScene = scene.UIScene;
+		const joystick = scene.joystick.joystick;
+		const interactBtn = scene.interactBtn;
+		const jumpBtn = scene.jumpBtn;
+
+		joystick.on('update', this.readTouchInput, scene);
 
 		// Pointer up allow us to stop the player movement
 		// When no longer pressing the joystick 
 		// WARN: Might affect some other stuff, maybe
-        scene.input.on('pointerup', function (pointer) {
+        UIScene.input.on('pointerup', function (pointer) {
             console.log('Pointer up!');
 			this.moveLeft = false;
 			this.moveRight = false;
@@ -169,7 +107,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
 		// Control the message selector box on pointer down
 		// we do it here and not on update to avoid multiple inputs
-		scene.joystick.on('pointerdown', function (pointer) {
+		joystick.on('pointerdown', function (pointer) {
 			const selected = this.player.msgSelectedIndex;
 			const messageList = this.player.scene.messageSelectorTexts;
 			if(this.player.moveDown && selected >= 0 && selected < messageList.length - 1){
@@ -180,13 +118,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		}, scene);
 
 		// Add a listener for the 'pointerup' event, which fires when the button is released
-		scene.interactBtn.on('pointerdown', () => {
+		interactBtn.on('pointerdown', () => {
             console.log('Pointer down!');
 			this.checkInteractBtn(scene);
 		});
 
 		// Add a listener for the 'pointerup' event, which fires when the button is released
-		scene.jumpBtn.on('pointerdown', () => {
+		jumpBtn.on('pointerdown', () => {
 			this.checkJumpBtn(scene);
 		});
 	}
@@ -376,7 +314,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 			});
 			return overlaps;
 		} catch (error) {
-			
+			return [];	
 		}
 	}
 	
@@ -390,7 +328,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 			}
 			return overlaps;
 		} catch (error) {
-			
+			return [];
 		}
 	}
 	
@@ -404,7 +342,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 			}
 			return overlaps;
 		} catch (error) {
-			
+			return [];
 		}
 	}
 
@@ -418,7 +356,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 			}
 			return overlaps;
 		} catch (error) {
-			
+			return [];
 		}
 	}
 
@@ -432,7 +370,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 			}
 			return overlaps;
 		} catch (error) {
-			
+			return [];
 		}
 	}
 
@@ -440,6 +378,20 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		this.anims.create({
 			key: 'idle',
 			frames: this.anims.generateFrameNumbers('player', { start: 3, end: 3 }),
+			frameRate: 10,
+			repeat: -1
+		});
+
+		this.anims.create({
+			key: 'idleRight',
+			frames: this.anims.generateFrameNumbers('player', { frames: [7] }),
+			frameRate: 10,
+			repeat: -1
+		});
+
+		this.anims.create({
+			key: 'idleLeft',
+			frames: this.anims.generateFrameNumbers('player', { frames: [10] }),
 			frameRate: 10,
 			repeat: -1
 		});
@@ -505,61 +457,5 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 			frames: [{ key: 'player', frame: 3 }],
 			frameRate: 20
 		});
-
-	// createAnimations(scene){
-	// 	this.anims.create({
-	// 		key: 'idle',
-	// 		frames: this.anims.generateFrameNumbers('player', { start: 0, end: 0 }),
-	// 		frameRate: 10,
-	// 		repeat: -1
-	// 	});
-
-	// 	this.anims.create({
-	// 		key: 'left',
-	// 		frames: this.anims.generateFrameNumbers('player', { start: 3, end: 5 }),
-	// 		frameRate: 10,
-	// 		repeat: -1
-	// 	});
-		
-	// 	this.anims.create({
-	// 		key: 'right',
-	// 		frames: this.anims.generateFrameNumbers('player', { start: 6, end: 8 }),
-	// 		frameRate: 10,
-	// 		repeat: -1
-	// 	});
-	
-	// 	this.anims.create({
-	// 		key: 'climb',
-	// 		frames: this.anims.generateFrameNumbers('player', { start: 9, end: 11 }),
-	// 		frameRate: 10,
-	// 		repeat: -1
-	// 	});
-	
-	// 	this.anims.create({
-	// 		key: 'jump',
-	// 		frames: this.anims.generateFrameNumbers('player', { start: 4, end: 4 }),
-	// 		frameRate: 10,
-	// 		repeat: -1
-	// 	});
-
-	// 	this.anims.create({
-	// 		key: 'jumpLeft',
-	// 		frames: this.anims.generateFrameNumbers('player', { start: 4, end: 4 }),
-	// 		frameRate: 10,
-	// 		repeat: -1
-	// 	});
-
-	// 	this.anims.create({
-	// 		key: 'jumpRight',
-	// 		frames: this.anims.generateFrameNumbers('player', { start: 7, end: 7 }),
-	// 		frameRate: 10,
-	// 		repeat: -1
-	// 	});
-
-	// 	this.anims.create({
-	// 		key: 'turn',
-	// 		frames: [{ key: 'player', frame: 1 }],
-	// 		frameRate: 20
-	// 	});
 	}
 }

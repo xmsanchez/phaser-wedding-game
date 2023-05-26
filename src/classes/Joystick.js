@@ -3,9 +3,9 @@ export default class Joystick {
         this.joystick = scene.plugins.get('rexvirtualjoystickplugin').add(scene, {
             x: x,
             y: y,
-            radius: 50,
-            base: scene.add.circle(0, 0, 50, 0x888888).setAlpha(0.3),
-            thumb: scene.add.circle(0, 0, 25, 0xcccccc).setAlpha(0.3),
+            radius: 150,
+            base: scene.add.circle(0, 0, 150, 0x888888).setAlpha(0.3),
+            thumb: scene.add.circle(0, 0, 90, 0xcccccc).setAlpha(0.3),
             dir: '4dir',
             forceMin: 5,
             enable: true
@@ -13,13 +13,13 @@ export default class Joystick {
     }
 
 	createJumpButton = function (scene, x, y) {
-		var btn = scene.add.circle(x, y, 50, 0x008000).setAlpha(0.3);
+		var btn = scene.add.circle(x, y, 120, 0x008000).setAlpha(0.3);
 		btn.scrollFactorX = 0;
 		btn.scrollFactorY = 0;
 
         // Add text to the circle
         var textStyle = {
-            font: '38px Arial',
+            font: '70px Arial',
             fill: '#ffffff'
         };
         var text = 'A';
@@ -41,13 +41,13 @@ export default class Joystick {
 	}
 
 	createInteractButton = function (scene, x, y) {
-		var btn = scene.add.circle(x, y, 20, 0xFF0000).setAlpha(0.3);
+		var btn = scene.add.circle(x, y, 70, 0xFF0000).setAlpha(0.3);
 		btn.scrollFactorX = 0;
 		btn.scrollFactorY = 0;
 
         // Add text to the circle
         var textStyle = {
-            font: '24px Arial',
+            font: '50px Arial',
             fill: '#ffffff'
         };
         var text = 'B';

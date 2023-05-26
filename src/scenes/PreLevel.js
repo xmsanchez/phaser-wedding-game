@@ -7,25 +7,33 @@ export default class PreLevel extends Phaser.Scene
         // this.preLevelMilliseconds = 2500;
     }
 
+    launchScene(data) {
+        this.scene.launch('UIScene', { mainScene: this });
+        this.scene.launch(data.levelKey);
+        this.scene.stop('PreLevel');
+    }
+
     create(data)
     {
         const levelName = data.levelName;
         const levelKey = data.levelKey;
         const levelDesc = data.text;
-        this.cameras.main.setBackgroundColor('#000'); // set background to black
-        let level = this.add.text(400, 300, levelName, 
-            { font: '42px monospace', align: 'center' })
-            .setOrigin(0.5, 0);
-        let levelTitle = this.add.text(400, 300, levelDesc, 
+
+        if(levelName === undefined){
+            this.launchScene({ levelName: levelName, levelKey: levelKey, text: levelDesc });
+        }else{
+            this.cameras.main.setBackgroundColor('#000'); // set background to black
+            this.add.text(400, 300, levelName, 
+                { font: '42px monospace', align: 'center' })
+                .setOrigin(0.5, 0);
+            this.add.text(400, 300, levelDesc, 
                 { font: '90px monospace', align: 'center' })
                 .setOrigin(0.5, -2);
 
-        this.time.delayedCall(this.preLevelMilliseconds, () => {
-            // Stop the pre-level scene and switch to the level scene
-            this.scene.launch(levelKey);
-            this.scene.stop('PreLevel');
-            this.scene.bringToTop(levelKey);
-        }, [], this);
-        
+            this.time.delayedCall(this.preLevelMilliseconds, () => {
+                // Stop the pre-level scene and switch to the level scene
+                this.launchScene({ levelName: levelName, levelKey: levelKey, text: levelDesc });
+            }, [], this);
+        }
     }
 }

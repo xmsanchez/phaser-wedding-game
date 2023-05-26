@@ -3,11 +3,11 @@ import Camera from '../classes/Camera';
 import HUD from '../classes/HUD';
 import Message from '../classes/Message.js';
 
-export default class Level5 extends Phaser.Scene
+export default class Level4 extends Phaser.Scene
 {
 	constructor()
 	{
-		super('Level5');
+		super('Level4');
 
 		this.jumpKeyReleased = true;
 		this.jump = false;
@@ -56,9 +56,10 @@ export default class Level5 extends Phaser.Scene
 		this.common = new Common(this);
 		this.message = new Message(this);
 		this.camera = new Camera();
+		this.common.addInput(this);
 
 		// Create the tilemap using the loaded JSON file
-		this.map = this.make.tilemap({ key: 'level5'});
+		this.map = this.make.tilemap({ key: 'level4'});
 	
 		// Add the loaded tiles image asset to the map
 		const tileset = this.map.addTilesetImage('livingroom', 'livingroom');
@@ -84,7 +85,6 @@ export default class Level5 extends Phaser.Scene
 		// Add colliders, input, hud, music
 		this.common.addColliders(this);
 		this.common.setCollisions(this, 0, 1400);
-		this.joystick = this.common.addInput(this).joystick;
 		this.hud = new HUD(this);
 		this.hud.addHud(this);
 		this.loadMusic();
@@ -128,7 +128,7 @@ export default class Level5 extends Phaser.Scene
 		// this.common.checkOverlapsStaticGroups(this.doors, this);
 
 		if (this.startScene) {
-			console.log('Stop scene Level5, start scene Level6');
+			console.log('Stop scene Level4, start scene Level5');
 		}
 	}
 

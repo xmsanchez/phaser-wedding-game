@@ -1140,7 +1140,7 @@
         {
          "columns":5,
          "firstgid":1,
-         "image":"..\/spritesheets\/objects_16x16.png",
+         "image":"..\/spritesheets\/objects\/objects.png",
          "imageheight":96,
          "imagewidth":80,
          "margin":0,
@@ -1153,7 +1153,7 @@
         {
          "columns":2,
          "firstgid":31,
-         "image":"..\/spritesheets\/treasure.png",
+         "image":"..\/spritesheets\/objects/treasure.png",
          "imageheight":128,
          "imagewidth":32,
          "margin":0,
@@ -1166,7 +1166,7 @@
         {
          "columns":39,
          "firstgid":47,
-         "image":"..\/tilesets\/tileset.png",
+         "image":"..\/tilesets\/tileset_field/tileset.png",
          "imageheight":1088,
          "imagewidth":624,
          "margin":0,
@@ -1192,7 +1192,7 @@
         {
          "columns":24,
          "firstgid":2891,
-         "image":"..\/spritesheets\/player.png",
+         "image":"..\/spritesheets\/player\/player.png",
          "imageheight":32,
          "imagewidth":384,
          "margin":0,

@@ -609,7 +609,7 @@
          "name":"doors",
          "objects":[
                 {
-                 "gid":2693,
+                 "gid":2686,
                  "height":16,
                  "id":88,
                  "name":"door1_1",
@@ -653,7 +653,7 @@
          "name":"coins",
          "objects":[
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":51,
                  "name":"",
@@ -665,7 +665,7 @@
                  "y":352
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":52,
                  "name":"",
@@ -677,7 +677,7 @@
                  "y":352
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":53,
                  "name":"",
@@ -689,7 +689,7 @@
                  "y":208
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":54,
                  "name":"",
@@ -701,7 +701,7 @@
                  "y":208
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":61,
                  "name":"",
@@ -713,7 +713,7 @@
                  "y":208
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":62,
                  "name":"",
@@ -725,7 +725,7 @@
                  "y":544
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":63,
                  "name":"",
@@ -737,7 +737,7 @@
                  "y":544
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":67,
                  "name":"",
@@ -749,7 +749,7 @@
                  "y":208
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":68,
                  "name":"",
@@ -761,7 +761,7 @@
                  "y":208
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":69,
                  "name":"",
@@ -773,7 +773,7 @@
                  "y":208
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":70,
                  "name":"",
@@ -785,7 +785,7 @@
                  "y":368
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":71,
                  "name":"",
@@ -797,7 +797,7 @@
                  "y":368
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":72,
                  "name":"",
@@ -809,7 +809,7 @@
                  "y":480
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":73,
                  "name":"",
@@ -821,7 +821,7 @@
                  "y":480
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":74,
                  "name":"",
@@ -833,7 +833,7 @@
                  "y":544
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":75,
                  "name":"",
@@ -845,7 +845,7 @@
                  "y":544
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":76,
                  "name":"",
@@ -857,7 +857,7 @@
                  "y":544
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":77,
                  "name":"",
@@ -869,7 +869,7 @@
                  "y":544
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":78,
                  "name":"",
@@ -881,7 +881,7 @@
                  "y":544
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":79,
                  "name":"",
@@ -893,7 +893,7 @@
                  "y":496
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":80,
                  "name":"",
@@ -905,7 +905,7 @@
                  "y":496
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":81,
                  "name":"",
@@ -917,7 +917,7 @@
                  "y":480
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":82,
                  "name":"",
@@ -929,7 +929,7 @@
                  "y":480
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":83,
                  "name":"",
@@ -941,7 +941,7 @@
                  "y":464
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":84,
                  "name":"",
@@ -953,7 +953,7 @@
                  "y":464
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":85,
                  "name":"",
@@ -965,7 +965,7 @@
                  "y":448
                 }, 
                 {
-                 "gid":2684,
+                 "gid":2677,
                  "height":16,
                  "id":86,
                  "name":"",
@@ -994,7 +994,7 @@
          "name":"player",
          "objects":[
                 {
-                 "gid":2704,
+                 "gid":2697,
                  "height":16,
                  "id":96,
                  "name":"player",
@@ -1017,7 +1017,7 @@
          "name":"npcs",
          "objects":[
                 {
-                 "gid":2764,
+                 "gid":2842,
                  "height":16,
                  "id":101,
                  "name":"Xavi",
@@ -1045,7 +1045,7 @@
                  "y":544
                 }, 
                 {
-                 "gid":2756,
+                 "gid":2770,
                  "height":16,
                  "id":102,
                  "name":"Miriam",
@@ -1084,7 +1084,7 @@
          "name":"cartells",
          "objects":[
                 {
-                 "gid":2702,
+                 "gid":2695,
                  "height":16,
                  "id":103,
                  "name":"cartell1_1",
@@ -1316,7 +1316,7 @@
          "name":"bunny",
          "objects":[
                 {
-                 "gid":2705,
+                 "gid":2698,
                  "height":16,
                  "id":111,
                  "name":"bunny",
@@ -1349,7 +1349,7 @@
         {
          "columns":39,
          "firstgid":1,
-         "image":"..\/tilesets\/tileset.png",
+         "image":"..\/tilesets\/tileset_field/tileset.png",
          "imageheight":1088,
          "imagewidth":624,
          "margin":0,
@@ -1385,20 +1385,20 @@
         {
          "columns":2,
          "firstgid":2658,
-         "image":"..\/spritesheets\/treasure.png",
+         "image":"..\/spritesheets\/objects\/treasure.png",
          "imageheight":128,
          "imagewidth":32,
          "margin":0,
          "name":"treasure",
          "spacing":0,
-         "tilecount":16,
+         "tilecount":0,
          "tileheight":16,
          "tilewidth":16
         }, 
         {
          "columns":5,
-         "firstgid":2674,
-         "image":"..\/spritesheets\/objects_16x16.png",
+         "firstgid":2667,
+         "image":"..\/spritesheets\/objects\/objects.png",
          "imageheight":96,
          "imagewidth":80,
          "margin":0,
@@ -1410,8 +1410,8 @@
         }, 
         {
          "columns":24,
-         "firstgid":2704,
-         "image":"..\/spritesheets\/player.png",
+         "firstgid":2697,
+         "image":"..\/spritesheets\/player\/player.png",
          "imageheight":32,
          "imagewidth":384,
          "margin":0,
@@ -1422,35 +1422,35 @@
          "tilewidth":16
         }, 
         {
-         "columns":3,
-         "firstgid":2752,
-         "image":"..\/spritesheets\/mi_16.png",
-         "imageheight":64,
-         "imagewidth":48,
+         "columns":24,
+         "firstgid":2745,
+         "image":"..\/spritesheets\/npcs\/mi.png",
+         "imageheight":32,
+         "imagewidth":384,
          "margin":0,
          "name":"mi_16",
          "spacing":0,
-         "tilecount":0,
+         "tilecount":48,
          "tileheight":16,
          "tilewidth":16
         }, 
         {
-         "columns":3,
-         "firstgid":2757,
-         "image":"..\/spritesheets\/xavi_16.png",
-         "imageheight":64,
-         "imagewidth":48,
+         "columns":24,
+         "firstgid":2793,
+         "image":"..\/spritesheets\/npcs\/xavi.png",
+         "imageheight":32,
+         "imagewidth":384,
          "margin":0,
          "name":"xavi_16",
          "spacing":0,
-         "tilecount":0,
+         "tilecount":48,
          "tileheight":16,
          "tilewidth":16
         }, 
         {
          "columns":13,
-         "firstgid":2765,
-         "image":"..\/spritesheets\/bunny.png",
+         "firstgid":2841,
+         "image":"..\/spritesheets\/npcs\/bunny.png",
          "imageheight":178,
          "imagewidth":596,
          "margin":0,
@@ -1462,7 +1462,7 @@
         }, 
         {
          "columns":0,
-         "firstgid":2804,
+         "firstgid":2880,
          "grid":
             {
              "height":1,

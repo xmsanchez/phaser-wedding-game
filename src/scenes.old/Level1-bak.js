@@ -25,7 +25,6 @@ export default class Level1 extends Phaser.Scene
 		this.player = null;
 		this.joystick = null;
 		
-		this.messageDisplaying = false;
 		this.messageIsSelector = false;
 		this.messageSelectorTexts = [];
 		this.messageSelectorTextObjects = [];
@@ -129,10 +128,10 @@ export default class Level1 extends Phaser.Scene
 				npc.setFrame(4);
 				
 				let currentIndex = 0;
-				if(this.messageList.length > 0 && this.firstInteraction && !this.messageDisplaying){
+				if(this.messageList.length > 0 && this.firstInteraction && !this.message.messageDisplaying){
 					console.log('Display message: ' + this.messageList[currentIndex]);
 					console.log('Messages: ' + this.messageList);
-					this.message.showMessage(this, this.messageList[0]);
+					this.message.showMessageList(this, this.messageList[0]);
 					this.messageList.shift();
 					console.log('Messages: ' + this.messageList);
 				}else if(this.messageList.length == 0){
@@ -158,7 +157,7 @@ export default class Level1 extends Phaser.Scene
 
 		// this.messageSelectorTexts = ['Option 0 i text bastant llarg a veure què passa text bastant llarg a veure què passa',  'Option 1 i text bastant llarg a veure què passa', 'Option 2 i més text perquè també vull veure el què', 'Option 3', 'Option 4 també amb bastant text'];
 		this.messageSelectorTexts = ['Option 1', 'Option 2', 'Option 3'];
-		if(!this.messageDisplaying){
+		if(!this.message.messageDisplaying){
 			// this.message.showMessageSelector(this, this.messageSelectorTexts);
 		}
 

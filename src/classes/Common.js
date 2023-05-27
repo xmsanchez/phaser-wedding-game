@@ -16,6 +16,7 @@ export default class Common {
 
 	stopScene(scene) {
 		scene.startScene = false;
+		scene.hud.destroy();
 		scene.scene.stop('UIScene');
 		scene.scene.stop();
 		scene.backgroundMusic.stop();
@@ -41,6 +42,9 @@ export default class Common {
 		scene.interactBtn = scene.registry.get('interactBtn');
 		scene.jumpBtn = scene.registry.get('jumpBtn');
 		scene.UIScene = scene.registry.get('UI');
+
+		console.log('Scene is: ' + scene);
+		console.log('Scene.UIScene is: ' + scene.UIScene);
 		
 		scene.UIScene.scene.setVisible(true);
 		scene.UIScene.scene.bringToTop();
@@ -112,15 +116,15 @@ export default class Common {
 	}
 
 	openTreasure(player, treasure, scene) {
-		console.log('Check if treasure is opened: ' + treasure.opened);
 		if(!treasure.opened){
+			console.log('Treasure IS NOT opened yet. Opening.');
 			treasure.opened = true;
 			treasure.setFrame(11);
 			console.log(treasure)
 			scene.common.chest_opened_sound.play();
 
 			// Show a message
-			scene.message.showMessage(this, 'Has trobat ' + treasure.containsText + '!');
+			scene.message.showMessageList(scene, ['Has trobat **' + treasure.containsText + '!**']);
 			
 			// Add a new object to the inventory
 			console.log('Add treasure contents to the inventory: ' + treasure.contents);
@@ -293,8 +297,8 @@ export default class Common {
 		console.log('Interactuo amb el bunny!');
 		console.log('Bunny props: ' + JSON.stringify(bunny.name));
 		scene.messageListShowing = [
-			bunny.name + ": Oh! M'has atrapat!!\nHas d'arribar el dia del casament **a les 16 hores.**",
-			bunny.name + ': Aquí tens **el rellotge.**\nTIC-TAC. TIC-TAC. TIC-TAC.'
+			bunny.name + ": Oh! M'has atrapat!!\nEl casament **és el dia 30 de Setembre** i hauries d'arribar cap **a les 16 hores.**",
+			bunny.name + ': Aquí tens el **rellotge.**\nTIC-TAC. TIC-TAC. TIC-TAC.'
 		]
 		// Passem un callback per actualitzar l'inventari
 		scene.message.showMessageList(scene, scene.messageListShowing, function() {
@@ -314,28 +318,32 @@ export default class Common {
 		scene.npcsLayer = scene.map.getObjectLayer(layer);
 		var count = 0;
 		scene.npcsLayer.objects.forEach((npc) => {
-		  count += 1;
-		  const contains = npc.properties.find(obj => obj.name === "contains");
-		  const default_frame = npc.properties.find(obj => obj.name === "default_frame");
-		  const spritesheet = npc.properties.find(obj => obj.name === "spritesheet");
-		  console.log('Contains.value is: ' + contains.value);
-		  console.log('default_frame.value is: ' + default_frame.value);
-		  var newnpc = scene.physics.add.sprite(npc.x, npc.y, spritesheet.value, default_frame.value).setOrigin(0, 1);
-		  newnpc.contents = contains.value;
-		  newnpc.default_frame = default_frame.value;
-		  newnpc.name = npc.name;
-		  newnpc.setImmovable(true);
-		  newnpc.body.setAllowGravity(false);
-		  newnpc.id = count;
-	  
-		  const container = this.drawHintContainer(scene, newnpc);
-		  newnpc.container = container;
-		  newnpc.container.setVisible(false);
+			count += 1;
+			const contains = npc.properties.find(obj => obj.name === "contains");
+			const default_frame = npc.properties.find(obj => obj.name === "default_frame");
+			const spritesheet = npc.properties.find(obj => obj.name === "spritesheet");
+			console.log('Contains.value is: ' + contains.value);
+			console.log('default_frame.value is: ' + default_frame.value);
+			var newnpc = scene.physics.add.sprite(npc.x, npc.y, spritesheet.value, default_frame.value).setOrigin(0, 1);
+			newnpc.contents = contains.value;
+			newnpc.default_frame = default_frame.value;
+			newnpc.name = npc.name;
+			newnpc.setImmovable(true);
+			newnpc.body.setAllowGravity(false);
+			newnpc.id = count;
+		
+			const container = this.drawHintContainer(scene, newnpc);
+			newnpc.container = container;
+			newnpc.container.setVisible(false);
 
-		  this.setNpcAnimations(scene, spritesheet.value, npc.name);
-	  	  
-		  scene.npcs.add(newnpc);
-		  console.log('Spawn NPC: ' + JSON.stringify(newnpc));
+			if(npc.name == 'Stan'){
+				this.setNpcStanAnimations(scene, spritesheet.value, npc.name);
+			}else{
+				this.setNpcAnimations(scene, spritesheet.value, npc.name);
+			}
+			
+			scene.npcs.add(newnpc);
+			console.log('Spawn NPC: ' + JSON.stringify(newnpc));
 		});
 	}
 
@@ -356,6 +364,25 @@ export default class Common {
 			repeat: 1,
 			duration: 100
 		});
+	}
+
+	setNpcStanAnimations(scene, layer, name) {
+        const totalFrames = scene.anims.generateFrameNumbers(layer).length;
+
+        // Assuming you want to create an array of 10 random frame indexes
+        let randomFrames = [];
+        for (let i = 0; i < 10; i++) {
+            let randomIndex = Phaser.Math.Between(0, totalFrames - 1);
+            randomFrames.push({ key: layer, frame: randomIndex });
+        }
+		console.log('Animation name: ' + `${name}_stand`);
+        // Generate a new animation using those random frames
+        scene.anims.create({
+            key: `${name}_stand`,
+            frames: randomFrames,
+            frameRate: 10,  // Adjust frameRate according to your needs
+            repeat: -1
+        });
 	}
 
 	checkOverlapsStaticGroups(object, scene) {
@@ -384,9 +411,6 @@ export default class Common {
 			name = obj.objectType.name;
 		}
 
-		if(obj.name == 'StanLeftArm' || obj.name == 'StanRightArm'){
-			return;
-		}
 		// console.log('Managing overlaps for object: ' + name);
 		// If the object is a treasure then we will enable the hint only when not opened
 		if(!obj.opened && name != 'door'){
@@ -454,7 +478,9 @@ export default class Common {
 
 	readCartell(player, cartell, scene) {
 		console.log('Cartell: ' + JSON.stringify(cartell.textCartell));
-		scene.message.showMessage(scene, cartell.textCartell);
+		console.log('Scene.message.messageDisplaying is: ' + JSON.stringify(scene.message.messageDisplaying));
+		console.log('scene.message.messageDisplaying is: ' + JSON.stringify(scene.message.messageDisplaying));
+		scene.message.showMessageList(scene, [cartell.textCartell]);
 	}
 
 	spawnDoors(scene) {
@@ -524,13 +550,10 @@ export default class Common {
 	// The player has no keys. They can't open the door.
 	doorNoKeyMessage(player, door, scene, key) {
 		console.log('Key is: ' + key);
-		console.log('Message is displaying? ' + scene.messageDisplaying);
-		if(scene.messageDisplaying){
-			scene.messageDisplaying = false;
-			scene.message.destroyMessageBox();
-		}else{
-			scene.message.showMessage(this, 'La porta està **tancada**. Necessites una **clau** per obrir-la!.');
-		}
+		console.log('Message is displaying? ' + scene.message.messageDisplaying);
+		console.log('Show message!');
+		scene.message.showMessageList(scene, ['La porta està **tancada**. Necessites una **clau** per obrir-la!.']);
+		
 	}
 
 	// The player has a key. They can open the door.
@@ -541,7 +564,7 @@ export default class Common {
 		scene.hud.inventory.pop('key');
 		scene.hud.updateInventory(scene);
 		
-		scene.message.showMessage(this, 'Utilitzes la clau!\nObres la porta...');
+		scene.message.showMessageList(scene, ['Utilitzes la clau!\nObres la porta...']);
 	}
 
 	// Check if the door can be opened or is already opened.
@@ -560,13 +583,13 @@ export default class Common {
 
 		// The player has no key and the door is currently closed
 		if (key == null && !door.opened) {
-			console.log('The player has no key and the door is currently closed. Message displaying: ' + scene.messageDisplaying);
+			console.log('The player has no key and the door is currently closed. Message displaying: ' + scene.message.messageDisplaying);
 			this.doorNoKeyMessage(player, door, scene, key);
 
 		// The player has the key o the door was already opened!
 		}else{
 			console.log('The player has the key OR the door is opened');
-			if(!door.opened && !scene.messageDisplaying){
+			if(!door.opened && !scene.message.messageDisplaying){
 				this.doorOpenWithKey(player, door, scene);
 			}
 			console.log('The player has a key or the door was already opened. Door name: ' + door.name);
@@ -574,6 +597,9 @@ export default class Common {
 			// Doors Level0
 			if (door.name == 'door0_1'){
 				// Start a new scene
+				scene.registry.set('Level0', {
+					doorOpened: true
+				});
 				console.log('door0_1 interacted. Start a new scene');
 				this.scene.startScene = true;
 
@@ -591,10 +617,9 @@ export default class Common {
 				// Move the player to the location of door number3
 				this.translatePlayerPosition(player, door.name, 'door1_2', scene);
 			}else if (door.name == 'door3_2') {
-				scene.message.showMessage(this, 'Encara no pots entrar! (estem fent obres :-))');
+				scene.message.showMessageList(scene, ['Encara no pots entrar! (estem fent obres :-))']);
 			}
 		}
-		console.log(JSON.stringify(door))
 		console.log('Door is opened: ' + door.opened);
 	}
 }

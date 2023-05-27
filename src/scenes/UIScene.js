@@ -1,13 +1,17 @@
 import Joystick from '../classes/Joystick.js';
+import HUD from '../classes/HUD.js';
+import Message from '../classes/Message.js';
 
 export default class UIScene extends Phaser.Scene {
     constructor() {
         super({ key: 'UIScene' });
-        console.log('UIScene constructor');
     }
 
     init(data) {
         this.mainScene = data.mainScene;
+    }
+
+    preload() {
     }
 
     create() {
@@ -30,5 +34,13 @@ export default class UIScene extends Phaser.Scene {
         this.registry.set('interactBtn', this.interactBtn);
         this.registry.set('jumpBtn', this.jumpBtn);
         this.registry.set('UI', this);
+
+		this.hud = new HUD(this);
+		this.hud.addHud(this);
+        
+        this.message = new Message(this);
+
+        this.registry.set('HUD', this.hud);
+        this.registry.set('Message', this.message);
     }
 }

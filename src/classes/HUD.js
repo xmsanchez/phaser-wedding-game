@@ -3,33 +3,58 @@ export default class HUD {
         this.scoreText = null;
         this.currentScore = 0;
         this.inventoryText = null;
-        this.inventoryDisplay = null;
+        this.inventoryDisplay = scene.registry.get('inventoryDisplay');
         this.inventory = scene.registry.get('inventory');
     }
 
+    destroy() {
+        console.log('Try to destroy this');
+        this.inventoryDisplay.removeAll(true);
+        // Add any other cleanup code here...
+        try {
+            console.log('This.anims: ', this.anims);
+            if (this.anims) {
+                this.anims.destroy();
+            }
+            this.anims = undefined;
+        } catch (error) {
+            console.log('destroy: ' + error);
+        }
+      }
+      
     addHud(scene) {
-		const canvasWidth = scene.cameras.main.width;
-		const canvasHeight = scene.cameras.main.height;
-		console.log('Canvas height: ' + canvasHeight);
-		console.log('Canvas width: ' + canvasWidth);
-		
-		// scene.joystick = new Joystick(scene, 300, (canvasHeight / 2) * 1.3);
-        this.scoreText = scene.add.text(250, (canvasHeight / 2) * 0.6, 'Punts: 0', { font: '18px Arial' }).setScrollFactor(0);
-        this.inventoryText = scene.add.text(canvasWidth / 1.7, (canvasHeight / 2) * 0.6, 'Inventari', { font: '18px Arial' }).setScrollFactor(0);
-        this.inventoryDisplay = scene.add.container(canvasWidth / 1.5, (canvasHeight / 2) * 0.6 + 30).setScrollFactor(0);
-
+        const canvasWidth = scene.cameras.main.width;
+        const canvasHeight = scene.cameras.main.height;
+        console.log('Canvas height: ' + canvasHeight);
+        console.log('Canvas width: ' + canvasWidth);
+        
+        // scene.joystick = new Joystick(scene, 300, (canvasHeight / 2) * 1.3);
+        console.log('canvas width: ' + canvasWidth);
+        this.inventoryText = scene.add.text((-canvasWidth / 2) + 70, -50, 'Inventari', { font: '50px Arial' }).setScrollFactor(0);
+        this.inventoryDisplay = scene.add.container((-canvasWidth / 2) + 70, 0).setScrollFactor(0);
+        
+        // Creating a semi-transparent rectangle graphics for the background of the inventory
+        const rect = scene.add.rectangle(0, 0, canvasWidth - 100, 120, 0x000000);
+        rect.alpha = 0.3; // Change alpha for transparency (0 = fully transparent, 1 = fully opaque)
+    
+        // Create the container
+        const container = scene.add.container(canvasWidth / 2, 80, [rect, this.inventoryText, this.inventoryDisplay]);
+        container.setScrollFactor(0);
+        
+        // this.scoreText = scene.add.text(300, 25, 'Punts: 0', { font: '50px Arial' }).setScrollFactor(0);
+        
         // Call updateInventory to create an initial empty inventory display
         this.updateInventory(scene);
     }
     
     updateInventory(scene, contents) {
         console.log('UPDATING INVENTORY');
-        console.log('This.inventory is: ' + this.inventory);
-        const tileSize = 16;
-        const spacing = 5;
+        // console.log('This.inventory is: ' + this.inventory + '. New object to add: ' + contents);
+        const tileSize = 16 * 3;
+        const spacing = 5 * 3;
 
         if(contents !== undefined){
-            console.log('Contents: ' + JSON.stringify(contents));
+            console.log('Object received: ' + JSON.stringify(contents));
         }
 
         let frame = 0;
@@ -44,8 +69,10 @@ export default class HUD {
             }else if(currentObject == 'clock'){
                 frame = 5;
             }
-            const item = scene.add.sprite(-i * (tileSize + spacing), 0, 'objects', frame).setOrigin(0, 0).setScale(1);
-            this.inventoryDisplay.add(item);
+            const item = scene.add.sprite(i * (tileSize + spacing), 0, 'objects', frame).setOrigin(0, 0).setScale(3);
+            scene.hud.inventoryDisplay.add(item);
+            scene.registry.set('inventory', this.inventory);
+            scene.registry.set('inventoryDisplay', this.inventoryDisplay);
             console.log('Current inventory: ' + this.inventory);
         }
     }

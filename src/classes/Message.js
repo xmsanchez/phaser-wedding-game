@@ -2,7 +2,17 @@ export default class Message {
     constructor(scene) {
 		this.messageBox = [];
 		this.scene = scene;
+
+		this.messageDisplaying = false;
+		this.messageIsSelector = false;
+		this.messageSelectorTexts = [];
+		this.messageSelectorTextObjects = [];
+		this.messageListShowing = [];
 	}
+
+    setScene(scene) {
+        this.scene = scene;    
+    }
 
     // Iteratively show messages from a list
     showMessageList(scene, messages, callback) {
@@ -16,6 +26,7 @@ export default class Message {
                 this.showMessageList(scene, messages, callback);
             });
         }
+        console.log('Messages.length: ' + messages.length);
         if(messages.length == 1 && (callback != null || callback != undefined)){
             callback(scene);
         }
@@ -85,20 +96,23 @@ export default class Message {
         this.scene.messageDisplaying = true;
         this.scene.messageIsSelector = true;
     }
+
+    showMessageWithRex(scene, message, callback) {
+        
+    }
       
     showMessage(scene, message, callback) {
-        message = message.replace(/\*\*(.*?)\*\*/g, '[color=#ff0000]$1[/color]');
+        message = message.replace(/\*\*(.*?)\*\*/g, '[color=#ff0000][b]$1[/b][/color]');
 
         console.log('Show message: ' + message);
-        const currentZoom = scene.cameras.main.zoom;
         const padding = 20;
-        const boxWidth = this.scene.cameras.main.width / currentZoom - padding * 2;
+        const boxWidth = this.scene.cameras.main.width - 50;
         const centerX = this.scene.cameras.main.centerX;
         const centerY = this.scene.cameras.main.centerY - 80;
         const boxX = centerX - boxWidth / 2;
     
         const textConfig = {
-            fontSize: '18px',
+            fontSize: '48px',
             fill: '#ffffff',
             wrap: {
                 mode: 'word', // Wrap by word
@@ -145,7 +159,7 @@ export default class Message {
         additionalText.setScrollFactor(0);
     
         this.messageBox.push(graphics, text, additionalText);
-        this.scene.messageDisplaying = true;
+        this.messageDisplaying = true;
 
         if(callback != null || callback != undefined){
             callback(scene);
@@ -154,8 +168,8 @@ export default class Message {
     
     destroyMessageBox() {
         console.log('Destroy messageBox');
-        this.scene.messageIsSelector = false;
-        this.scene.messageDisplaying = false;
+        this.messageIsSelector = false;
+        this.messageDisplaying = false;
         if (this.messageBox && this.messageBox.length > 0) {
         this.messageBox.forEach(element => {
             console.log('Destroying element ' + element);

@@ -18,8 +18,6 @@ export default class Level1 extends Phaser.Scene
 		this.score = 0;
 		this.player = null;
 		this.joystick = null;
-		this.messageDisplaying = false;
-
 		this.startScene = false;
 		this.currentScene = 'Level1';
 		
@@ -52,9 +50,10 @@ export default class Level1 extends Phaser.Scene
 	{
 		// Create all resources
 		this.common = new Common(this);
-		this.message = new Message(this);
 		this.camera = new Camera();
 		this.common.addInput(this);
+		this.message = this.registry.get('Message');
+		this.hud = this.registry.get('HUD');
 
 		this.initialCameraZoom = 1;
 		this.joystickBaseScale = null;
@@ -79,7 +78,7 @@ export default class Level1 extends Phaser.Scene
 		this.common.createLevelLayer(this, 'fg_background', tileset_jungle, 0.9);
 		this.common.createLevelLayer(this, 'ground_bg', tileset_jungle, 0.8);
 		this.ground = this.common.createLevelLayer(this, 'ground_fg', tileset_jungle);
-		this.common.createLevelLayer(this, 'rocks', tileset_jungle);
+		// this.common.createLevelLayer(this, 'rocks', tileset_jungle);
 		this.platforms = this.common.createLevelLayer(this, 'platforms', tileset_jungle);
 		
 		this.physics.world.setBounds(-30, 0, this.map.widthInPixels, this.map.heightInPixels * tileset_jungle.tileHeight);
@@ -96,8 +95,6 @@ export default class Level1 extends Phaser.Scene
 		this.common.addColliders(this);
 		this.common.setCollisions(this, 0, 2000);
 
-		this.hud = new HUD(this);
-		this.hud.addHud(this);
 		this.loadMusic();
 
 		// Add controls
@@ -110,12 +107,14 @@ export default class Level1 extends Phaser.Scene
 		this.scenesVisited = this.registry.get('scenesVisited');
 		this.previousScene = this.registry.get('previousScene');
 		this.scenesVisited.push(this.currentScene);
-		console.log('this.scenesVisited: ' + this.scenesVisited);
 	}
 
     update() {
 		// Update player movement based on events
 		this.player.playerMovement(this);
+
+		// NPCs will always look at the player
+		this.npcLookDirection();
 
 		// Check overlaps (show the 'B' button hint)
 		this.common.checkOverlapsStaticGroups(this.npcs, this);
@@ -124,19 +123,26 @@ export default class Level1 extends Phaser.Scene
 		
 		let dialog = [];
 		this.npcs.getChildren().forEach((npc) => {
+
+			if(!this.message.messageDisplaying){
+				npc.anims.stop();
+				npc.setFrame(2);
+			}
 			const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
 			if (distance < 55) {
-				if(this.firstInteraction && !this.messageDisplaying){
-					dialog = [
-						'Ei, Hola!', 'Soc l\'Stan!',
-						'No estaràs pas buscant el mapa cap a Monkey Island, no?',
-						'Potser busques un vaixell?',
-						'Tinc els millors vaixells del mon.',
-						'Que per què venc vaixells en un bosc?',
-						'És una pregunta excelent! Doncs veuràs, tot va començar el dia en que...',
-						'Que tens pressa? Que busques **el mapa** d\'un casament?',
-						'Bé, doncs si trobes **la clau** per obrir aquest bagul, et donaré **el mapa** que busques!'
-					];
+				if(this.firstInteraction && !this.message.messageDisplaying){
+					dialog = ['hola'];
+					// dialog = [
+					// 	'Ei, Hola!', 'Soc l\'Stan!',
+					// 	'No estaràs pas buscant el mapa cap a Monkey Island, no?',
+					// 	'Potser busques un vaixell?',
+					// 	'Tinc els millors vaixells del mon.',
+					// 	'Que per què venc vaixells en un bosc?',
+					// 	'És una pregunta excelent! Doncs veuràs, tot va començar el dia en que...',
+					// 	'Que tens pressa? Que busques **el mapa** d\'un casament?',
+					// 	'Bé, doncs si trobes la **clau** per obrir aquest bagul, et donaré **el mapa** que busques!'
+					// ];
+					npc.anims.play('Stan_stand', true);
 					this.message.showMessageList(this, dialog, function(scene){
 						scene.firstInteraction = false;
 					})
@@ -148,12 +154,14 @@ export default class Level1 extends Phaser.Scene
 			console.log('Stop scene Level1, if user has the map, start Level2Prev. Otherwise, return to scene Level1Prev');
 			if(this.hasMap){
 				this.startScene = false;
+				this.hud.destroy();
 				this.scene.stop('Level1');
 				this.registry.set('previousScene', 'Level1');
 				this.backgroundMusic.stop();
 				this.scene.start('PreLevel', { levelName: 'Nivell 3', levelKey: 'Level3Prev', text: "El Conill" });
 			}else{
 				this.startScene = false;
+				this.hud.destroy();
 				this.scene.stop('Level1');
 				this.registry.set('previousScene', 'Level1');
 				this.backgroundMusic.stop();
@@ -161,13 +169,14 @@ export default class Level1 extends Phaser.Scene
 			}
 		}
 
-		if(this.levelFinished && !this.messageDisplaying){
+		if(this.levelFinished && !this.message.messageDisplaying){
 			this.common.stopScene(this);
 			this.scene.start('PreLevel', { levelName: 'Nivell 3\nPròleg', levelKey: 'Level3Prev', text: 'La Data' });
 		}
     }	
 
 	npcActions(player, npc) {
+		npc.anims.play('Stan_stand', true);
 		console.log('NpcActions. NPC is: ' + npc.name);
 		let dialog = [];
 		let inventoryLength = this.hud.inventory.length;
@@ -180,10 +189,9 @@ export default class Level1 extends Phaser.Scene
 					hasKey = true;
 				}
 			}
-			if(hasKey){
+			if(hasKey && !this.hasMap){
 				dialog = [
-					'**(!!!!!)**',
-					'Veig que has trobat **la clau!** (D\'on carai l\haurà tret???)',
+					'**(!!!!!)** Veig que has trobat **la clau!** (D\'on carai l\haurà tret???)',
 					'Segur que no estàs interessat en comprar un vaixell?',
 					'Bé, crec que no em deixes alternativa',
 					'Una promesa és una promesa. Aquí tens **el mapa**'];
@@ -191,23 +199,40 @@ export default class Level1 extends Phaser.Scene
 					console.log('Update inventory');
 					scene.hud.inventory.push(npc.contents);
 					scene.hud.updateInventory(scene, npc.contents);
+					// TODO FIX MAP POPING INSTEAD OF KEY!!!
+					// scene.hud.inventory.pop('key');
 					scene.common.chest_opened_sound.play();
 					scene.hasMap = true;
 				})
+			}else if(this.hasMap){
+				dialog = [
+					'Ja tens **el mapa**, si no tens intencions de comprar un vaixell deixa\'m estar, estic molt ocupat'
+				]
+				this.message.showMessageList(this, dialog);
 			}else{
 				console.log('Not first interaction, plus nothing in inventory');
 				dialog = [
 					'Hola de nou!',
-					'Ja has trobat la clau?',
+					'Ja has trobat la **clau**?',
 					'T\'he explicat ja que venc els millors vaixells del món?',
-					'Que no estàs interessat? Bé, és una llàstima! Sort amb la cerca de **la clau**!',
-					'(el tindré donant voltes sense saber que no hi ha cap **per molt amunt que pugi** no trobarà cap **clau**...)'
+					'Que no estàs interessat? Bé, és una llàstima! Sort amb la cerca de la **clau**!',
+					'(el tindré donant voltes sense saber que **per molt amunt que pugi** no trobarà cap **clau**...)'
 				]
-				this.message.showMessageList(this, dialog);
+				this.message.showMessageList(this, dialog, function(scene){})
 			}
 		}
 	}
 	
+	npcLookDirection() {
+		const position = this.npcs.getChildren().find((npc) => {
+			if(this.player.x > npc.x + npc.width / 2){
+				npc.flipX = false;
+			}else{
+				npc.flipX = true;
+			}
+		})
+	}
+
 	loadMusic(){
 		// Create an instance of the audio object
 		this.backgroundMusic = this.sound.add('background_music_woods2', { loop: true, volume: 0.2});

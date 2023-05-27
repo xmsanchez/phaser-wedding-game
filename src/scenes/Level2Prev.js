@@ -17,14 +17,7 @@ export default class Level2Prev extends Phaser.Scene
 		this.touchMoveRight = false;
 		this.score = 0;
 		this.player = null;
-		this.joystick = null;
-		
-		this.messageDisplaying = false;
-		this.messageIsSelector = false;
-		this.messageSelectorTexts = [];
-		this.messageSelectorTextObjects = [];
-		this.messageListShowing = [];
-		this.firstInteraction = true;
+		this.joystick = null;		this.firstInteraction = true;
 		this.bunnyFirstInteractionJump = false;
 
 		this.startScene = false;
@@ -51,9 +44,10 @@ export default class Level2Prev extends Phaser.Scene
 	{
 		// Create all resources
 		this.common = new Common(this);
-		this.message = new Message(this);
 		this.camera = new Camera();
 		this.common.addInput(this);
+		this.message = this.registry.get('Message');
+		this.hud = this.registry.get('HUD');
 
 		// Create the tilemap using the loaded JSON file
 		this.map = this.make.tilemap({ key: 'house-outside'});
@@ -77,8 +71,6 @@ export default class Level2Prev extends Phaser.Scene
 		// Add colliders, input, hud, music
 		this.common.addColliders(this);
 		this.common.setCollisions(this, 0, 1400);
-		this.hud = new HUD(this);
-		this.hud.addHud(this);
 		this.loadMusic();
 
 		// Add controls

@@ -18,7 +18,6 @@ export default class Level2 extends Phaser.Scene
 		this.score = 0;
 		this.player = null;
 		this.joystick = null;
-		this.messageDisplaying = false;
 
 		this.startScene = false;
 		this.currentScene = 'Level2';

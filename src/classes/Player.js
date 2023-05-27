@@ -21,7 +21,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		const maxVelocityX = 180;
 		const jumpVelocity = -450;
 
-		if (!scene.messageDisplaying) {
+		if (!scene.message.messageDisplaying) {
 			if (this.moveLeft) {
 				this.lastMove = 'idleLeft';
 				scene.player.setAccelerationX(-acceleration);
@@ -105,17 +105,17 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 			this.moveUp = false;
         }, this)
 
-		// Control the message selector box on pointer down
-		// we do it here and not on update to avoid multiple inputs
-		joystick.on('pointerdown', function (pointer) {
-			const selected = this.player.msgSelectedIndex;
-			const messageList = this.player.scene.messageSelectorTexts;
-			if(this.player.moveDown && selected >= 0 && selected < messageList.length - 1){
-				this.player.msgSelectedIndex += 1;
-			}else if(this.player.moveUp && selected > 0 && selected < messageList.length){
-				this.player.msgSelectedIndex -= 1;
-			}
-		}, scene);
+		// // Control the message selector box on pointer down
+		// // we do it here and not on update to avoid multiple inputs
+		// joystick.on('pointerdown', function (pointer) {
+		// 	const selected = this.player.msgSelectedIndex;
+		// 	const messageList = this.player.scene.messageSelectorTexts;
+		// 	if(this.player.moveDown && selected >= 0 && selected < messageList.length - 1){
+		// 		this.player.msgSelectedIndex += 1;
+		// 	}else if(this.player.moveUp && selected > 0 && selected < messageList.length){
+		// 		this.player.msgSelectedIndex -= 1;
+		// 	}
+		// }, scene);
 
 		// Add a listener for the 'pointerup' event, which fires when the button is released
 		interactBtn.on('pointerdown', () => {
@@ -137,14 +137,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		const overlappingNPCs = this.isOverlappingNpcs(scene);
 		const overlappingBunny = this.isOverlappingBunny(scene);
 
-		if(scene.messageDisplaying && !scene.messageIsSelector){
+		if(scene.message.messageDisplaying && !scene.message.messageIsSelector){
 			console.log('Checking interact button. Destroy the message box.');
 			scene.message.destroyMessageBox();
 			
-		}else if (scene.messageDisplaying && this.scene.messageIsSelector){
+		}else if (scene.message.messageDisplaying && this.scene.message.messageIsSelector){
 			console.log('Select message option and destroy the box!');
 			this.msgSelectedOnAccept = this.msgSelectedIndex;
-			console.log('Message selected is: ' + scene.messageSelectorTexts[this.msgSelectedOnAccept]);
+			console.log('Message selected is: ' + scene.message.messageSelectorTexts[this.msgSelectedOnAccept]);
 			scene.message.destroyMessageBox();
 		}else{
 			if (overlappingTreasures.length > 0) {
@@ -169,6 +169,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 				})
 			}
 		}
+		console.log('checkInteractBtn finished');
 	}	  
 
 	checkJumpBtn(scene) {
@@ -308,7 +309,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 				scene.common.coin_sound.play();
 				
 				scene.score += 10;
-				scene.hud.updateScore(scene.score);
+				// scene.hud.updateScore(scene.score);
 				coin.destroy();
 				overlaps.push(coin);
 			});
@@ -322,7 +323,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		try {
 			const overlaps = [];
 			if(scene.doors !== null){
-				scene.physics.world.overlap(this, scene.doors.getChildren(), (player, door) => {
+				scene.physics.world.overlap(this, this.scene.doors.getChildren(), (player, door) => {
+					console.log('isOverlappingDoors. door.opened: ' + door.opened);
 					overlaps.push(door);
 				});
 			}

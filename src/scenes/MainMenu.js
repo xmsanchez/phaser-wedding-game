@@ -15,12 +15,10 @@ export default class MainMenu extends Phaser.Scene {
 		var urlJoystick = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexvirtualjoystickplugin.min.js';
 		var urlButton = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbuttonplugin.min.js';
 		var urlBBCode = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbbcodetextplugin.min.js';
-		var urlUI = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js';
 		this.load.plugin('rexvirtualjoystickplugin', urlJoystick, true);
 		this.load.plugin('rexbuttonplugin', urlButton, true);
 		this.load.plugin('rexbbcodetextplugin', urlBBCode, true);
-		// this.load.plugin('rexuiplugin', urlUI, true);
-    
+
 		// Load common tilesets
 		this.load.image('tileset_field','assets/tilesets/tileset_field/tileset.png');
 		this.load.image('tileset_jungle','assets/tilesets/tileset_jungle/tileset_jungle_embed.png');
@@ -72,8 +70,7 @@ export default class MainMenu extends Phaser.Scene {
 		this.load.spritesheet('npc_mi', 'assets/spritesheets/npcs/mi.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('npc_bunny', 'assets/spritesheets/npcs/bunny.png', { frameWidth: 45, frameHeight: 45 });
 		this.load.spritesheet('npc_beast', 'assets/spritesheets/npcs/bestia.png', { frameWidth: 88, frameHeight: 88 });
-		this.load.spritesheet('npc_stan', 'assets/spritesheets/npcs/stan/stan_static.png', { frameWidth: 64, frameHeight: 64 });
-		this.load.spritesheet('npc_stan_arms', 'assets/spritesheets/npcs/stan/stan_arms.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.spritesheet('npc_stan', 'assets/spritesheets/npcs/stan.png', { frameWidth: 66, frameHeight: 66 });
 		this.load.spritesheet('treasure', 'assets/spritesheets/objects/treasure.png', {frameWidth: 16, frameHeight: 16});		
 		this.load.spritesheet('objects', 'assets/spritesheets/objects/objects.png', {frameWidth: 16, frameHeight: 16});
     }
@@ -82,9 +79,15 @@ export default class MainMenu extends Phaser.Scene {
 		// Set common vars
         this.registry.set('firstInteraction', true);
 		this.registry.set('inventory', []);
+		this.registry.set('inventoryDisplay', []);
+		this.registry.set('Message', null);
 		this.registry.set('UI', null);
 		this.registry.set('scenesVisited', []);
 		this.registry.set('previousScene', 'MainMenu');
+
+		this.registry.set('Level0', {
+			doorOpened: false
+		});
 		
 		const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
 		const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;

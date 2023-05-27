@@ -24,13 +24,6 @@ export default class Level0 extends Phaser.Scene
 		this.score = 0;
 		this.player = null;
 		this.joystick = null;
-		
-		this.messageDisplaying = false;
-		this.messageIsSelector = false;
-		this.messageSelectorTexts = [];
-		this.messageSelectorTextObjects = [];
-		this.messageListShowing = [];
-
 		this.startScene = false;
 		this.currentScene = 'Level0';
 
@@ -57,9 +50,10 @@ export default class Level0 extends Phaser.Scene
 
 		// Create all resources
 		this.common = new Common(this);
-		this.message = new Message(this);
 		this.camera = new Camera();
 		this.common.addInput(this);
+		this.message = this.registry.get('Message');
+		this.hud = this.registry.get('HUD');
 
 		// Create the tilemap using the loaded JSON file
 		this.map = this.make.tilemap({ key: 'house-inside'});
@@ -87,8 +81,6 @@ export default class Level0 extends Phaser.Scene
 		// Add colliders, input, hud, music
 		this.common.addColliders(this);
 		this.common.setCollisions(this, 0, 1400);
-		this.hud = new HUD(this);
-		this.hud.addHud(this);
 		this.loadMusic();
 
 		// Add controls
@@ -98,10 +90,21 @@ export default class Level0 extends Phaser.Scene
 		// Setup camera bounds and zoom
 		this.camera.setCamera(this, 2.40);
 
+		this.checkCompleted();
+	}
+
+	checkCompleted() {
 		this.scenesVisited = this.registry.get('scenesVisited');
 		this.previousScene = this.registry.get('previousScene');
 		this.scenesVisited.push(this.currentScene);
 		console.log('this.scenesVisited: ' + this.scenesVisited);
+		this.doorOpened = this.registry.get('Level0').doorOpened;
+		if(this.doorOpened){
+			console.log('Is the door already opened? ' + this.doorOpened);
+			this.doors.getChildren().forEach((door) => {
+				door.opened = true;
+			})
+		}
 	}
 
 	update() {
@@ -119,7 +122,7 @@ export default class Level0 extends Phaser.Scene
 				this.messageListShowing = [];
 				
 				// For first interaction, show a message list when approaching NPCs
-				if(this.firstInteraction && !this.messageDisplaying){
+				if(this.firstInteraction && !this.message.messageDisplaying){
 					this.messageListShowing = [
 						npc.name + ': Hola! Saps què?!\n\n**ENS CASEM!!!**', 
 						npc.name + ': Ara tenim un problema, i és que **hem perdut tota la informació** sobre el casament.\nEns ajudes a trobar-la?'
@@ -148,8 +151,7 @@ export default class Level0 extends Phaser.Scene
 
 	npcActions(player, npc) {
 		console.log('NpcActions, checking if inventory is empty or not. NPC is: ' + npc.name);
-		if(this.hud.inventory.length == 0){
-			console.log('Inventory is empty!');
+		if(this.hud.inventory.length == 0 && !this.doorOpened){
 			if(npc.name == 'Xavi'){
 				this.messageListShowing = [
 					npc.name + ': Hauries de parlar amb la **Miriam**, és aquí al costat.'
@@ -169,34 +171,18 @@ export default class Level0 extends Phaser.Scene
 					scene.common.chest_opened_sound.play();
 				})
 			}
-		}else{
-			console.log('Inventory is NOT empty!');
-			// Look for the map in the inventory
-			console.log('Objects in inventory: ' + this.hud.inventory);
-			for (var i = 0; i < this.hud.inventory.length; i++) {
-				console.log('Object in inventory: ' + this.hud.inventory[i]);
-				if(this.hud.inventory[i] === 'map'){
-					if(npc.name == 'Xavi'){
-						this.message.showMessage(this, npc.name + ': Ja tens **el mapa**? Dona-li a la **Miriam**!')
-					}else if(npc.name == 'Miriam'){
-						if(npc.contents == ''){
-							console.log(npc.name + ': Ja tens la **clau**, corre cap a la porta!');
-						}else{
-							this.message.showMessage(this, npc.name + ': Has trobat el mapa!\n\nEl casament serà a **"LA VINYASSA"**. És a prop **d\'Arbúcies!**\n\nAquí tens la **clau** per obrir la porta, al proper nivell esbrinaràs **la data** del casament!');
-							this.common.chest_opened_sound.play();
-							this.hud.updateInventory(this, npc.contents);
-							this.hud.inventory.push(npc.contents);
-							npc.contents = '';
-							return;
-						}
-					}
-				}else if (this.hud.inventory[i] === 'key'){
-					if(npc.name == 'Xavi'){
-						this.message.showMessage(this, npc.name + ": La Miriam t'ha donat la **clau**? Doncs corre cap a la porta!");
-					}else if (npc.name == 'Miriam'){
-						this.message.showMessage(this, npc.name + ': Ja tens la **clau**! Ja pots obrir la porta.');
-					}
-				}
+		}
+		if (this.hud.inventory.length > 0 && !this.doorOpened){
+			if(npc.name == 'Xavi'){
+				this.message.showMessageList(this, [npc.name + ": La Miriam t'ha donat la **clau**? Doncs corre cap a la porta!"]);
+			}else if (npc.name == 'Miriam'){
+				this.message.showMessageList(this, [npc.name + ': Ja tens la **clau**! Ja pots obrir la porta.']);
+			}
+		}else if(this.doorOpened){
+			if(npc.name == 'Xavi'){
+				this.message.showMessageList(this, [npc.name + ": Ja tens la porta oberta, recorda que has de buscar el **mapa**"]);
+			}else if (npc.name == 'Miriam'){
+				this.message.showMessageList(this, [npc.name + ": Ja tens la porta oberta, recorda que has de buscar el **mapa**"]);
 			}
 		}
 	}

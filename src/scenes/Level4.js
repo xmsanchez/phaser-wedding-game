@@ -24,13 +24,6 @@ export default class Level4 extends Phaser.Scene
 		this.score = 0;
 		this.player = null;
 		this.joystick = null;
-		
-		this.messageDisplaying = false;
-		this.messageIsSelector = false;
-		this.messageSelectorTexts = [];
-		this.messageSelectorTextObjects = [];
-		this.messageListShowing = [];
-
 		this.startScene = false;
 		this.currentScene = 'Level5';
 
@@ -54,9 +47,10 @@ export default class Level4 extends Phaser.Scene
 	{
 		// Create all resources
 		this.common = new Common(this);
-		this.message = new Message(this);
 		this.camera = new Camera();
 		this.common.addInput(this);
+		this.message = this.registry.get('Message');
+		this.hud = this.registry.get('HUD');
 
 		// Create the tilemap using the loaded JSON file
 		this.map = this.make.tilemap({ key: 'level4'});
@@ -85,8 +79,6 @@ export default class Level4 extends Phaser.Scene
 		// Add colliders, input, hud, music
 		this.common.addColliders(this);
 		this.common.setCollisions(this, 0, 1400);
-		this.hud = new HUD(this);
-		this.hud.addHud(this);
 		this.loadMusic();
 
 		// Add controls
@@ -112,7 +104,7 @@ export default class Level4 extends Phaser.Scene
 		// 		this.messageListShowing = [];
 				
 		// 		// For first interaction, show a message list when approaching NPCs
-		// 		if(this.firstInteraction && !this.messageDisplaying){
+		// 		if(this.firstInteraction && !this.message.messageDisplaying){
 		// 			this.messageListShowing = [
 		// 				npc.name + ': Que bé! Has aconseguit el rellotge.\nMalauradament... també necessitaràs un vestit',
 		// 				npc.name + ': Penso que dins del bosc, passat el jardí, el trobaràs.',

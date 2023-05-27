@@ -18,8 +18,6 @@ export default class Level3 extends Phaser.Scene
 		this.score = 0;
 		this.player = null;
 		this.joystick = null;
-		this.messageDisplaying = false;
-
 		this.startScene = false;
 		this.currentScene = 'Level3';
 		
@@ -47,9 +45,10 @@ export default class Level3 extends Phaser.Scene
 	{
 		// Create all resources
 		this.common = new Common(this);
-		this.message = new Message(this);
 		this.camera = new Camera();
 		this.common.addInput(this);
+		this.message = this.registry.get('Message');
+		this.hud = this.registry.get('HUD');
 
 		// Create the tilemap using the loaded JSON file
 		this.map = this.make.tilemap({ key: 'level3' });
@@ -77,8 +76,6 @@ export default class Level3 extends Phaser.Scene
 		// Add colliders, input, hud, music
 		this.common.addColliders(this);
 		this.common.setCollisions(this);
-		this.hud = new HUD(this);
-		this.hud.addHud(this);
 		this.loadMusic();
 
 		// Add controls
@@ -100,16 +97,17 @@ export default class Level3 extends Phaser.Scene
 		this.bunny.container.y = this.bunny.y - 20;
 		this.common.bunnyMovement(this);
 
-		if(this.bunny.contents == null && !this.messageDisplaying){
+		if(this.bunny.contents == null && !this.message.messageDisplaying){
 			// Set a timeout before showing the message.
 			setTimeout(() => {
 				console.log('We can start the next level!');
-				this.message.showMessage(this, 'Felicitats! Ja tens el rellotge.\nPodràs aconseguir la resta de coses?');
+				this.message.showMessageList(this, ['Felicitats! Ja tens el **rellotge**.\nPodràs aconseguir la resta de coses?']);
 				this.levelFinished = true;
 			}, 100);
 		}
-		if(this.levelFinished && !this.messageDisplaying){
+		if(this.levelFinished && !this.message.messageDisplaying){
 			this.startScene = false;
+			this.hud.destroy();
 			this.scene.stop('Level1');
 			this.backgroundMusic.stop();
 			this.scene.start('PreLevel', { levelName: 'Nivell 4\nPròleg', levelKey: 'Level4Prev', text: 'El vestit' });

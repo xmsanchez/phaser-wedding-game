@@ -17,14 +17,7 @@ export default class Level3Prev extends Phaser.Scene
 		this.touchMoveRight = false;
 		this.score = 0;
 		this.player = null;
-		this.joystick = null;
-		
-		this.messageDisplaying = false;
-		this.messageIsSelector = false;
-		this.messageSelectorTexts = [];
-		this.messageSelectorTextObjects = [];
-		this.messageListShowing = [];
-		this.firstInteraction = true;
+		this.joystick = null;		this.firstInteraction = true;
 		this.bunnyFirstInteractionJump = false;
 
 		this.startScene = false;
@@ -51,9 +44,10 @@ export default class Level3Prev extends Phaser.Scene
 	{
 		// Create all resources
 		this.common = new Common(this);
-		this.message = new Message(this);
 		this.camera = new Camera();
 		this.common.addInput(this);
+		this.message = this.registry.get('Message');
+		this.hud = this.registry.get('HUD');
 
 		// Create the tilemap using the loaded JSON file
 		this.map = this.make.tilemap({ key: 'house-outside'});
@@ -77,8 +71,6 @@ export default class Level3Prev extends Phaser.Scene
 		// Add colliders, input, hud, music
 		this.common.addColliders(this);
 		this.common.setCollisions(this, 0, 1400);
-		this.hud = new HUD(this);
-		this.hud.addHud(this);
 		this.loadMusic();
 
 		// Add controls
@@ -101,10 +93,10 @@ export default class Level3Prev extends Phaser.Scene
 				
 				setTimeout(() => {
 					// For first interaction, show a message list when approaching NPCs
-					if(this.firstInteraction && !this.messageDisplaying){
+					if(this.firstInteraction && !this.message.messageDisplaying){
 						this.messageListShowing = [
 							bunny.name + ': Oh, no! Vaig tard, vaig tard.', 
-							bunny.name + ': Aquest rellotge marca el dia i la hora del casament. Vaig tard, vaig tard!!'
+							bunny.name + ': Aquest rellotge marca **el dia i la hora** del casament. Vaig tard, vaig tard!!'
 						];
 						this.message.showMessageList(this, this.messageListShowing);
 						this.firstInteraction = false;
@@ -115,7 +107,7 @@ export default class Level3Prev extends Phaser.Scene
 				}, 400);
 				
 				setTimeout(() => {
-					if(!this.messageDisplaying && this.messageListShowing.length == 0){
+					if(!this.message.messageDisplaying && this.messageListShowing.length == 0){
 						bunny.flipX = false;
 						bunny.anims.play('bunny-left', true);
 						bunny.setVelocityX(-200);
@@ -131,9 +123,10 @@ export default class Level3Prev extends Phaser.Scene
 		if(this.player.x < 0){
 			console.log('Stop scene Level3Prev, start scene Level3');
 			this.startScene = false;
+			this.hud.destroy();
 			this.scene.stop('Level3Prev');
 			this.backgroundMusic.stop();
-			this.scene.start('PreLevel', { levelName: 'Nivell 3', levelKey: 'Level3', text: "L\hora" });
+			this.scene.start('PreLevel', { levelName: 'Nivell 3', levelKey: 'Level3', text: "L\'hora" });
 		}
     }
 

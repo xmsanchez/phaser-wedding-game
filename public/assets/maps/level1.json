@@ -1169,9 +1169,9 @@
                  "y":448
                 }, 
                 {
-                 "gid":5940,
-                 "height":64,
-                 "id":165,
+                 "gid":5958,
+                 "height":66,
+                 "id":173,
                  "name":"Stan",
                  "properties":[
                         {
@@ -1181,8 +1181,8 @@
                         }, 
                         {
                          "name":"default_frame",
-                         "type":"string",
-                         "value":"0"
+                         "type":"int",
+                         "value":2
                         }, 
                         {
                          "name":"spritesheet",
@@ -1192,65 +1192,9 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":64,
-                 "x":262,
-                 "y":947
-                }, 
-                {
-                 "height":0,
-                 "id":166,
-                 "name":"StanLeftArm",
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"contains",
-                         "type":"string",
-                         "value":""
-                        }, 
-                        {
-                         "name":"default_frame",
-                         "type":"string",
-                         "value":"6"
-                        }, 
-                        {
-                         "name":"spritesheet",
-                         "type":"string",
-                         "value":"npc_stan_arms"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":275,
-                 "y":928.666666666667
-                }, 
-                {
-                 "height":0,
-                 "id":167,
-                 "name":"StanRightArm",
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"contains",
-                         "type":"string",
-                         "value":""
-                        }, 
-                        {
-                         "name":"default_frame",
-                         "type":"string",
-                         "value":"13"
-                        }, 
-                        {
-                         "name":"spritesheet",
-                         "type":"string",
-                         "value":"npc_stan_arms"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":297.333333333333,
-                 "y":928.333333333333
+                 "width":66,
+                 "x":285,
+                 "y":948.333333333333
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1264,7 +1208,7 @@
          "name":"treasures",
          "objects":[
                 {
-                 "gid":5970,
+                 "gid":5948,
                  "height":16,
                  "id":168,
                  "name":"",
@@ -1317,7 +1261,7 @@
          "y":0
         }],
  "nextlayerid":53,
- "nextobjectid":170,
+ "nextobjectid":174,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.1",
@@ -1406,34 +1350,8 @@
          "tilewidth":16
         }, 
         {
-         "columns":1,
-         "firstgid":5940,
-         "image":"..\/spritesheets\/npcs\/stan\/stan_static.png",
-         "imageheight":64,
-         "imagewidth":64,
-         "margin":0,
-         "name":"stan",
-         "spacing":0,
-         "tilecount":1,
-         "tileheight":64,
-         "tilewidth":64
-        }, 
-        {
-         "columns":7,
-         "firstgid":5941,
-         "image":"..\/spritesheets\/npcs\/stan\/stan_arms.png",
-         "imageheight":112,
-         "imagewidth":224,
-         "margin":0,
-         "name":"stan_arms",
-         "spacing":0,
-         "tilecount":21,
-         "tileheight":32,
-         "tilewidth":32
-        }, 
-        {
          "columns":2,
-         "firstgid":5962,
+         "firstgid":5940,
          "image":"..\/spritesheets\/objects\/treasure.png",
          "imageheight":128,
          "imagewidth":32,
@@ -1443,6 +1361,19 @@
          "tilecount":16,
          "tileheight":16,
          "tilewidth":16
+        }, 
+        {
+         "columns":19,
+         "firstgid":5956,
+         "image":"..\/spritesheets\/npcs\/stan.png",
+         "imageheight":1188,
+         "imagewidth":1254,
+         "margin":0,
+         "name":"stan",
+         "spacing":0,
+         "tilecount":342,
+         "tileheight":66,
+         "tilewidth":66
         }],
  "tilewidth":16,
  "type":"map",

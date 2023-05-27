@@ -114,7 +114,7 @@ export default class MainMenu extends Phaser.Scene {
 		});
 		const enterKey = this.input.keyboard.addKey('ENTER');
 		enterKey.on('down', () => {
-			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level0', text: "L'arribada" });
+			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level10', text: "L'arribada" });
 		});
 	}
 

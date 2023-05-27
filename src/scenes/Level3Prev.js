@@ -126,7 +126,7 @@ export default class Level3Prev extends Phaser.Scene
 			this.hud.destroy();
 			this.scene.stop('Level3Prev');
 			this.backgroundMusic.stop();
-			this.scene.start('PreLevel', { levelName: 'Nivell 3', levelKey: 'Level3', text: "L\'hora" });
+			this.scene.start('PreLevel', { levelKey: 'Level3', text: "L\'hora" });
 		}
     }
 

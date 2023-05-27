@@ -54,7 +54,6 @@ export default class Common {
 		// Ensure that the objects actually exists
 		if(obj1 !== undefined && obj2 !== undefined && obj1 !== null && obj2 !== null){
 			try {
-				console.log('Add collider for ' + obj1 + ' and ' + obj2);
 				scene.physics.add.collider(obj1, obj2);
 			} catch (error) {
 				console.log('Error while trying to add collider... error: ' + error);

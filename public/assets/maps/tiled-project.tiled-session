@@ -29,7 +29,7 @@
                 28
             ],
             "scale": 2,
-            "selectedLayer": 8,
+            "selectedLayer": 6,
             "viewCenter": {
                 "x": 318,
                 "y": 156.25
@@ -134,11 +134,11 @@
                 52,
                 28
             ],
-            "scale": 3,
-            "selectedLayer": 16,
+            "scale": 2,
+            "selectedLayer": -1,
             "viewCenter": {
-                "x": 164.66666666666669,
-                "y": 903.8333333333333
+                "x": 497.5,
+                "y": 318.25
             }
         },
         "level1.json#background": {
@@ -315,8 +315,8 @@
             "scale": 1.5,
             "selectedLayer": 12,
             "viewCenter": {
-                "x": 318,
-                "y": 319.66666666666663
+                "x": 316.6666666666667,
+                "y": 319
             }
         },
         "level2.json#bunny": {
@@ -452,8 +452,8 @@
             "scale": 3,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 160.16666666666669,
-                "y": 160.16666666666669
+                "x": 159.66666666666669,
+                "y": 205.83333333333331
             }
         },
         "rule1.tmx#tileset": {
@@ -556,18 +556,18 @@
     "project": "tiled-project.tiled-project",
     "property.type": "string",
     "recentFiles": [
+        "level2.json",
+        "rule1.tmx",
         "level4.json",
         "level3.json",
         "level1.json",
-        "level2.json",
         "z.level1-bak.json",
         "house-outside.json",
         "house-inside.json",
         "terrain.json",
         "z.level2-bak.json",
         "level2-bak.json",
-        "level1-bak.json",
-        "level4-prev.json"
+        "level1-bak.json"
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {

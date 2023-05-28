@@ -63,10 +63,10 @@
                 42
             ],
             "scale": 2,
-            "selectedLayer": 5,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 256.25,
-                "y": 192.25
+                "x": 272.75,
+                "y": 224.75
             }
         },
         "house-outside.json#bunny": {
@@ -82,7 +82,7 @@
             "scaleInDock": 0.75
         },
         "house-outside.json#objects": {
-            "scaleInDock": 1
+            "scaleInDock": 4
         },
         "house-outside.json#player": {
             "scaleInDock": 2
@@ -128,17 +128,17 @@
         },
         "level1.json": {
             "expandedObjectLayers": [
-                51,
                 29,
-                27,
                 52,
-                28
+                28,
+                51,
+                27
             ],
             "scale": 0.75,
             "selectedLayer": 16,
             "viewCenter": {
-                "x": 1018.6666666666667,
-                "y": 429.99999999999994
+                "x": 806,
+                "y": 580.6666666666667
             }
         },
         "level1.json#background": {
@@ -353,16 +353,16 @@
         },
         "level3.json": {
             "expandedObjectLayers": [
-                45,
                 44,
+                45,
                 43,
-                27,
-                28
+                28,
+                27
             ],
             "scale": 1.5,
-            "selectedLayer": 13,
+            "selectedLayer": 10,
             "viewCenter": {
-                "x": 319.33333333333337,
+                "x": 319,
                 "y": 318.33333333333337
             }
         },

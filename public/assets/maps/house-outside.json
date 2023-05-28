@@ -93,13 +93,13 @@
                         {
                          "name":"text",
                          "type":"string",
-                         "value":"<--- Segueix el conill blanc"
+                         "value":"Segueix al conill blanc --->"
                         }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":176,
+                 "x":160,
                  "y":336
                 }],
          "opacity":1,
@@ -168,7 +168,7 @@
                  "type":"",
                  "visible":true,
                  "width":45,
-                 "x":288,
+                 "x":176,
                  "y":336
                 }],
          "opacity":1,

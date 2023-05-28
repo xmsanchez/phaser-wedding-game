@@ -116,6 +116,10 @@ export default class Level0 extends Phaser.Scene
 		// Update player movement based on events
 		this.player.playerMovement(this);
 		
+		// Check overlaps (show the 'B' button hint)
+		this.common.checkOverlapsStaticGroups(this.npcs, this);
+		this.common.checkOverlapsStaticGroups(this.doors, this);
+
 		// NPCs will always look at the player
 		this.npcLookDirection();
 	
@@ -140,10 +144,6 @@ export default class Level0 extends Phaser.Scene
 			}
 		});
 		
-		// Check overlaps (show the 'B' button hint)
-		this.common.checkOverlapsStaticGroups(this.npcs, this);
-		this.common.checkOverlapsStaticGroups(this.doors, this);
-
 		if (this.startScene) {
 			console.log('Stop scene Level0, start scene Level1');
 			this.startScene = false;

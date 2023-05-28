@@ -89,7 +89,40 @@ export default class MainMenu extends Phaser.Scene {
 			doorsOpened: [],
 			treasuresOpened: [],
 		});
+		this.registry.set('Level1Prev', {
+			doorsOpened: [],
+			treasuresOpened: [],
+		});
 		this.registry.set('Level1', {
+			doorsOpened: [],
+			treasuresOpened: [],
+		});
+		this.registry.set('Level2Prev', {
+			doorsOpened: [],
+			treasuresOpened: [],
+			justArrived: true,
+		});
+		this.registry.set('Level2Prev2', {
+			doorsOpened: [],
+			treasuresOpened: [],
+		});
+		this.registry.set('Level2', {
+			doorsOpened: [],
+			treasuresOpened: [],
+		});
+		this.registry.set('Level3Prev', {
+			doorsOpened: [],
+			treasuresOpened: [],
+		});
+		this.registry.set('Level3', {
+			doorsOpened: [],
+			treasuresOpened: [],
+		});
+		this.registry.set('Level4Prev', {
+			doorsOpened: [],
+			treasuresOpened: [],
+		});
+		this.registry.set('Level4', {
 			doorsOpened: [],
 			treasuresOpened: [],
 		});
@@ -115,11 +148,11 @@ export default class MainMenu extends Phaser.Scene {
 
 		// add a click event listener to start the Level1 scene
 		this.input.on('pointerdown', () => {
-			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level1', text: "L'arribada" });
+			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level0', text: "L'arribada" });
 		});
 		const enterKey = this.input.keyboard.addKey('ENTER');
 		enterKey.on('down', () => {
-			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level1', text: "L'arribada" });
+			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level0', text: "L'arribada" });
 		});
 	}
 

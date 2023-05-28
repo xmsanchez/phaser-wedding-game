@@ -149,14 +149,14 @@ export default class Level1 extends Phaser.Scene
 			if (distance < 55) {
 				if(this.firstInteraction && !this.message.messageDisplaying){
 					dialog = [
-						'Ei, Hola!', 'Soc l\'Stan!',
-					// 	'No estaràs pas buscant el mapa cap a Monkey Island, no?',
-					// 	'Potser busques un vaixell?',
-					// 	'Tinc els millors vaixells del mon.',
-					// 	'Que per què venc vaixells en un bosc?',
-					// 	'És una pregunta excelent! Doncs veuràs, tot va començar el dia en que...',
-					// 	'Que tens pressa? Que busques **el mapa** d\'un casament?',
-					// 	'Bé, doncs si trobes la **clau** per obrir aquest bagul, et donaré **el mapa** que busques!'
+					//	'Ei, Hola!', 'Soc l\'Stan!',
+						'No estaràs pas buscant el mapa cap a Monkey Island, no?',
+						'Potser busques un vaixell?',
+						'Tinc els millors vaixells del mon.',
+						'Que per què venc vaixells en un bosc?',
+						'És una pregunta excelent! Doncs veuràs, tot va començar el dia en que...',
+						'Que tens pressa? Que busques **el mapa** d\'un casament?',
+						'Bé, doncs si trobes la **clau** per obrir aquest bagul, et donaré **el mapa** que busques!'
 					];
 					npc.anims.play('Stan_stand', true);
 					this.message.showMessageList(this, dialog, function(scene){
@@ -174,7 +174,7 @@ export default class Level1 extends Phaser.Scene
 				this.scene.stop('Level1');
 				this.registry.set('previousScene', 'Level1');
 				this.backgroundMusic.stop();
-				this.scene.start('PreLevel', { levelKey: 'Level3Prev', text: "El Conill" });
+				this.scene.start('PreLevel', { levelName: '', levelKey: 'Level2Prev', text: 'Uns minuts\nmés tard...' });
 			}else{
 				this.startScene = false;
 				this.hud.destroy();
@@ -183,11 +183,6 @@ export default class Level1 extends Phaser.Scene
 				this.backgroundMusic.stop();
 				this.scene.start('PreLevel', { levelKey: 'Level1Prev' });
 			}
-		}
-
-		if(this.levelFinished && !this.message.messageDisplaying){
-			this.common.stopScene(this);
-			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level3Prev', text: 'La Data' });
 		}
     }	
 

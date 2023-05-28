@@ -59,7 +59,7 @@ export default class Level3Prev extends Phaser.Scene
 		this.common.createLevelLayer(this, 'bg_background', tileset);
 		this.ground = this.common.createLevelLayer(this, 'ground_fg', tileset);
 		
-		this.physics.world.setBounds(-30, 0, this.map.widthInPixels + 30, this.map.heightInPixels * tileset.tileHeight);
+		this.physics.world.setBounds(0, 30, this.map.widthInPixels + 30, this.map.heightInPixels * tileset.tileHeight);
 
 		// Spawn all interactable objects
 		this.common.spawnCartells(this);
@@ -86,6 +86,7 @@ export default class Level3Prev extends Phaser.Scene
 		this.camera.setCamera(this, 2.40);
 
 		this.bunnies.getChildren().forEach((bunny) => {
+			bunny.flipX = true;
 			const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, bunny.x, bunny.y);
 			if (distance < 125) {		
 				this.playerLookDirection(bunny);
@@ -108,9 +109,9 @@ export default class Level3Prev extends Phaser.Scene
 				
 				setTimeout(() => {
 					if(!this.message.messageDisplaying && this.messageListShowing.length == 0){
-						bunny.flipX = false;
+						bunny.flipX = true;
 						bunny.anims.play('bunny-left', true);
-						bunny.setVelocityX(-200);
+						bunny.setVelocityX(200);
 					}
 				}, 800);
 			}
@@ -120,13 +121,13 @@ export default class Level3Prev extends Phaser.Scene
 		this.common.checkOverlapsStaticGroups(this.cartells, this);
 
 		// If player goes out of the screen to the left, start next scene
-		if(this.player.x < 0){
+		if(this.player.x > this.map.widthInPixels){
 			console.log('Stop scene Level3Prev, start scene Level3');
 			this.startScene = false;
 			this.hud.destroy();
 			this.scene.stop('Level3Prev');
 			this.backgroundMusic.stop();
-			this.scene.start('PreLevel', { levelKey: 'Level3', text: "L\'hora" });
+			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level3', timeout: 5500, textSize: 38, text: "Mitja hora més tard,\ndesprés de travessar\nel bosc, evitant la\nxapa de l\'Stan..." });
 		}
     }
 

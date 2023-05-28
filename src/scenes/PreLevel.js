@@ -18,6 +18,14 @@ export default class PreLevel extends Phaser.Scene
         const levelName = data.levelName;
         const levelKey = data.levelKey;
         const levelDesc = data.text;
+        let levelTextSize = data.textSize;
+        let timeout = data.timeout;
+        if(levelTextSize == null){
+            levelTextSize = 90;
+        }
+        if(timeout != null){
+            this.preLevelMilliseconds = timeout;
+        }
 
         if(levelName === undefined){
             this.launchScene({ levelName: levelName, levelKey: levelKey, text: levelDesc });
@@ -27,7 +35,7 @@ export default class PreLevel extends Phaser.Scene
                 { font: '42px monospace', align: 'center' })
                 .setOrigin(0.5, 0);
             this.add.text(400, 300, levelDesc, 
-                { font: '90px monospace', align: 'center' })
+                { font: levelTextSize + 'px monospace', align: 'center' })
                 .setOrigin(0.5, -2);
 
             this.time.delayedCall(this.preLevelMilliseconds, () => {

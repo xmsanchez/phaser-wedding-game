@@ -34,6 +34,7 @@ export default class Common {
 		scene.player.setBounce(0.1);
 		scene.player.setCollideWorldBounds(true);
 		scene.player.createAnimations(scene);
+		scene.player.setSize(13);
 		return scene.player;
 	}
 
@@ -51,33 +52,35 @@ export default class Common {
 	}
 	
 	addCollider(scene, obj1, obj2) {
-		// Ensure that the objects actually exists
-		if(obj1 !== undefined && obj2 !== undefined && obj1 !== null && obj2 !== null){
-			try {
-				scene.physics.add.collider(obj1, obj2);
-			} catch (error) {
-				console.log('Error while trying to add collider... error: ' + error);
-			}
+		// Ensure that the objects actually exist
+		if (obj1 != null && obj2 != null) {
+		  try {
+			scene.physics.add.collider(obj1, obj2);
+		  } catch (error) {
+			console.log('Error while trying to add collider... error: ' + error);
+		  }
 		}
-	}
-	addColliders(scene) {
-		// Add colliders
-		console.log('Adding colliders!');
-		this.addCollider(scene, scene.player, scene.ground);
-		this.addCollider(scene, scene.player, scene.platforms);
-		this.addCollider(scene, scene.player, scene.walls);
-		this.addCollider(scene, scene.player, scene.bridge);
-		this.addCollider(scene, scene.player, scene.rocks);
-		this.addCollider(scene, scene.treasures, scene.ground);
-		this.addCollider(scene, scene.treasures, scene.platforms);
-		this.addCollider(scene, scene.player, scene.coins);
-		this.addCollider(scene, scene.coins, scene.ground);
-		this.addCollider(scene, scene.bunny, scene.ground);
-		if(scene.bunny !== undefined){
-			this.addCollider(scene, scene.bunny, scene.platforms);
+	  }
+	  
+	  addColliders(scene) {
+		// Add colliders for player and different objects
+		const { player, ground, platforms, walls, bridge, rocks, treasures, coins, bunny } = scene;
+	  
+		this.addCollider(scene, player, ground);
+		this.addCollider(scene, player, platforms);
+		this.addCollider(scene, player, walls);
+		this.addCollider(scene, player, bridge);
+		this.addCollider(scene, player, rocks);
+		this.addCollider(scene, treasures, ground);
+		this.addCollider(scene, treasures, platforms);
+		this.addCollider(scene, player, coins);
+		this.addCollider(scene, coins, ground);
+		this.addCollider(scene, bunny, ground);
+		if (bunny !== undefined) {
+		  this.addCollider(scene, bunny, platforms);
 		}
-	}
-
+	  }
+	  
 	createLevelLayer(scene, layerName, tileset, scrollFactorX){
 		try {
 			var obj = scene.map.createLayer(layerName, tileset);
@@ -121,6 +124,12 @@ export default class Common {
 			treasure.setFrame(11);
 			console.log(treasure)
 			scene.common.chest_opened_sound.play();
+
+			const sceneRegistry = scene.registry.get(scene.scene.key);
+			scene.registry.set(scene.scene.key, {
+				...sceneRegistry,
+    			treasuresOpened: [...sceneRegistry.treasuresOpened, treasure.name]
+			});
 
 			// Show a message
 			scene.message.showMessageList(scene, ['Has trobat **' + treasure.containsText + '!**']);
@@ -239,22 +248,35 @@ export default class Common {
 	
 	bunnyMovement(scene) {
 		// Bunny related code
-		var bunnySpeed = 200;
+		var bunnySpeed = 250;
 		if (!scene.bunnyCatched) {
 			const playerDistance = Phaser.Math.Distance.Between(scene.player.x, scene.player.y, scene.bunny.x, scene.bunny.y);
 			if (scene.bunnyReverseFlag === undefined) { // Initialize reverseFlag if it doesn't exist
 				scene.bunnyReverseFlag = false;
 			}
-			// console.log('Bunny reverseFlag: ' + scene.bunnyReverseFlag);
-	
-			// // Check if the player is within a certain distance
-			// if (playerDistance < 50 && !scene.bunnyReverseFlag) {
-			//     scene.bunnyReverseFlag = true;
-			//     scene.pathPoints.reverse();
-			// } else if (playerDistance > 50 && scene.bunnyReverseFlag) {
-			//     scene.bunnyReverseFlag = false;
-			//     scene.pathPoints.reverse();
-			// }
+			console.log('Bunny reverseFlag: ' + scene.bunnyReverseFlag);
+				
+			// Initially, the bunny is not reversing
+			scene.bunnyIsReversing = false;
+
+			if (playerDistance < 70 && !scene.bunnyReverseFlag) {
+				scene.bunnyReverseFlag = true;
+				console.log('Player distance <50: ' + playerDistance);
+				// Only reverse the path if the bunny is not already doing so
+				if (!scene.bunnyIsReversing) {
+					scene.pathPoints.reverse();
+					scene.bunnyIsReversing = true;
+				}
+			} else if (playerDistance > 70 && scene.bunnyReverseFlag) {
+				scene.bunnyReverseFlag = false;
+				console.log('Player distance >50: ' + playerDistance);
+				// Only reverse the path if the bunny is currently reversing
+				if (scene.bunnyIsReversing) {
+					scene.pathPoints.reverse();
+					scene.bunnyIsReversing = false;
+				}
+			}	
+
 	
 			const point = scene.pathPoints[0];
 	
@@ -366,24 +388,24 @@ export default class Common {
 	}
 
 	setNpcStanAnimations(scene, layer, name) {
-        const totalFrames = scene.anims.generateFrameNumbers(layer).length;
-
-        // Assuming you want to create an array of 10 random frame indexes
-        let randomFrames = [];
-        for (let i = 0; i < 10; i++) {
-            let randomIndex = Phaser.Math.Between(0, totalFrames - 1);
-            randomFrames.push({ key: layer, frame: randomIndex });
-        }
+		const totalFrames = scene.anims.generateFrameNumbers(layer).length;
+	
+		let randomFrames = [];
+		for (let i = 0; i < 10; i++) {
+			let randomIndex = Phaser.Math.Between(0, totalFrames - 1);
+			randomFrames.push(randomIndex);
+		}
+	
 		console.log('Animation name: ' + `${name}_stand`);
-        // Generate a new animation using those random frames
-        scene.anims.create({
-            key: `${name}_stand`,
-            frames: randomFrames,
-            frameRate: 10,  // Adjust frameRate according to your needs
-            repeat: -1
-        });
+	
+		scene.anims.create({
+			key: `${name}_stand`,
+			frames: randomFrames.map(index => ({ key: layer, frame: index })),
+			frameRate: 10,
+			repeat: -1
+		});
 	}
-
+	
 	checkOverlapsStaticGroups(object, scene) {
 		try {
 			object.getChildren().forEach((obj) => {
@@ -596,8 +618,10 @@ export default class Common {
 			// Doors Level0
 			if (door.name == 'door0_1'){
 				// Start a new scene
-				scene.registry.set('Level0', {
-					doorOpened: true
+				const sceneRegistry = scene.registry.get(scene.scene.key);
+				scene.registry.set(scene.scene.key, {
+					...sceneRegistry,
+					doorsOpened: [...sceneRegistry.doorsOpened, door.name]
 				});
 				console.log('door0_1 interacted. Start a new scene');
 				this.scene.startScene = true;

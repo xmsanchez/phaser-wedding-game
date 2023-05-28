@@ -83,7 +83,7 @@ export default class Message {
         });
       
         const additionalTextConfig = {
-          font: 'italic 14px',
+          font: 'italic 28px',
           fill: '#ffffff',
         };
       
@@ -112,7 +112,7 @@ export default class Message {
         const boxX = centerX - boxWidth / 2;
     
         const textConfig = {
-            fontSize: '48px',
+            fontSize: '52px',
             fill: '#ffffff',
             wrap: {
                 mode: 'word', // Wrap by word
@@ -136,7 +136,7 @@ export default class Message {
         text.setScrollFactor(0);
     
         const textHeight = text.height + padding * 2;
-        const boxHeight = Math.max(textHeight + 30, 100);
+        const boxHeight = Math.max(textHeight + 60, 100);
         const boxY = centerY - boxHeight / 2;
     
         graphics.clear();
@@ -147,14 +147,23 @@ export default class Message {
     
         text.setY(centerY - 10); // Adjust the text Y position based on the new box height
     
+        // const additionalTextConfig = {
+        //     font: 'italic 28px',
+        //     fill: '#ffffff',
+        // };
         const additionalTextConfig = {
-            font: 'italic 14px',
+            fontSize: '32px',
             fill: '#ffffff',
+            wrap: {
+                mode: 'word', // Wrap by word
+                width: boxWidth - padding * 2 // Set the wrap width
+            }
         };
     
-        const additionalText = this.scene.add.text(centerX, boxY + boxHeight + padding, "Prem 'B' per continuar", additionalTextConfig);
+        const additionalText = this.scene.add.rexBBCodeText(centerX, centerY, "Prem [color=#ff0000][b][i]B[/i][/b][/color] per continuar", additionalTextConfig);
+        // const additionalText = this.scene.add.text(centerX, boxY + boxHeight + padding, "Prem 'B' per continuar", additionalTextConfig);
         additionalText.setOrigin(0.5, 0);
-        additionalText.y = boxY + boxHeight - 30;
+        additionalText.y = boxY + boxHeight - 45;
 
         additionalText.setScrollFactor(0);
     

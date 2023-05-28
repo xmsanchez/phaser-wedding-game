@@ -97,12 +97,17 @@ export default class Level0 extends Phaser.Scene
 		this.scenesVisited = this.registry.get('scenesVisited');
 		this.previousScene = this.registry.get('previousScene');
 		this.scenesVisited.push(this.currentScene);
-		console.log('this.scenesVisited: ' + this.scenesVisited);
-		this.doorOpened = this.registry.get('Level0').doorOpened;
-		if(this.doorOpened){
-			console.log('Is the door already opened? ' + this.doorOpened);
+		console.log('checkCompleted this.scenesVisited: ' + this.scenesVisited);
+		this.sceneRegistry = this.registry.get(this.scene.key);
+		let doorsOpened = this.sceneRegistry.doorsOpened;
+		for(let i = 0; i < doorsOpened.length; i++) {
 			this.doors.getChildren().forEach((door) => {
-				door.opened = true;
+				console.log('checkCompleted - Comaring to door.name: ' + door.name);
+				if(door.name === doorsOpened[i]) {
+					console.log('checkCompleted - Found it!! -> ' + door.name);
+					door.opened = true;
+					this.doorOpened = true;
+				}
 			})
 		}
 	}
@@ -184,6 +189,7 @@ export default class Level0 extends Phaser.Scene
 			}else if (npc.name == 'Miriam'){
 				this.message.showMessageList(this, [npc.name + ": Ja tens la porta oberta, recorda que has de buscar el **mapa**"]);
 			}
+			this.message.messageDisplaying = false;
 		}
 	}
 

@@ -25,14 +25,14 @@
         "house-inside.json": {
             "expandedObjectLayers": [
                 29,
-                27,
-                28
+                28,
+                27
             ],
             "scale": 2,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 318,
-                "y": 156.25
+                "x": 320.25,
+                "y": 159.75
             }
         },
         "house-inside.json#livingroom": {
@@ -58,15 +58,15 @@
             "expandedObjectLayers": [
                 43,
                 29,
-                42,
+                28,
                 41,
-                28
+                42
             ],
             "scale": 2,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 254,
-                "y": 327.75
+                "x": 256.25,
+                "y": 192.25
             }
         },
         "house-outside.json#bunny": {
@@ -134,11 +134,11 @@
                 52,
                 28
             ],
-            "scale": 2,
-            "selectedLayer": -1,
+            "scale": 0.75,
+            "selectedLayer": 16,
             "viewCenter": {
-                "x": 497.5,
-                "y": 318.25
+                "x": 1018.6666666666667,
+                "y": 429.99999999999994
             }
         },
         "level1.json#background": {
@@ -360,7 +360,7 @@
                 28
             ],
             "scale": 1.5,
-            "selectedLayer": 12,
+            "selectedLayer": 13,
             "viewCenter": {
                 "x": 319.33333333333337,
                 "y": 318.33333333333337

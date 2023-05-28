@@ -86,7 +86,12 @@ export default class MainMenu extends Phaser.Scene {
 		this.registry.set('previousScene', 'MainMenu');
 
 		this.registry.set('Level0', {
-			doorOpened: false
+			doorsOpened: [],
+			treasuresOpened: [],
+		});
+		this.registry.set('Level1', {
+			doorsOpened: [],
+			treasuresOpened: [],
 		});
 		
 		const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
@@ -110,11 +115,11 @@ export default class MainMenu extends Phaser.Scene {
 
 		// add a click event listener to start the Level1 scene
 		this.input.on('pointerdown', () => {
-			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level0', text: "L'arribada" });
+			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level1', text: "L'arribada" });
 		});
 		const enterKey = this.input.keyboard.addKey('ENTER');
 		enterKey.on('down', () => {
-			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level10', text: "L'arribada" });
+			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level1', text: "L'arribada" });
 		});
 	}
 

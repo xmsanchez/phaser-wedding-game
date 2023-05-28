@@ -49,6 +49,7 @@ export default class Level1 extends Phaser.Scene
 	create()
 	{
 		// Create all resources
+		this.sceneRegistry = this.registry.get(this.scene.key);
 		this.common = new Common(this);
 		this.camera = new Camera();
 		this.common.addInput(this);
@@ -105,11 +106,26 @@ export default class Level1 extends Phaser.Scene
 		// Setup camera bounds and zoom
 		this.camera.setCamera(this, 3);
 
+		this.checkCompleted();
+	}
+
+	checkCompleted() {
 		this.scenesVisited = this.registry.get('scenesVisited');
 		this.previousScene = this.registry.get('previousScene');
 		this.scenesVisited.push(this.currentScene);
+		console.log('checkCompleted this.scenesVisited: ' + this.scenesVisited);
+		this.sceneRegistry = this.registry.get(this.scene.key);
+		let treasuresOpened = this.sceneRegistry.treasuresOpened;
+		for(let i = 0; i < treasuresOpened.length; i++) {
+			this.treasures.getChildren().forEach((treasure) => {
+				if(treasure.name === treasuresOpened[i]) {
+					treasure.opened = true;
+					treasure.setFrame(11);
+				}
+			})
+		}
 	}
-
+	
     update() {
 		// Update player movement based on events
 		this.player.playerMovement(this);
@@ -132,16 +148,15 @@ export default class Level1 extends Phaser.Scene
 			const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
 			if (distance < 55) {
 				if(this.firstInteraction && !this.message.messageDisplaying){
-					// dialog = ['hola'];
 					dialog = [
 						'Ei, Hola!', 'Soc l\'Stan!',
-						'No estaràs pas buscant el mapa cap a Monkey Island, no?',
-						'Potser busques un vaixell?',
-						'Tinc els millors vaixells del mon.',
-						'Que per què venc vaixells en un bosc?',
-						'És una pregunta excelent! Doncs veuràs, tot va començar el dia en que...',
-						'Que tens pressa? Que busques **el mapa** d\'un casament?',
-						'Bé, doncs si trobes la **clau** per obrir aquest bagul, et donaré **el mapa** que busques!'
+					// 	'No estaràs pas buscant el mapa cap a Monkey Island, no?',
+					// 	'Potser busques un vaixell?',
+					// 	'Tinc els millors vaixells del mon.',
+					// 	'Que per què venc vaixells en un bosc?',
+					// 	'És una pregunta excelent! Doncs veuràs, tot va començar el dia en que...',
+					// 	'Que tens pressa? Que busques **el mapa** d\'un casament?',
+					// 	'Bé, doncs si trobes la **clau** per obrir aquest bagul, et donaré **el mapa** que busques!'
 					];
 					npc.anims.play('Stan_stand', true);
 					this.message.showMessageList(this, dialog, function(scene){
@@ -198,10 +213,10 @@ export default class Level1 extends Phaser.Scene
 					'Una promesa és una promesa. Aquí tens **el mapa**'];
 				this.message.showMessageList(this, dialog, function(scene){
 					console.log('Update inventory');
+					scene.hud.inventory.pop('key');
 					scene.hud.inventory.push(npc.contents);
 					scene.hud.updateInventory(scene, npc.contents);
 					// TODO FIX MAP POPING INSTEAD OF KEY!!!
-					// scene.hud.inventory.pop('key');
 					scene.common.chest_opened_sound.play();
 					scene.hasMap = true;
 				})

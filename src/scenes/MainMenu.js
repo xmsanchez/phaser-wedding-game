@@ -148,11 +148,11 @@ export default class MainMenu extends Phaser.Scene {
 
 		// add a click event listener to start the Level1 scene
 		this.input.on('pointerdown', () => {
-			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level0', text: "L'arribada" });
+			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level3Prev', text: "L'arribada" });
 		});
 		const enterKey = this.input.keyboard.addKey('ENTER');
 		enterKey.on('down', () => {
-			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level0', text: "L'arribada" });
+			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level3Prev', text: "L'arribada" });
 		});
 	}
 

@@ -6,11 +6,10 @@ import Level0 from './scenes/Level0'
 import Level1Prev from './scenes/Level1Prev'
 import Level1 from './scenes/Level1'
 import Level2Prev from './scenes/Level2Prev'
+import Level2Prev2 from './scenes/Level2Prev2'
 import Level2 from './scenes/Level2'
 import Level3Prev from './scenes/Level3Prev'
 import Level3 from './scenes/Level3'
-import Level4Prev from './scenes/Level4Prev'
-import Level4 from './scenes/Level4'
 
 const config = {
 	type: Phaser.AUTO,
@@ -40,11 +39,10 @@ const config = {
 		Level1Prev,
 		Level1,
 		Level2Prev,
+		Level2Prev2,
 		Level2,
 		Level3Prev,
 		Level3,
-		Level4Prev,
-		Level4,
 	]
 }
 

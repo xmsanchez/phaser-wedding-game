@@ -1,6 +1,6 @@
-import Common from '../classes/Common.js';
-import Camera from '../classes/Camera.js';
-import HUD from '../classes/HUD.js';
+import Common from '../classes/Common';
+import Camera from '../classes/Camera';
+import HUD from '../classes/HUD';
 import Message from '../classes/Message.js';
 
 export default class Level3Prev extends Phaser.Scene
@@ -13,32 +13,35 @@ export default class Level3Prev extends Phaser.Scene
 		this.jump = false;
 		this.moveLeft = false;
 		this.moveRight = false;
+		this.moveDown = false;
+		this.moveUp = false;
+		
 		this.touchMoveLeft = false;
 		this.touchMoveRight = false;
+		this.touchMoveDown = false;
+		this.touchMoveUp = false;
+
 		this.score = 0;
 		this.player = null;
-		this.joystick = null;		this.firstInteraction = true;
-		this.bunnyFirstInteractionJump = false;
-
+		this.joystick = null;
 		this.startScene = false;
-		this.currentScene = 'Level3Prev';
-		
+		this.currentScene = 'Level3';
+
 		this.npcs = null;
 		this.treasures = null;
 		this.doors = null;
 		this.cartells = null;
 		this.bunnies = null;
 
-		// Bunny related variables
-		this.pathPoints = null;
-		this.bunnyReverseFlag = false;
-		this.bunnyCatched = false;
+		this.interactBtn = null;
+		this.firstInteraction = true;
 
 		this.common = null;
+		this.message = null;
 	}
 
 	preload()
-    {}
+    { }
 
 	create()
 	{
@@ -50,20 +53,24 @@ export default class Level3Prev extends Phaser.Scene
 		this.hud = this.registry.get('HUD');
 
 		// Create the tilemap using the loaded JSON file
-		this.map = this.make.tilemap({ key: 'house-outside'});
+		this.map = this.make.tilemap({ key: 'house-inside'});
 	
 		// Add the loaded tiles image asset to the map
-		const tileset = this.map.addTilesetImage('house-outside', 'house-outside');
+		const tileset = this.map.addTilesetImage('livingroom', 'livingroom');
 
 		// Create all the layers
 		this.common.createLevelLayer(this, 'bg_background', tileset);
+		this.common.createLevelLayer(this, 'fg_background', tileset);
+		this.ground_bg = this.common.createLevelLayer(this, 'ground_bg', tileset);
 		this.ground = this.common.createLevelLayer(this, 'ground_fg', tileset);
+		this.common.createLevelLayer(this, 'ground_decorations', tileset);
+		this.common.createLevelLayer(this, 'decorations', tileset);
 		
-		this.physics.world.setBounds(0, 30, this.map.widthInPixels + 30, this.map.heightInPixels * tileset.tileHeight);
+		this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels * tileset.tileHeight);
 
 		// Spawn all interactable objects
-		this.common.spawnCartells(this);
-		this.bunny = this.common.spawnBunny(this);
+		this.common.spawnDoors(this);
+		this.common.spawnNpcs(this, 'npcs', 4);
 
 		// Spawn player
 		this.player = this.common.addPlayer(this);
@@ -76,72 +83,94 @@ export default class Level3Prev extends Phaser.Scene
 		// Add controls
 		this.player.addTouchScreenPointers(this);
 		this.player.setKeyboardControls(this);
+
+		// Make Xavi a little bit closer
+		this.npcs.getChildren().forEach((npc) => {
+			if(npc.name == 'Xavi'){
+				npc.x = this.player.x + 80;
+				npc.container.x = npc.x;
+			}
+		});
+
+		this.doors.getChildren().forEach((door) => {
+			door.opened = true;
+		});
 	}
 
-    update() {
+	update() {
+		// this.doors[0].opened = true;
+		
 		// Update player movement based on events
 		this.player.playerMovement(this);
 		
 		// Setup camera bounds and zoom
 		this.camera.setCamera(this, 2.40);
 
-		this.bunnies.getChildren().forEach((bunny) => {
-			bunny.flipX = true;
-			const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, bunny.x, bunny.y);
-			if (distance < 125) {		
-				this.playerLookDirection(bunny);
+		// NPCs will always look at the player
+		this.npcLookDirection();
+
+		this.npcs.getChildren().forEach((npc) => {
+			const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
+			if (distance < 300) {				
+				// NOT SURE WHY WE NEED TO REINITIALIZE THIS VAR
+				// BUT IF WE DON'T, MESSAGES ARE NOT SHOWN
 				this.messageListShowing = [];
 				
-				setTimeout(() => {
-					// For first interaction, show a message list when approaching NPCs
-					if(this.firstInteraction && !this.message.messageDisplaying){
-						this.messageListShowing = [
-							bunny.name + ': Oh, no! Vaig tard, vaig tard.', 
-							bunny.name + ': Aquest rellotge marca **el dia i la hora** del casament. Vaig tard, vaig tard!!'
-						];
-						this.message.showMessageList(this, this.messageListShowing);
-						this.firstInteraction = false;
-						setTimeout(() => {
-							this.bunny.setVelocityY(-350);	
-						}, 400);
-					}	
-				}, 400);
-				
-				setTimeout(() => {
-					if(!this.message.messageDisplaying && this.messageListShowing.length == 0){
-						bunny.flipX = true;
-						bunny.anims.play('bunny-left', true);
-						bunny.setVelocityX(200);
-					}
-				}, 800);
+				// For first interaction, show a message list when approaching NPCs
+				if(this.firstInteraction && !this.message.messageDisplaying){
+					this.messageListShowing = [
+						npc.name + ': Que bé! Has aconseguit el **rellotge.**\nMalauradament... també necessitaràs **un vestit**',
+						npc.name + ': Hauries **d\'anar al castell**, travessant la ciutat del desert. Penso que les obres del pont ja han acabat',
+						npc.name + ': Ànims! Ja gairabé ho tens tot!'
+					];
+					this.message.showMessageList(this, this.messageListShowing);
+					this.firstInteraction = false;
+				}
 			}
 		});
 
-		// Check overlaps (show the 'B' button hint)
-		this.common.checkOverlapsStaticGroups(this.cartells, this);
+		this.common.checkOverlapsStaticGroups(this.npcs, this);
+		this.common.checkOverlapsStaticGroups(this.doors, this);
 
-		// If player goes out of the screen to the left, start next scene
-		if(this.player.x > this.map.widthInPixels){
+		if (this.startScene) {
 			console.log('Stop scene Level3Prev, start scene Level3');
-			this.startScene = false;
-			this.hud.destroy();
-			this.scene.stop('Level3Prev');
-			this.backgroundMusic.stop();
-			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level3', timeout: 5500, textSize: 38, text: "Mitja hora més tard,\ndesprés de travessar\nel bosc, evitant la\nxapa de l\'Stan..." });
+			this.message.showMessage(this, 'Aquí hem de iniciar el Nivell 4');
+			// this.startScene = false;
+			// this.hud.destroy();
+			// this.scene.stop('Level5Prev');
+			// this.backgroundMusic.stop();
+			// this.scene.start('PreLevel', { levelName: 'Nivell 5', levelKey: 'Level5', text: 'El vestit' });
 		}
-    }
+	}
 
-	playerLookDirection(bunny) {
-		if(this.player.x > bunny.x + bunny.width / 2){
-			this.player.setFrame(10);
-		}else{
-			this.player.setFrame(7);
+	npcActions(player, npc) {
+		console.log('NpcActions, checking if inventory is empty or not');
+		if(npc.name == 'Xavi'){
+			// this.message.showMessage(scene, npc.name + ": Encara no has trobat el mapa? Ha de ser dins d'un bagul");
+			this.messageListShowing = [npc.name + ': Ves a buscar **el vestit**!']
+			this.message.showMessageList(this, this.messageListShowing)
+		}else if(npc.name == 'Miriam'){
+			this.messageListShowing = [
+				npc.name + ': Estic molt contenta de que hagis trobat **el rellotge!**',
+				npc.name + ': Ja has parlat amb el **Xavi** sobre el següent que necessitaràs?'
+			]
+			this.message.showMessageList(this, this.messageListShowing);
 		}
+	}
+
+	npcLookDirection() {
+		const position = this.npcs.getChildren().find((npc) => {
+			if(this.player.x > npc.x + npc.width / 2){
+				npc.setFrame(7);
+			}else{
+				npc.setFrame(3);
+			}
+		})
 	}
 
 	loadMusic(){
 		// Create an instance of the audio object
-		this.backgroundMusic = this.sound.add('background_music_bunny1', { loop: true, volume: 0.4});
+		this.backgroundMusic = this.sound.add('background_music_house', { loop: true, volume: 0.2});
 		// Play the audio file
 		this.backgroundMusic.play();
 	}

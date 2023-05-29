@@ -172,14 +172,14 @@ export default class Level1 extends Phaser.Scene
 				this.startScene = false;
 				this.hud.destroy();
 				this.scene.stop('Level1');
-				this.registry.set('previousScene', 'Level1');
+				this.registry.set('previousScene', this.scene.key);
 				this.backgroundMusic.stop();
 				this.scene.start('PreLevel', { levelName: '', levelKey: 'Level2Prev', text: 'Uns minuts\nmés tard...' });
 			}else{
 				this.startScene = false;
 				this.hud.destroy();
 				this.scene.stop('Level1');
-				this.registry.set('previousScene', 'Level1');
+				this.registry.set('previousScene', this.scene.key);
 				this.backgroundMusic.stop();
 				this.scene.start('PreLevel', { levelKey: 'Level1Prev' });
 			}

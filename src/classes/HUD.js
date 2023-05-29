@@ -8,11 +8,9 @@ export default class HUD {
     }
 
     destroy() {
-        console.log('Try to destroy this');
         this.inventoryDisplay.removeAll(true);
         // Add any other cleanup code here...
         try {
-            console.log('This.anims: ', this.anims);
             if (this.anims) {
                 this.anims.destroy();
             }
@@ -68,6 +66,8 @@ export default class HUD {
                 frame = 8;
             }else if(currentObject == 'clock'){
                 frame = 5;
+            }else if(currentObject == 'bruixola'){
+                frame = 30;
             }
             const item = scene.add.sprite(i * (tileSize + spacing), 0, 'objects', frame).setOrigin(0, 0).setScale(3);
             scene.hud.inventoryDisplay.add(item);

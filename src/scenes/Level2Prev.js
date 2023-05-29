@@ -132,16 +132,19 @@ export default class Level2Prev extends Phaser.Scene
 				'Miriam: La seva madriguera està **passat el bosc**. Per entrar-hi, necessitaràs una **bruixola**. Emporta\'t aquesta!',
 				'Miriam: Amb això ja pots anar-lo a buscar. Ànims!'
 			]
-			this.message.showMessageList(this, dialog);
+			this.message.showMessageList(this, dialog, function(scene){
+				scene.hud.inventory.push('bruixola');
+				scene.hud.updateInventory(scene, 'bruixola');
+			});
 		}
 
 		if (this.startScene) {
-			console.log('Stop scene Level2Prev, start scene Level2');
+			console.log('Stop scene Level2Prev, start scene Level2Prev2');
 			this.startScene = false;
-			this.registry.set('previousScene', 'Level1');
+			this.registry.set('previousScene', this.scene.key);
 			// We need to stop current UIScene
 			this.common.stopScene(this);
-			this.scene.start('PreLevel', { levelKey: 'Level3Prev' });
+			this.scene.start('PreLevel', { levelKey: 'Level2Prev2' });
 		}
     }
 

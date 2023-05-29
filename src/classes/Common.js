@@ -248,7 +248,7 @@ export default class Common {
 	
 	bunnyMovement(scene) {
 		// Bunny related code
-		var bunnySpeed = 250;
+		var bunnySpeed = 200;
 		if (!scene.bunnyCatched) {
 			const playerDistance = Phaser.Math.Distance.Between(scene.player.x, scene.player.y, scene.bunny.x, scene.bunny.y);
 			if (scene.bunnyReverseFlag === undefined) { // Initialize reverseFlag if it doesn't exist

@@ -56,17 +56,17 @@
         },
         "house-outside.json": {
             "expandedObjectLayers": [
-                43,
                 29,
-                28,
                 41,
-                42
+                42,
+                43,
+                28
             ],
             "scale": 2,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 272.75,
-                "y": 224.75
+                "x": 256.25,
+                "y": 192.25
             }
         },
         "house-outside.json#bunny": {
@@ -128,16 +128,16 @@
         },
         "level1.json": {
             "expandedObjectLayers": [
-                29,
                 52,
-                28,
+                29,
                 51,
+                28,
                 27
             ],
             "scale": 0.75,
             "selectedLayer": 16,
             "viewCenter": {
-                "x": 806,
+                "x": 804.6666666666667,
                 "y": 580.6666666666667
             }
         },
@@ -544,7 +544,7 @@
         }
     },
     "last.externalTilesetPath": "/home/xavi/Projects/xavi/gpt/games/platform-new/public/assets/maps",
-    "last.imagePath": "/home/xavi/Projects/xavi/gpt/games/phaser-wedding-game/public/assets/spritesheets/npcs",
+    "last.imagePath": "/home/xavi/Projects/xavi/gpt/games/phaser-wedding-game/public/assets/spritesheets/objects",
     "map.lastUsedFormat": "json",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
@@ -571,8 +571,8 @@
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {
-        "height": 66,
-        "width": 66
+        "height": 64,
+        "width": 128
     },
     "tileset.type": 0
 }

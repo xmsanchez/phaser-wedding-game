@@ -1,6 +1,9 @@
 import Common from '../classes/Common.js';
 import Camera from '../classes/Camera.js';
 
+////////////////////////////////////////////////////////
+// EL CONILL
+////////////////////////////////////////////////////////
 export default class Level2 extends Phaser.Scene
 {
 	constructor()
@@ -34,6 +37,7 @@ export default class Level2 extends Phaser.Scene
 		this.bunny = null;
 
 		this.levelFinished = false;
+		this.firstInteraction = true;
 	}
 
 	preload()
@@ -52,15 +56,17 @@ export default class Level2 extends Phaser.Scene
 		this.map = this.make.tilemap({ key: 'level2' });
 	
 		// Add the loaded tiles image asset to the map
-		const tileset = this.map.addTilesetImage('tileset_field', 'tileset_field');
-		// const disney_castle_256 = this.map.addTilesetImage('disney_castle_256', 'disney_castle_256');
+		const tileset = this.map.addTilesetImage('swamp', 'swamp');
+		const tileset_bg = this.map.addTilesetImage('swamp_bg', 'swamp_bg');
 
 		// Create all the layers
-		this.common.createLevelLayer(this, 'bg_background', tileset, 0.6);
-		this.common.createLevelLayer(this, 'fg_background', tileset, 0.7);
-		this.common.createLevelLayer(this, 'ground_bg', tileset, 0.8);
-		this.ground = this.common.createLevelLayer(this, 'ground_fg', tileset, 0.9);
+		this.common.createLevelLayer(this, 'bg2', tileset_bg, 0.6);
+		this.common.createLevelLayer(this, 'bg1', tileset_bg, 0.7);
+		this.common.createLevelLayer(this, 'fg_background', tileset_bg, 0.8);
+		this.common.createLevelLayer(this, 'ground_bg', tileset, 0.9);
+		this.ground = this.common.createLevelLayer(this, 'ground_fg', tileset);
 		this.common.createLevelLayer(this, 'rocks', tileset);
+		this.common.createLevelLayer(this, 'decorations', tileset);
 		this.platforms = this.common.createLevelLayer(this, 'platforms', tileset);
 		
 		this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels * tileset.tileHeight);
@@ -73,27 +79,55 @@ export default class Level2 extends Phaser.Scene
 
 		// Add colliders, input, hud, music
 		this.common.addColliders(this);
-		this.common.setCollisions(this);
+		this.common.setCollisions(this, 0, 5000);
 		this.loadMusic();
 
 		// Add controls
 		this.player.addTouchScreenPointers(this);
 		this.player.setKeyboardControls(this);
+
+		// Setup camera bounds and zoom
+		this.camera.setCamera(this, 2.40);
+
+		// Create a Phaser.Graphics object
+		const debugGraphics = this.add.graphics();
+
+		// Set the line style for the path
+		debugGraphics.lineStyle(2, 0xff0000);
+
+		// Iterate over the points and draw lines between them
+		const pathPoints = this.map.getObjectLayer('objectPath').objects;
+		for (let i = 0; i < pathPoints.length - 1; i++) {
+		const startPoint = pathPoints[i];
+		const endPoint = pathPoints[i + 1];
+		debugGraphics.moveTo(startPoint.x, startPoint.y);
+		debugGraphics.lineTo(endPoint.x, endPoint.y);
+		}
+
+		// Add the debug graphics to the scene
+		this.add.existing(debugGraphics);
 	}
 
     update() {
 		// Update player movement based on events
 		this.player.playerMovement(this);
-		
-		// Setup camera bounds and zoom
-		this.camera.setCamera(this, 2);
 
 		// Check overlaps (show the 'B' button hint)
 		this.common.checkOverlapsStaticGroups(this.bunnies, this);
 
-		// Bunny stuff
-		this.bunny.container.y = this.bunny.y - 20;
-		this.common.bunnyMovement(this);
+		this.bunnies.getChildren().forEach((npc) => {
+			const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
+			if (distance < 75) {		
+				if(this.firstInteraction){
+					this.firstInteraction = false;
+				}
+			}
+
+			if(!this.firstInteraction){
+				this.bunny.container.y = this.bunny.y - 20;
+				this.common.bunnyMovement(this);
+			}
+		});
 
 		if(this.bunny.contents == null && !this.message.messageDisplaying){
 			// Set a timeout before showing the message.
@@ -106,11 +140,10 @@ export default class Level2 extends Phaser.Scene
 		if(this.levelFinished && !this.message.messageDisplaying){
 			setTimeout(() => {
 				this.startScene = false;
-				this.hud.destroy();
-				this.scene.stop('Level1');
-				this.backgroundMusic.stop();
+				this.registry.set('previousScene', this.scene.key);
+				this.common.stopScene(this);
 				this.scene.start('PreLevel', { levelName: '', timeout: 4500, textSize: 38, levelKey: 'Level3Prev', text: 'Amb el mapa i el rellotge,\nja en el teu poder, vas\ncamí de tornada a casa...' });
-			}, 1000);
+			}, 4000);
 		}
     }
 	

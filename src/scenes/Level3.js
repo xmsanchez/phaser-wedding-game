@@ -1,8 +1,9 @@
 import Common from '../classes/Common';
 import Camera from '../classes/Camera';
-import HUD from '../classes/HUD';
-import Message from '../classes/Message.js';
 
+////////////////////////////////////////////////////////
+// EL DESERT
+////////////////////////////////////////////////////////
 export default class Level3 extends Phaser.Scene
 {
 	constructor()

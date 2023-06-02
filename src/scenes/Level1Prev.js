@@ -1,8 +1,9 @@
 import Common from '../classes/Common.js';
 import Camera from '../classes/Camera.js';
-import HUD from '../classes/HUD.js';
-import Message from '../classes/Message.js';
 
+////////////////////////////////////////////////////////
+// EL MAPA (prev)
+////////////////////////////////////////////////////////
 export default class Level1Prev extends Phaser.Scene
 {
 	constructor()
@@ -102,8 +103,9 @@ export default class Level1Prev extends Phaser.Scene
 		// If player goes out of the screen to the left, start next scene
 		if(this.player.x > this.map.widthInPixels){
 			console.log('Stop scene Level1Prev, start scene Level1');
+			this.startScene = false;
+			this.registry.set('previousScene', this.scene.key);
 			this.common.stopScene(this);
-			this.registry.set('previousScene', 'Level1Prev');
 			this.scene.start('PreLevel', { levelKey: 'Level1', text: "El Mapa" });
 		}
     }

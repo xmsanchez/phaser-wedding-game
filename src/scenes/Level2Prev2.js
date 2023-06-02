@@ -1,6 +1,9 @@
 import Common from '../classes/Common.js';
 import Camera from '../classes/Camera.js';
 
+////////////////////////////////////////////////////////
+// EL CONILL (prev2)
+////////////////////////////////////////////////////////
 export default class Level2Prev2 extends Phaser.Scene
 {
 	constructor()
@@ -122,9 +125,8 @@ export default class Level2Prev2 extends Phaser.Scene
 		if(this.player.x > this.map.widthInPixels){
 			console.log('Stop scene Level2Prev2, start scene Level2');
 			this.startScene = false;
-			this.hud.destroy();
-			this.scene.stop('Level2Prev2');
-			this.backgroundMusic.stop();
+			this.registry.set('previousScene', this.scene.key);
+			this.common.stopScene(this);
 			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level2', timeout: 5500, textSize: 38, text: "Mitja hora més tard,\ndesprés de travessar\nel bosc, evitant la\nxapa de l\'Stan..." });
 		}
     }

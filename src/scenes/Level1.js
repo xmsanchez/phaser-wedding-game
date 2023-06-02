@@ -1,8 +1,9 @@
 import Common from '../classes/Common.js';
 import Camera from '../classes/Camera.js';
-import HUD from '../classes/HUD.js';
-import Message from '../classes/Message.js';
 
+////////////////////////////////////////////////////////
+// EL MAPA
+////////////////////////////////////////////////////////
 export default class Level1 extends Phaser.Scene
 {
 	constructor()
@@ -170,10 +171,8 @@ export default class Level1 extends Phaser.Scene
 			console.log('Stop scene Level1, if user has the map, start Level2Prev. Otherwise, return to scene Level1Prev');
 			if(this.hasMap){
 				this.startScene = false;
-				this.hud.destroy();
-				this.scene.stop('Level1');
 				this.registry.set('previousScene', this.scene.key);
-				this.backgroundMusic.stop();
+				this.common.stopScene(this);
 				this.scene.start('PreLevel', { levelName: '', levelKey: 'Level2Prev', text: 'Uns minuts\nmés tard...' });
 			}else{
 				this.startScene = false;

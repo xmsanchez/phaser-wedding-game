@@ -1,8 +1,9 @@
 import Common from '../classes/Common';
 import Camera from '../classes/Camera';
-import HUD from '../classes/HUD';
-import Message from '../classes/Message.js';
 
+////////////////////////////////////////////////////////
+// EL DESERT (prev)
+////////////////////////////////////////////////////////
 export default class Level3Prev extends Phaser.Scene
 {
 	constructor()
@@ -95,6 +96,27 @@ export default class Level3Prev extends Phaser.Scene
 		this.doors.getChildren().forEach((door) => {
 			door.opened = true;
 		});
+
+		this.checkCompleted();
+	}
+
+	checkCompleted() {
+		this.scenesVisited = this.registry.get('scenesVisited');
+		this.previousScene = this.registry.get('previousScene');
+		this.scenesVisited.push(this.currentScene);
+		console.log('checkCompleted this.scenesVisited: ' + this.scenesVisited);
+		this.sceneRegistry = this.registry.get(this.scene.key);
+		let doorsOpened = this.sceneRegistry.doorsOpened;
+		for(let i = 0; i < doorsOpened.length; i++) {
+			this.doors.getChildren().forEach((door) => {
+				console.log('checkCompleted - Comaring to door.name: ' + door.name);
+				if(door.name === doorsOpened[i]) {
+					console.log('checkCompleted - Found it!! -> ' + door.name);
+					door.opened = true;
+					this.doorOpened = true;
+				}
+			})
+		}
 	}
 
 	update() {
@@ -118,13 +140,19 @@ export default class Level3Prev extends Phaser.Scene
 				
 				// For first interaction, show a message list when approaching NPCs
 				if(this.firstInteraction && !this.message.messageDisplaying){
-					this.messageListShowing = [
-						npc.name + ': Que bé! Has aconseguit el **rellotge.**\nMalauradament... també necessitaràs **un vestit**',
-						npc.name + ': Hauries **d\'anar al castell**, travessant la ciutat del desert. Penso que les obres del pont ja han acabat',
-						npc.name + ': Ànims! Ja gairabé ho tens tot!'
-					];
-					this.message.showMessageList(this, this.messageListShowing);
-					this.firstInteraction = false;
+					// If we come from the next scene, don't show the initial message
+					if(this.previousScene == 'Level3Prev2'){
+						this.firstInteraction = false;
+					}else{
+						this.messageListShowing = [
+							npc.name + ': Que bé! Has aconseguit el **rellotge.**\nMalauradament... també necessitaràs **un vestit**',
+							npc.name + ': Hauries **d\'anar al castell**, travessant la ciutat del desert. Penso que les obres del pont ja han acabat',
+							npc.name + ': Ànims! Ja gairabé ho tens tot!'
+						];
+						this.message.showMessageList(this, this.messageListShowing);
+						this.firstInteraction = false;
+					}
+					
 				}
 			}
 		});
@@ -133,13 +161,11 @@ export default class Level3Prev extends Phaser.Scene
 		this.common.checkOverlapsStaticGroups(this.doors, this);
 
 		if (this.startScene) {
-			console.log('Stop scene Level3Prev, start scene Level3');
-			this.message.showMessage(this, 'Aquí hem de iniciar el Nivell 4');
-			// this.startScene = false;
-			// this.hud.destroy();
-			// this.scene.stop('Level5Prev');
-			// this.backgroundMusic.stop();
-			// this.scene.start('PreLevel', { levelName: 'Nivell 5', levelKey: 'Level5', text: 'El vestit' });
+			console.log('Stop scene Level3Prev, start scene Level3Prev2');
+			this.startScene = false;
+			this.registry.set('previousScene', this.scene.key);
+			this.common.stopScene(this);
+			this.scene.start('PreLevel', { levelKey: 'Level3Prev2' });
 		}
 	}
 
@@ -163,7 +189,7 @@ export default class Level3Prev extends Phaser.Scene
 			if(this.player.x > npc.x + npc.width / 2){
 				npc.setFrame(7);
 			}else{
-				npc.setFrame(3);
+				npc.setFrame(10);
 			}
 		})
 	}

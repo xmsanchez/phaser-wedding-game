@@ -1,5 +1,4 @@
 import Player from './Player.js';
-import Joystick from './Joystick.js';
 
 export default class Common {
     constructor(scene) {
@@ -44,11 +43,25 @@ export default class Common {
 		scene.jumpBtn = scene.registry.get('jumpBtn');
 		scene.UIScene = scene.registry.get('UI');
 
-		console.log('Scene is: ' + scene);
+		console.log('Scene is: ' + scene.scene.key);
 		console.log('Scene.UIScene is: ' + scene.UIScene);
 		
 		scene.UIScene.scene.setVisible(true);
 		scene.UIScene.scene.bringToTop();
+	}
+	
+	createLevelLayer(scene, layerName, tileset, scrollFactorX){
+		try {
+			var obj = scene.map.createLayer(layerName, tileset);
+			if(scrollFactorX != null){
+				obj.scrollFactorX = scrollFactorX;
+			}
+			// console.log('Created layer ' + layerName);
+			return obj;
+		} catch (error) {
+			console.log('Error trying to create layer ' + layerName);
+			return null;
+		}
 	}
 	
 	addCollider(scene, obj1, obj2) {
@@ -62,7 +75,7 @@ export default class Common {
 		}
 	  }
 	  
-	  addColliders(scene) {
+	addColliders(scene) {
 		// Add colliders for player and different objects
 		const { player, ground, platforms, walls, bridge, rocks, treasures, coins, bunny } = scene;
 	  
@@ -79,22 +92,8 @@ export default class Common {
 		if (bunny !== undefined) {
 		  this.addCollider(scene, bunny, platforms);
 		}
-	  }
-	  
-	createLevelLayer(scene, layerName, tileset, scrollFactorX){
-		try {
-			var obj = scene.map.createLayer(layerName, tileset);
-			if(scrollFactorX != null){
-				obj.scrollFactorX = scrollFactorX;
-			}
-			// console.log('Created layer ' + layerName);
-			return obj;
-		} catch (error) {
-			console.log('Error trying to create layer ' + layerName);
-			return null;
-		}
 	}
-
+	  
 	setCollisions(scene, from, to){
 		console.log('Setting collisions!')
 		console.log('from, to are: ' + from + ', ' + to);
@@ -191,8 +190,6 @@ export default class Common {
 			bunnyLayer.objects.forEach((bunny) => {
 				const contains = bunny.properties.find(obj => obj.name === "contains");
 				newbunny = scene.physics.add.sprite(bunny.x, bunny.y, 'npc_bunny', 0).setOrigin(0, 1)
-				newbunny.setImmovable(true)
-				newbunny.body.setAllowGravity(true);
 				newbunny.name = bunny.name;
 				console.log('Bunny ' + bunny.name + ' props:', bunny.properties);
 	
@@ -200,6 +197,7 @@ export default class Common {
 				newbunny.container = container;
 				newbunny.container.setVisible(false);
 				newbunny.contents = contains.value;
+				newbunny.body.setAllowGravity(false);
 
 				console.log('Add bunny to scene: ' + scene.bunnies);
 		 		scene.bunnies.add(newbunny);
@@ -207,8 +205,18 @@ export default class Common {
 			
 			try {
 				scene.pathPoints = scene.map.getObjectLayer('objectPath').objects;
+				if (scene.game.config.physics.arcade.debug) {
+					// Debug PathPoints
+					let graphics = scene.add.graphics({ lineStyle: { width: 2, color: 0x0000ff } });
+					scene.pathPoints.forEach((point) => {
+						// Draw a rectangle centered at each point
+						// Here 50, 50 is the width and height of the rectangle
+						graphics.strokeRect(point.x - 25, point.y - 25, 50, 50);
+					});
+				}
 			}catch{}
 			newbunny = this.setBunnyAnimations(scene, newbunny);
+			scene.physics.world.enable(newbunny);
 			return newbunny;
 		} catch (error) {
 			console.log('No bunnies found. Error: ' + error);
@@ -247,51 +255,74 @@ export default class Common {
 	}
 	
 	bunnyMovement(scene) {
+		if(scene.player.y > scene.cameras.main.height - 800){
+			console.log('Player has fallen below the bottom of the screen: ' + scene.player.y);
+			scene.player.x = 750;
+			scene.player.y = 100;
+			scene.bunny.x = 800;
+			scene.bunny.y = 100;
+
+		}
 		// Bunny related code
-		var bunnySpeed = 200;
-		if (!scene.bunnyCatched) {
-			const playerDistance = Phaser.Math.Distance.Between(scene.player.x, scene.player.y, scene.bunny.x, scene.bunny.y);
-			if (scene.bunnyReverseFlag === undefined) { // Initialize reverseFlag if it doesn't exist
-				scene.bunnyReverseFlag = false;
-			}
-			console.log('Bunny reverseFlag: ' + scene.bunnyReverseFlag);
-				
-			// Initially, the bunny is not reversing
-			scene.bunnyIsReversing = false;
+		let bunnySpeed = 250;
+		if (scene.bunnyCatched) {
+			// Stop bunny movement
+			scene.bunny.setVelocity(0, 0);
+			scene.bunny.anims.play('bunny-idle', true);	
+			scene.bunny.body.setAllowGravity(true);
+			scene.bunny.body.gravity.y = 6000;
+		}else{
 
-			if (playerDistance < 70 && !scene.bunnyReverseFlag) {
-				scene.bunnyReverseFlag = true;
-				console.log('Player distance <50: ' + playerDistance);
-				// Only reverse the path if the bunny is not already doing so
-				if (!scene.bunnyIsReversing) {
-					scene.pathPoints.reverse();
-					scene.bunnyIsReversing = true;
+			try {
+				const playerDistance = Phaser.Math.Distance.Between(scene.player.x, scene.player.y, scene.bunny.x, scene.bunny.y);
+				if (scene.bunnyReverseFlag === undefined) { // Initialize reverseFlag if it doesn't exist
+					scene.bunnyReverseFlag = false;
 				}
-			} else if (playerDistance > 70 && scene.bunnyReverseFlag) {
-				scene.bunnyReverseFlag = false;
-				console.log('Player distance >50: ' + playerDistance);
-				// Only reverse the path if the bunny is currently reversing
-				if (scene.bunnyIsReversing) {
-					scene.pathPoints.reverse();
-					scene.bunnyIsReversing = false;
-				}
-			}	
 
+				if(playerDistance > 150){
+					bunnySpeed = 160;
+				}else{
+					bunnySpeed = 250;
+				}
 	
-			const point = scene.pathPoints[0];
-	
-			const distance = Phaser.Math.Distance.Between(scene.bunny.x, scene.bunny.y, point.x, point.y);
-	
-			if (distance < 5) {
-				// Reached the current path point, move to the next one
-				scene.pathPoints.push(scene.pathPoints.shift());
+				// Initially, the bunny is not reversing
+				scene.bunnyIsReversing = false;
+
+				if (playerDistance < 70 && !scene.bunnyReverseFlag) {
+					scene.bunnyReverseFlag = true;
+					console.log('Player distance <50: ' + playerDistance);
+					// Only reverse the path if the bunny is not already doing so
+					if (!scene.bunnyIsReversing) {
+						scene.pathPoints.reverse();
+						scene.bunnyIsReversing = true;
+					}
+				} else if (playerDistance > 70 && scene.bunnyReverseFlag) {
+					scene.bunnyReverseFlag = false;
+					console.log('Player distance >50: ' + playerDistance);
+					// Only reverse the path if the bunny is currently reversing
+					if (scene.bunnyIsReversing) {
+						scene.pathPoints.reverse();
+						scene.bunnyIsReversing = false;
+					}
+				}	
+		
+				const point = scene.pathPoints[0];
+				// console.log('Point is: ' + JSON.stringify(point));
+				const distance = Phaser.Math.Distance.Between(scene.bunny.x, scene.bunny.y, point.x, point.y);
+				// console.log('Distance between bunny.x and point.x: ' + scene.bunny.x + ' and ' + point.x + ' is: ' + distance);
+				if (distance < 15) {
+					// Reached the current path point, move to the next one
+					scene.pathPoints.push(scene.pathPoints.shift());
+				}
+		
+				// Move the bunny towards the current path point
+				scene.physics.velocityFromRotation(scene.bunny.rotation, bunnySpeed, scene.bunny.body.velocity);
+				scene.physics.moveToObject(scene.bunny, scene.pathPoints[0], bunnySpeed);
+				scene.bunny.container.x = scene.bunny.x;
+				scene.bunny.container.y = scene.bunny.y - 20;
+			} catch (error) {
+				scene.bunny.body.reset(scene.bunny.x, scene.bunny.y);
 			}
-	
-			// Move the bunny towards the current path point
-			scene.physics.velocityFromRotation(scene.bunny.rotation, bunnySpeed, scene.bunny.body.velocity);
-			scene.physics.moveToObject(scene.bunny, scene.pathPoints[0], bunnySpeed);
-			scene.bunny.container.x = scene.bunny.x;
-			scene.bunny.container.y = scene.bunny.y - 20;
 	
 			// Set the appropriate animation based on the bunny's movement direction
 			if (scene.bunny.body.velocity.x < 0) {
@@ -301,19 +332,9 @@ export default class Common {
 				scene.bunny.flipX = true;
 				scene.bunny.anims.play('bunny-right', true);
 			}
-		} else {
-	
-			// Stop bunny movement
-			scene.bunny.setVelocity(0, 0);
-			// Bunny is not moving horizontally, play idle animation or set a default animation
-			scene.bunny.anims.play('bunny-idle', true);
-	
-			scene.bunny.body.setAllowGravity(true);
-			scene.bunny.body.gravity.y = 6000;
 		}
 	}
 	
-
 	checkBunnyActions(player, bunny, scene) {
 		console.log('Interactuo amb el bunny!');
 		console.log('Bunny props: ' + JSON.stringify(bunny.name));
@@ -480,12 +501,8 @@ export default class Common {
 				newcartell.name = cartell.name;
 				console.log('cartell ' + cartell.name + ' props:', cartell.properties);
 				
-				if(levelName == 'level1'){
-					newcartell.textCartell = '<-- Camí en obres.\nCap al **bosc** -->';
-				}else{
-					newcartell.textCartell = cartell.properties.find(obj => obj.name === "text").value;
-				}
-	
+				newcartell.textCartell = cartell.properties.find(obj => obj.name === "text").value;
+				
 				const container = this.drawHintContainer(scene, newcartell);
 				newcartell.container = container;
 				newcartell.container.setVisible(false);
@@ -592,7 +609,8 @@ export default class Common {
 	checkIfCanOpenDoor(player, door, scene) {
 		var inventory = scene.hud.inventory;
 		var key = null;
-		
+		let sceneKey = scene.scene.key;
+
 		console.log('Inventory contents: ' + JSON.stringify(inventory));
 		console.log(JSON.stringify(inventory))
 		for (var i = 0; i < inventory.length; i++) {
@@ -628,9 +646,15 @@ export default class Common {
 
 			// If we are outside, allow the player to come back in
 			}else if(door.name == 'door-outside') {
-				this.scene.scene.start('Level0');
-				this.scene.scene.stop();
-				this.scene.backgroundMusic.stop();
+				if(sceneKey == 'Level1Prev'){
+					this.scene.scene.start('Level0');
+					this.scene.scene.stop();
+					this.scene.backgroundMusic.stop();
+				}else if(sceneKey == 'Level3Prev2'){
+					this.scene.scene.start('Level3Prev');
+					this.scene.scene.stop();
+					this.scene.backgroundMusic.stop();
+				}
 
 			// Doors Level2
 			}else if (door.name == 'door1_2') {

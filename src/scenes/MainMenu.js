@@ -22,6 +22,8 @@ export default class MainMenu extends Phaser.Scene {
 		// Load common tilesets
 		this.load.image('tileset_field','assets/tilesets/tileset_field/tileset.png');
 		this.load.image('tileset_jungle','assets/tilesets/tileset_jungle/tileset_jungle_embed.png');
+		this.load.image('swamp', 'assets/tilesets/tileset_swamp/swamp.png');
+		this.load.image('swamp_bg', 'assets/tilesets/tileset_swamp/swamp_bg.png');
 
 		// Load audio music
 		this.load.audio('background_music', 'assets/audio/tangled.mp3');
@@ -44,15 +46,16 @@ export default class MainMenu extends Phaser.Scene {
 		this.load.tilemapTiledJSON('level1', 'assets/maps/level1.json');
 		// La Data
 		this.load.tilemapTiledJSON('level2', 'assets/maps/level2.json');
+		this.load.tilemapTiledJSON('level2-bunny', 'assets/maps/z.level2-bunny-bak.json');
 		// L'hora
 		this.load.tilemapTiledJSON('level3', 'assets/maps/level3.json');
 		// El Vestit
-		this.load.tilemapTiledJSON('level4', 'assets/maps/level4.json');
+		// this.load.tilemapTiledJSON('level4', 'assets/maps/level4.json');
 
 		// Level 1 assets
 		this.load.image('livingroom', 'assets/tilesets/house-inside/livingroom.png');
 
-		// Level 2 assets+
+		// Level 2 assets
 		this.load.image('disney_castle_256','assets/tilesets/disney_castle.png');
 		this.load.image('house-outside','assets/tilesets/house-outside/house-outside.png');
 
@@ -60,10 +63,6 @@ export default class MainMenu extends Phaser.Scene {
 		// For Level3Prev we will reuse level1 map (the house)
 		this.load.tilemapTiledJSON('level3-prev', 'assets/maps/level1.json');
 		
-		// Level 4 assets
-		// For Level4Prev we will reuse level1 map (the house)
-		this.load.tilemapTiledJSON('level4-prev', 'assets/maps/level1.json');
-
 		// Load tilesets as spritesheets
 		this.load.spritesheet('player', 'assets/spritesheets/player/player.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('npc_xavi', 'assets/spritesheets/npcs/xavi.png', { frameWidth: 32, frameHeight: 32 });
@@ -114,6 +113,10 @@ export default class MainMenu extends Phaser.Scene {
 			doorsOpened: [],
 			treasuresOpened: [],
 		});
+		this.registry.set('Level3Prev2', {
+			doorsOpened: [],
+			treasuresOpened: [],
+		});
 		this.registry.set('Level3', {
 			doorsOpened: [],
 			treasuresOpened: [],
@@ -148,11 +151,11 @@ export default class MainMenu extends Phaser.Scene {
 
 		// add a click event listener to start the Level1 scene
 		this.input.on('pointerdown', () => {
-			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level3Prev', text: "L'arribada" });
+			this.scene.start('PreLevel', { levelName: '', timeout: 200, levelKey: 'Level0', text: "L'arribada" });
 		});
 		const enterKey = this.input.keyboard.addKey('ENTER');
 		enterKey.on('down', () => {
-			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level3Prev', text: "L'arribada" });
+			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level2', text: "L'arribada" });
 		});
 	}
 

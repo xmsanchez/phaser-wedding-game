@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level1.json",
+    "activeFile": "level2.json",
     "automapping.whileDrawing": true,
     "expandedProjectPaths": [
         "."
@@ -11,7 +11,7 @@
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "": {
-            "scaleInDock": 1,
+            "scaleInDock": 0.5,
             "scaleInEditor": 1.5
         },
         "#tileset": {
@@ -31,8 +31,8 @@
             "scale": 2,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 320.25,
-                "y": 159.75
+                "x": 284.25,
+                "y": 158.25
             }
         },
         "house-inside.json#livingroom": {
@@ -59,17 +59,20 @@
                 29,
                 41,
                 42,
-                43,
-                28
+                28,
+                43
             ],
             "scale": 2,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 256.25,
-                "y": 192.25
+                "x": 235.75,
+                "y": 292.25
             }
         },
         "house-outside.json#bunny": {
+            "scaleInDock": 1
+        },
+        "house-outside.json#construction_vehicles": {
             "scaleInDock": 1
         },
         "house-outside.json#house": {
@@ -128,17 +131,17 @@
         },
         "level1.json": {
             "expandedObjectLayers": [
-                52,
                 29,
-                51,
                 28,
+                51,
+                52,
                 27
             ],
-            "scale": 0.75,
-            "selectedLayer": 16,
+            "scale": 0.5,
+            "selectedLayer": 18,
             "viewCenter": {
-                "x": 804.6666666666667,
-                "y": 580.6666666666667
+                "x": 266,
+                "y": 413
             }
         },
         "level1.json#background": {
@@ -307,16 +310,16 @@
         "level2.json": {
             "expandedObjectLayers": [
                 45,
+                28,
                 44,
                 43,
-                27,
-                28
+                27
             ],
-            "scale": 1.5,
-            "selectedLayer": 12,
+            "scale": 1,
+            "selectedLayer": 14,
             "viewCenter": {
-                "x": 316.6666666666667,
-                "y": 319
+                "x": -13,
+                "y": 135.5
             }
         },
         "level2.json#bunny": {
@@ -338,6 +341,12 @@
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "level2.json#swamp": {
+            "scaleInDock": 1.5
+        },
+        "level2.json#swamp_bg": {
+            "scaleInDock": 0.33
+        },
         "level2.json#tileset": {
             "scaleInDock": 0.5,
             "scaleInEditor": 2
@@ -353,18 +362,19 @@
         },
         "level3.json": {
             "expandedObjectLayers": [
-                44,
                 45,
-                43,
                 28,
                 27
             ],
             "scale": 1.5,
-            "selectedLayer": 10,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 319,
-                "y": 318.33333333333337
+                "x": 1600,
+                "y": 250.33333333333331
             }
+        },
+        "level3.json#agrabah_market": {
+            "scaleInDock": 1
         },
         "level3.json#bunny": {
             "scaleInDock": 1
@@ -383,6 +393,12 @@
         },
         "level3.json#tileset_field": {
             "scaleInDock": 0.5,
+            "scaleInEditor": 1
+        },
+        "level3.json#tileset_jungle": {
+            "scaleInDock": 0.33
+        },
+        "level3.json#tileset_jungle_embed": {
             "scaleInEditor": 1
         },
         "level3.json#xavi": {
@@ -417,8 +433,8 @@
         },
         "level4.json": {
             "expandedObjectLayers": [
-                45,
                 44,
+                45,
                 43,
                 27,
                 28
@@ -426,8 +442,8 @@
             "scale": 1.5,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 338.6666666666667,
-                "y": 327
+                "x": 338.33333333333337,
+                "y": 326.33333333333337
             }
         },
         "level4.json#bunny": {
@@ -523,8 +539,8 @@
             "scale": 0.8732323232323232,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 660.1908617698092,
-                "y": 483.83458646616543
+                "x": 660.1908617698091,
+                "y": 481.54424522845574
             }
         },
         "z.level2-bak.json#disney_castle_256": {
@@ -541,38 +557,76 @@
         },
         "z.level2-bak.json#treasure": {
             "scaleInDock": 1
+        },
+        "z.level2-bunny-bak.json": {
+            "expandedObjectLayers": [
+                45,
+                28,
+                43,
+                27,
+                44
+            ],
+            "scale": 1.5,
+            "selectedLayer": 12,
+            "viewCenter": {
+                "x": 318.33333333333337,
+                "y": 320.33333333333337
+            }
+        },
+        "z.level2-bunny-bak.json#bunny": {
+            "scaleInDock": 1
+        },
+        "z.level2-bunny-bak.json#mi": {
+            "scaleInDock": 1
+        },
+        "z.level2-bunny-bak.json#objects_16x16": {
+            "scaleInDock": 3
+        },
+        "z.level2-bunny-bak.json#player": {
+            "scaleInDock": 1
+        },
+        "z.level2-bunny-bak.json#swamp": {
+            "scaleInDock": 1
+        },
+        "z.level2-bunny-bak.json#swamp_bg": {
+            "scaleInDock": 1
+        },
+        "z.level2-bunny-bak.json#tileset_field": {
+            "scaleInDock": 1
+        },
+        "z.level2-bunny-bak.json#xavi": {
+            "scaleInDock": 1
         }
     },
     "last.externalTilesetPath": "/home/xavi/Projects/xavi/gpt/games/platform-new/public/assets/maps",
-    "last.imagePath": "/home/xavi/Projects/xavi/gpt/games/phaser-wedding-game/public/assets/spritesheets/objects",
+    "last.imagePath": "/home/xavi/Projects/xavi/gpt/games/phaser-wedding-game/public/assets/tilesets/tileset_swamp",
     "map.lastUsedFormat": "json",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
     "openFiles": [
-        "house-inside.json",
-        "house-outside.json",
-        "level1.json"
+        "level3.json",
+        "level2.json"
     ],
     "project": "tiled-project.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "level2.json",
-        "rule1.tmx",
-        "level4.json",
         "level3.json",
+        "level2.json",
         "level1.json",
-        "z.level1-bak.json",
-        "house-outside.json",
-        "house-inside.json",
-        "terrain.json",
+        "z.level2-bunny-bak.json",
         "z.level2-bak.json",
-        "level2-bak.json",
-        "level1-bak.json"
+        "house-inside.json",
+        "house-outside.json",
+        "level4.json",
+        "rule1.tmx",
+        "z.level1-bak.json",
+        "terrain.json",
+        "level2-bak.json"
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {
-        "height": 64,
-        "width": 128
+        "height": 16,
+        "width": 16
     },
     "tileset.type": 0
 }

@@ -93,7 +93,7 @@
                         {
                          "name":"text",
                          "type":"string",
-                         "value":"Segueix al conill blanc --->"
+                         "value":"<-- Direcci\u00f3 al **desert**\nDirecci\u00f3 al **bosc** -->"
                         }],
                  "rotation":0,
                  "type":"",
@@ -274,12 +274,12 @@
          "columns":5,
          "firstgid":825,
          "image":"..\/spritesheets\/objects\/objects.png",
-         "imageheight":96,
+         "imageheight":112,
          "imagewidth":80,
          "margin":0,
          "name":"objects",
          "spacing":0,
-         "tilecount":30,
+         "tilecount":35,
          "tileheight":16,
          "tilewidth":16
         }],

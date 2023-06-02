@@ -1,8 +1,9 @@
 import Common from '../classes/Common.js';
 import Camera from '../classes/Camera.js';
-import HUD from '../classes/HUD.js';
-import Message from '../classes/Message.js';
 
+////////////////////////////////////////////////////////
+// EL CONILL (prev)
+////////////////////////////////////////////////////////
 export default class Level2Prev extends Phaser.Scene
 {
 	constructor()
@@ -142,7 +143,6 @@ export default class Level2Prev extends Phaser.Scene
 			console.log('Stop scene Level2Prev, start scene Level2Prev2');
 			this.startScene = false;
 			this.registry.set('previousScene', this.scene.key);
-			// We need to stop current UIScene
 			this.common.stopScene(this);
 			this.scene.start('PreLevel', { levelKey: 'Level2Prev2' });
 		}

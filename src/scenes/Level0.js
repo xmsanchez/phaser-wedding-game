@@ -3,6 +3,9 @@ import Camera from '../classes/Camera';
 import HUD from '../classes/HUD';
 import Message from '../classes/Message.js';
 
+////////////////////////////////////////////////////////
+// L'ARRIBADA
+////////////////////////////////////////////////////////
 export default class Level0 extends Phaser.Scene
 {
 	constructor()
@@ -147,8 +150,7 @@ export default class Level0 extends Phaser.Scene
 		if (this.startScene) {
 			console.log('Stop scene Level0, start scene Level1');
 			this.startScene = false;
-			this.registry.set('previousScene', 'Level0');
-			// We need to stop current UIScene
+			this.registry.set('previousScene', this.scene.key);
 			this.common.stopScene(this);
 			this.scene.start('PreLevel', { levelKey: 'Level1Prev' });
 		}

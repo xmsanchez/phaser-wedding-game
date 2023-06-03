@@ -1,9 +1,9 @@
 import { useLayoutEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import './App.css';
-import Game from './game/Game.jsx';
-import Landing from './landing/Landing.jsx';
-import TopMenu from './TopMenu.jsx';
+import Game from './components/game/Game.jsx';
+import Landing from './components/landing/Landing.jsx';
+import TopMenu from './components/main/TopMenu.jsx';
 
 function App() {
   return (
@@ -14,7 +14,7 @@ function App() {
             path="/"
             element={
               <>
-                <TopMenu /> {/* Add TopMenu component inside the route */}
+                <TopMenu />
                 <Game />
               </>
             }

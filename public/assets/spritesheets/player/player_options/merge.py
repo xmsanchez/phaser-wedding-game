@@ -11,6 +11,10 @@ def merge_images(image_files, output_path, direction='horizontal', size=(32,32))
         if image.size[0] > size[0] or image.size[1] > size[1]:
             image.thumbnail(size, Image.ANTIALIAS)
 
+        # Skip if the image is smaller than 15x15
+        if image.size[0] < 15 or image.size[1] < 15:
+            continue
+
         new_image = Image.new("RGBA", size)
         new_image.paste(image, ((size[0]-image.size[0])//2,
                                 (size[1]-image.size[1])//2))

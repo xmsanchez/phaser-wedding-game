@@ -1,0 +1,131 @@
+.mainContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1500px;
+    height: 90%;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.settingsContainer {
+    width: 25%;
+    height: auto;
+    background-color: #ffffff;
+    margin: auto;
+    margin-top: 0px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    font-size: 18px;
+    scroll-behavior: smooth;  /* Add this line to make the scrolling smoother */
+}
+
+.chatBox {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    margin: auto;
+    max-width: 800px;
+    height: 100%;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    font-size: 18px;
+    overflow-y: scroll;  /* Add this line to enable vertical scrolling */
+    scroll-behavior: smooth;  /* Add this line to make the scrolling smoother */
+}
+
+.chatBoxHeader {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+  
+/* Add this code to always scroll to the bottom */
+.chatBox::-webkit-scrollbar {
+    display: none;
+}
+  
+.chatBox > *:last-child {
+    scroll-margin-bottom: 1px;
+}
+
+.apiMessage {
+    color:rgb(187, 0, 0);
+    font-weight: bold;
+    text-align: center;
+}
+
+.messageContainer {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.messageContainer::-webkit-scrollbar {
+  width: 12px;
+}
+
+.messageContainer::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.messageContainer::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 20px;
+    border: 2px solid #f1f1f1;
+}
+
+.userMessage {
+    align-self: flex-end;
+    background-color: #2196f3;
+    color: white;
+}
+  
+.chatbotMessage {
+    align-self: flex-start;
+    background-color: #e0e0e0;
+    color: #212121;
+}
+
+@media screen and (max-width: 1000px) {
+    .mainContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 100%;
+        max-width: 700px;
+        height: 90%;
+        margin: auto;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        font-size: 11px;
+    }
+    
+    .settingsContainer {
+        width: 80%;
+        height: auto;
+        background-color: #ffffff;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 16px;
+        font-size: 11px;
+        scroll-behavior: smooth;  /* Add this line to make the scrolling smoother */
+    }
+
+    .chatBoxHeader {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+}

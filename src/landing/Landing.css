@@ -1,0 +1,126 @@
+body {
+    background-color: white;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    width: 100%;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+main .section {
+    padding: 5em 0;
+}
+
+div h2 {
+    justify-content: center;
+    text-align: center;
+    font-size: 30px;
+    color: purple;
+}
+
+button:focus, button:active {
+    background-color: #800080 !important;
+    box-shadow: none !important;
+}
+
+div .btn {
+    margin: auto;
+    color: white;
+    background-color: purple;
+    font-size: large;
+    width: 230px;
+    height: 50px;
+    line-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.containerBtn {
+    margin: auto;
+    width: 200px;
+    text-align: center;
+    background-color: purple;
+}
+
+#headerSection {
+    color: white;
+    text-align: center;
+    align-items: center;
+    margin: auto;
+    width: 100%;
+}
+
+.headerSectionImage {
+    align-items: center;
+    width: 80%;
+    margin: auto;
+}
+
+#bodySection {
+    /* background-color: #f5f5f5; */
+    width: 100%;
+}
+
+#googleFormsSection {
+    background-color: white;
+    margin: 100px;
+}
+
+#footerSection {
+    background-color: #f5f5f5;
+}
+
+p {
+    font-size: 20px;
+    color: black !important;
+    text-align: left;
+    margin: 15px;
+}
+
+#chatContainer {
+    height: 300px;
+    overflow-y: auto;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+/* width */
+#chatContainer::-webkit-scrollbar {
+    width: 10px;
+}
+/* track */
+#chatContainer::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+/* handle */
+#chatContainer::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+/* handle on hover */
+#chatContainer::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+.chat-message {
+    max-width: 80%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 20px;
+}
+.user-message {
+    background-color: #007bff;
+    color: white;
+    align-self: flex-start;
+}
+.bot-message {
+    background-color: #e5e5e5;
+    color: black;
+    align-self: flex-end;
+}

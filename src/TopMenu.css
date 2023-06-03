@@ -1,0 +1,14 @@
+.top-menu {
+    margin: auto;
+    /* background-color: #000000; */
+
+}
+
+.top-menu h2, p {
+    color: white;
+    font-size: 20px;
+}
+
+.top-menu.collapsed {
+    font-size: 15px;
+}

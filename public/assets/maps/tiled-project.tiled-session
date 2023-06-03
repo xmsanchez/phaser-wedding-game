@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level2.json",
+    "activeFile": "level3.json",
     "automapping.whileDrawing": true,
     "expandedProjectPaths": [
         "."
@@ -11,7 +11,7 @@
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "": {
-            "scaleInDock": 0.5,
+            "scaleInDock": 1,
             "scaleInEditor": 1.5
         },
         "#tileset": {
@@ -24,15 +24,15 @@
         },
         "house-inside.json": {
             "expandedObjectLayers": [
+                27,
                 29,
-                28,
-                27
+                28
             ],
             "scale": 2,
-            "selectedLayer": 6,
+            "selectedLayer": 8,
             "viewCenter": {
-                "x": 284.25,
-                "y": 158.25
+                "x": 283,
+                "y": 157.75
             }
         },
         "house-inside.json#livingroom": {
@@ -56,17 +56,17 @@
         },
         "house-outside.json": {
             "expandedObjectLayers": [
-                29,
-                41,
                 42,
-                28,
-                43
+                43,
+                41,
+                29,
+                28
             ],
             "scale": 2,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 235.75,
-                "y": 292.25
+                "x": 234.5,
+                "y": 291.25
             }
         },
         "house-outside.json#bunny": {
@@ -309,17 +309,17 @@
         },
         "level2.json": {
             "expandedObjectLayers": [
-                45,
-                28,
-                44,
                 43,
-                27
+                27,
+                44,
+                28,
+                45
             ],
             "scale": 1,
-            "selectedLayer": 14,
+            "selectedLayer": 13,
             "viewCenter": {
-                "x": -13,
-                "y": 135.5
+                "x": 520,
+                "y": 172.5
             }
         },
         "level2.json#bunny": {
@@ -362,21 +362,28 @@
         },
         "level3.json": {
             "expandedObjectLayers": [
-                45,
+                27,
+                29,
                 28,
-                27
+                45
             ],
-            "scale": 1.5,
-            "selectedLayer": 2,
+            "scale": 1,
+            "selectedLayer": 11,
             "viewCenter": {
-                "x": 1600,
-                "y": 250.33333333333331
+                "x": 245,
+                "y": 374.5
             }
         },
         "level3.json#agrabah_market": {
             "scaleInDock": 1
         },
         "level3.json#bunny": {
+            "scaleInDock": 1
+        },
+        "level3.json#castle_inside": {
+            "scaleInDock": 0.33
+        },
+        "level3.json#fairy": {
             "scaleInDock": 1
         },
         "level3.json#mi": {
@@ -599,7 +606,7 @@
         }
     },
     "last.externalTilesetPath": "/home/xavi/Projects/xavi/gpt/games/platform-new/public/assets/maps",
-    "last.imagePath": "/home/xavi/Projects/xavi/gpt/games/phaser-wedding-game/public/assets/tilesets/tileset_swamp",
+    "last.imagePath": "/home/xavi/Projects/xavi/gpt/games/phaser-wedding-game/public/assets/spritesheets/npcs",
     "map.lastUsedFormat": "json",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
@@ -610,13 +617,13 @@
     "project": "tiled-project.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "level3.json",
         "level2.json",
+        "house-outside.json",
+        "house-inside.json",
+        "level3.json",
         "level1.json",
         "z.level2-bunny-bak.json",
         "z.level2-bak.json",
-        "house-inside.json",
-        "house-outside.json",
         "level4.json",
         "rule1.tmx",
         "z.level1-bak.json",
@@ -625,8 +632,8 @@
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {
-        "height": 16,
-        "width": 16
+        "height": 64,
+        "width": 64
     },
     "tileset.type": 0
 }

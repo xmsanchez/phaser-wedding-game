@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The Wedding</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="landing.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+<body hidden>
+    <main>
+        <div id="headerSection" class="section">
+            <h2>The Wedding</h2>
+        </div>
+        <div id="bodySection" class="section">
+            <div class="container">
+                <h2>Detalls</h2>
+                <p><b>El lloc:</b> La Vinyassa</p>
+                <p><b>La data:</b> 30/09/2023</p>
+                <p><b>L'hora:</b> Les 16h</p>
+                <p><b>El dresscode:</b> Formal. Les noies no podeu anar de blanc!</p>
+            </div>
+        </div>
+        <div id="googleFormsSection" class="section">
+            <div class="container">
+                <h2>Confirma la teva assistència</h2>
+            </div>
+            <div class="containerBtn">
+                <button id="confirmarButton" class="btn">Confirmar</button>
+            </div>
+        </div>
+    </main>
+    <footer id="footerSection" class="section">
+        <div class="container">
+            <h2>Tens alguna pregunta?</h2>
+            <h2>Responem <b>al moment</b></h2>
+            <h2>Prova-ho!!</h2>
+            <div id="chatContainer" class="d-flex flex-column"></div>
+            <div class="input-field">
+                <input id="userMessage" type="text" placeholder="Type your message here...">
+                <button id="sendButton" class="btn">Send</button>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="chat/chat.js"></script>
+</body>
+</html>

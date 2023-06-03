@@ -1,20 +1,32 @@
 {
-	"name": "phaser3-wedding-day",
-	"version": "1.0.0",
-	"description": "Wedding Day Game",
-	"scripts": {
-		"start": "vite --host",
-		"build": "vite build",
-		"preview": "vite preview"
-	},
-	"author": "xmsanchez",
-	"devDependencies": {
-		"eslint": "^8.25.0",
-		"vite": "^3.1.0"
-	},
-	"dependencies": {
-		"easystarjs": "^0.4.4",
-		"phaser": "^3.60.0",
-		"phaser3-rex-plugins": "^1.60.1"
-	}
+  "name": "phaser-wedding-game",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "vite --host",
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "phaser": "^3.60.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-linkify": "^1.0.0-alpha",
+    "react-router-dom": "^6.11.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.37",
+    "@types/react-dom": "^18.0.11",
+    "@vitejs/plugin-react": "^4.0.0",
+    "eslint": "^8.38.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.3.4",
+    "phaser": "^3.60.0",
+    "phaser3-rex-plugins": "^1.60.1",
+    "vite": "^4.3.9"
+  }
 }

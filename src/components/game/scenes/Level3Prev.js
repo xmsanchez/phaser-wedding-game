@@ -79,7 +79,8 @@ export default class Level3Prev extends Phaser.Scene
 		// Add colliders, input, hud, music
 		this.common.addColliders(this);
 		this.common.setCollisions(this, 0, 1400);
-		this.loadMusic();
+		
+		this.common.loadMusic(this, tileset.name);
 
 		// Add controls
 		this.player.addTouchScreenPointers(this);
@@ -129,7 +130,7 @@ export default class Level3Prev extends Phaser.Scene
 		this.camera.setCamera(this, 2.40);
 
 		// NPCs will always look at the player
-		this.npcLookDirection();
+		this.common.npcLookDirection(this, npc);
 
 		this.npcs.getChildren().forEach((npc) => {
 			const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
@@ -182,22 +183,5 @@ export default class Level3Prev extends Phaser.Scene
 			]
 			this.message.showMessageList(this, this.messageListShowing);
 		}
-	}
-
-	npcLookDirection() {
-		const position = this.npcs.getChildren().find((npc) => {
-			if(this.player.x > npc.x + npc.width / 2){
-				npc.setFrame(7);
-			}else{
-				npc.setFrame(10);
-			}
-		})
-	}
-
-	loadMusic(){
-		// Create an instance of the audio object
-		this.backgroundMusic = this.sound.add('background_music_house', { loop: true, volume: 0.2});
-		// Play the audio file
-		this.backgroundMusic.play();
 	}
 }

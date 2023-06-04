@@ -26,7 +26,7 @@ export default class MainMenu extends Phaser.Scene {
 		this.load.image('swamp_bg', 'assets/tilesets/tileset_swamp/swamp_bg.png');
 
 		// Load audio music
-		this.load.audio('background_music', 'assets/audio/tangled.mp3');
+		this.load.audio('background_music_tangled', 'assets/audio/tangled.mp3');
 		this.load.audio('background_music_house', 'assets/audio/music/PerituneMaterial_Dawning_Tale.mp3');
 		this.load.audio('background_music_bunny1', 'assets/audio/music/Fluffing-a-Duck.mp3');
 		this.load.audio('background_music_bunny2', 'assets/audio/music/Run-Amok.mp3');
@@ -36,6 +36,7 @@ export default class MainMenu extends Phaser.Scene {
 		// Load audio sounds
 		this.load.audio('audio_coin', 'assets/audio/coin.mp3');
 		this.load.audio('audio_chest_opened', 'assets/audio/new_item.mp3');
+		this.load.audio('audio_dog_bark', 'assets/audio/dog_bark2.mp3');
 
 		// Load maps
 		// House inside (pròlegs)
@@ -59,6 +60,7 @@ export default class MainMenu extends Phaser.Scene {
 		this.load.spritesheet('player', 'assets/spritesheets/player/player.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('npc_xavi', 'assets/spritesheets/npcs/xavi.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('npc_mi', 'assets/spritesheets/npcs/mi.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.spritesheet('npc_bug', 'assets/spritesheets/npcs/bug.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('npc_bunny', 'assets/spritesheets/npcs/bunny.png', { frameWidth: 45, frameHeight: 45 });
 		this.load.spritesheet('npc_beast', 'assets/spritesheets/npcs/bestia.png', { frameWidth: 88, frameHeight: 88 });
 		this.load.spritesheet('npc_stan', 'assets/spritesheets/npcs/stan.png', { frameWidth: 66, frameHeight: 66 });

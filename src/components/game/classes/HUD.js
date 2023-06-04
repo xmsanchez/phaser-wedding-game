@@ -68,6 +68,8 @@ export default class HUD {
                 frame = 5;
             }else if(currentObject == 'bruixola'){
                 frame = 30;
+            }else if(currentObject == 'pal'){
+                frame = 31;
             }
             const item = scene.add.sprite(i * (tileSize + spacing), 0, 'objects', frame).setOrigin(0, 0).setScale(3);
             scene.hud.inventoryDisplay.add(item);
@@ -77,10 +79,23 @@ export default class HUD {
         }
     }
 
-    updateScore(scene) {
-        this.currentScore += 10;
-        this.scoreText.setText('Punts: ' + this.currentScore);
-    }
+    // updateScore(scene) {
+    //     this.currentScore += 10;
+    //     this.scoreText.setText('Punts: ' + this.currentScore);
+    // }
+
+    searchInventory(object) {
+        console.log('Search inventory for object ' + object);
+		for (var i = 0; i < this.inventory.length; i++) {
+			if (this.inventory[i] == object) {
+				console.log('The user has one ' + object);
+				object = i;
+				return object;
+			}
+		}
+        console.log('Could not find the object in the inventory');
+		return null;
+	}
 
     // This is to display on messages
     createButtonIcon = function (scene, x, y, buttonText) {

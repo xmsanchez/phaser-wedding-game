@@ -98,7 +98,7 @@ export default class Level1 extends Phaser.Scene
 		this.common.addColliders(this);
 		this.common.setCollisions(this, 0, 20000);
 
-		this.loadMusic();
+		this.common.loadMusic(this, tileset_jungle.name);
 
 		// Add controls
 		this.player.addTouchScreenPointers(this);
@@ -131,9 +131,6 @@ export default class Level1 extends Phaser.Scene
 		// Update player movement based on events
 		this.player.playerMovement(this);
 
-		// NPCs will always look at the player
-		this.npcLookDirection();
-
 		// Check overlaps (show the 'B' button hint)
 		this.common.checkOverlapsStaticGroups(this.npcs, this);
 		this.common.checkOverlapsStaticGroups(this.treasures, this);
@@ -141,6 +138,8 @@ export default class Level1 extends Phaser.Scene
 		
 		let dialog = [];
 		this.npcs.getChildren().forEach((npc) => {
+			// NPCs will always look at the player
+			this.common.npcLookDirection(this, npc);
 
 			if(!this.message.messageDisplaying){
 				npc.anims.stop();
@@ -173,7 +172,7 @@ export default class Level1 extends Phaser.Scene
 				this.startScene = false;
 				this.registry.set('previousScene', this.scene.key);
 				this.common.stopScene(this);
-				this.scene.start('PreLevel', { levelName: '', levelKey: 'Level2Prev', text: 'Uns minuts\nmés tard...' });
+				this.scene.start('PreLevel', { levelName: '', timeout: 2000, levelKey: 'Level2Prev', text: 'Uns minuts\nmés tard...' });
 			}else{
 				this.startScene = false;
 				this.hud.destroy();
@@ -231,22 +230,5 @@ export default class Level1 extends Phaser.Scene
 				this.message.showMessageList(this, dialog, function(scene){})
 			}
 		}
-	}
-	
-	npcLookDirection() {
-		const position = this.npcs.getChildren().find((npc) => {
-			if(this.player.x > npc.x + npc.width / 2){
-				npc.flipX = false;
-			}else{
-				npc.flipX = true;
-			}
-		})
-	}
-
-	loadMusic(){
-		// Create an instance of the audio object
-		this.backgroundMusic = this.sound.add('background_music_woods2', { loop: true, volume: 0.2});
-		// Play the audio file
-		this.backgroundMusic.play();
 	}
 }

@@ -41,7 +41,11 @@ const Message = ( props ) => {
               Copy code
             </button>
             <pre className={styles.code}>
-              <code>{replaceNewLines(part)}</code>
+              <code>
+                <p>
+                  {replaceNewLines(part)}
+                </p>
+              </code>
             </pre>
           </div>
         ) : (

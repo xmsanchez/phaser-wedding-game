@@ -76,7 +76,8 @@ export default class Level2Prev extends Phaser.Scene
 		// Add colliders, input, hud, music
 		this.common.addColliders(this);
 		this.common.setCollisions(this, 0, 1400);
-		this.loadMusic();
+		
+		this.common.loadMusic(this, tileset.name);
 
 		// Add controls
 		this.player.addTouchScreenPointers(this);
@@ -104,9 +105,15 @@ export default class Level2Prev extends Phaser.Scene
 	}
 
 	npcActions(player, npc) {
+		console.log('npcActions -> ' + npc.name);
+		// En Bug sempre va al seu rotllo :-)
+		if(npc.name == 'Bug'){
+			this.common.actionsBug(this, npc);
+		}else{
 
+		}
 	}
-	
+
     update() {
 		// Update player movement based on events
 		this.player.playerMovement(this);
@@ -115,8 +122,10 @@ export default class Level2Prev extends Phaser.Scene
 		this.common.checkOverlapsStaticGroups(this.npcs, this);
 		this.common.checkOverlapsStaticGroups(this.doors, this);
 
-		// NPCs will always look at the player
-		this.npcLookDirection();
+		this.npcs.getChildren().forEach((npc) => {
+			// NPCs will always look at the player
+			this.common.npcLookDirection(this, npc);
+		});
 
 		if(this.justArrived){
 			console.log('Player just got here!');
@@ -147,21 +156,4 @@ export default class Level2Prev extends Phaser.Scene
 			this.scene.start('PreLevel', { levelKey: 'Level2Prev2' });
 		}
     }
-
-	npcLookDirection() {
-		const position = this.npcs.getChildren().find((npc) => {
-			if(this.player.x > npc.x + npc.width / 2){
-				npc.setFrame(7);
-			}else{
-				npc.setFrame(10);
-			}
-		})
-	}
-
-	loadMusic(){
-		// Create an instance of the audio object
-		this.backgroundMusic = this.sound.add('background_music_bunny1', { loop: true, volume: 0.4});
-		// Play the audio file
-		this.backgroundMusic.play();
-	}
 }

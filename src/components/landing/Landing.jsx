@@ -4,21 +4,21 @@ import './Landing.css'
 
 function Landing() {
 
-    useLayoutEffect(() => {
-        if ('visualViewport' in window) {
-          window.visualViewport.onresize = () => {
-            if (window.visualViewport.scale !== 1) {
-              const scale = 1 / window.visualViewport.scale;
-              document.body.style.transform = `scale(${scale})`;
-            } else {
-              document.body.style.transform = 'none';
-            }
-          }
-        }
-    
-        document.body.style.backgroundColor = "white";
-        document.body.style.width = 100 + "%";
-      }, []);
+  // useLayoutEffect(() => {
+  //     if ('visualViewport' in window) {
+  //       window.visualViewport.onresize = () => {
+  //         if (window.visualViewport.scale !== 1) {
+  //           const scale = 1 / window.visualViewport.scale;
+  //           document.body.style.transform = `scale(${scale})`;
+  //         } else {
+  //           document.body.style.transform = 'none';
+  //         }
+  //       }
+  //     }
+  
+  //     document.body.style.backgroundColor = "white";
+  //     document.body.style.width = 100 + "%";
+  //   }, []);
       
   useLayoutEffect(() => {
       document.body.style.backgroundColor = "white";
@@ -51,12 +51,8 @@ function Landing() {
             </div>
         </div>
         <div id="googleFormsSection" className="section">
-            <div className="container">
-                <h2>Confirma la teva assistència</h2>
-            </div>
-            <div className="containerBtn">
-                <button id="confirmarButton" className="btn" onClick={handleConfirmarClick}>Confirmar</button>
-            </div>
+            <h2>Confirma la teva assistència</h2>
+            <button id="confirmarButton" className="btn" onClick={handleConfirmarClick}>Confirmar</button>
         </div>
         <footer id="footerSection" className="section">
           <div className="container">

@@ -175,11 +175,38 @@ export default class Common {
 		});
 	}
 
+	npcLookDirection(scene, npc) {
+		if(scene.player.x > npc.x + npc.width / 2){
+			npc.flipX = false;
+		}else{
+			npc.flipX = true;
+		}
+	}
+
 	checkNpcActions(player, npc, scene) {
 		console.log('Talking to an npc:' + JSON.stringify(npc));
 
 		console.log('Check NPC actions');
 		scene.npcActions(player, npc);
+	}
+
+	actionsBug(scene, npc) {
+		let stick = scene.hud.searchInventory('pal');
+		console.log('Stick is: ' + stick);
+		let bark = scene.sound.add('audio_dog_bark', { loop: false, volume: 0.5 });
+		bark.play();
+		if(stick != null){
+			scene.message.showMessageList(scene, ["Woof, Woof, Woof! (en Bug et babeja una mica mentre mira amb nostàlgia el pal que t'ha regalat)"]);
+		}else{
+			scene.message.showMessageList(scene, [
+				"Woof, Woof! (en Bug et dona un pal... no sembla que t'hagi de servir per res, però ell està content)"
+			], function(scene) {
+				scene.hud.inventory.push(npc.contents);
+				scene.hud.updateInventory(scene, npc.contents);
+				npc.contents = [];
+				scene.common.chest_opened_sound.play();
+			});
+		}
 	}
 
 	spawnBunny(scene) {
@@ -367,8 +394,8 @@ export default class Common {
 			const contains = npc.properties.find(obj => obj.name === "contains");
 			const default_frame = npc.properties.find(obj => obj.name === "default_frame");
 			const spritesheet = npc.properties.find(obj => obj.name === "spritesheet");
-			console.log('Contains.value is: ' + contains.value);
-			console.log('default_frame.value is: ' + default_frame.value);
+			console.log('Spawn NPC name: ' + npc.name)
+			console.log('NPC contents: ' + contains.value);
 			var newnpc = scene.physics.add.sprite(npc.x, npc.y, spritesheet.value, default_frame.value).setOrigin(0, 1);
 			newnpc.contents = contains.value;
 			newnpc.default_frame = default_frame.value;
@@ -390,7 +417,7 @@ export default class Common {
 			}
 			
 			scene.npcs.add(newnpc);
-			console.log('Spawn NPC: ' + JSON.stringify(newnpc));
+			// console.log('Spawn NPC: ' + JSON.stringify(newnpc));
 		});
 	}
 
@@ -638,12 +665,8 @@ export default class Common {
 
 		console.log('Inventory contents: ' + JSON.stringify(inventory));
 		console.log(JSON.stringify(inventory))
-		for (var i = 0; i < inventory.length; i++) {
-			if (inventory[i] == 'key') {
-				console.log('The user has a key!');
-				key = i;
-			}
-		}
+		key = scene.hud.searchInventory('key');
+		console.log('Key is: ' + key);
 
 		// The player has no key and the door is currently closed
 		if (key == null && !door.opened) {
@@ -693,5 +716,28 @@ export default class Common {
 			}
 		}
 		console.log('Door is opened: ' + door.opened);
+	}
+
+	loadMusic(scene, tilesetName) {
+		console.log('loadMusic - Tileset name is: ' + tilesetName);
+		switch (tilesetName) {
+			case 'livingroom':
+				scene.backgroundMusic = scene.sound.add('background_music_house', { loop: true, volume: 0.2});
+				break;
+			case 'house-outside':
+				scene.backgroundMusic = scene.sound.add('background_music_bunny1', { loop: true, volume: 0.2});
+				break;
+			case 'tileset_jungle':
+				scene.backgroundMusic = scene.sound.add('background_music_woods2', { loop: true, volume: 0.2});
+				break;
+			case 'swamp':
+				scene.backgroundMusic = scene.sound.add('background_music_bunny2', { loop: true, volume: 0.2});
+				break;
+			case 'castle_inside':
+				scene.backgroundMusic = scene.sound.add('background_music_tangled', { loop: true, volume: 0.2});
+				break;
+		}
+		// Play the audio file
+		scene.backgroundMusic.play();
 	}
 }

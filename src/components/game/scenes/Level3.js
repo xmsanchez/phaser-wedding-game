@@ -79,7 +79,8 @@ export default class Level3 extends Phaser.Scene
 		// Add colliders, input, hud, music
 		this.common.addColliders(this);
 		this.common.setCollisions(this, 0, 1400);
-		this.loadMusic();
+		
+		this.common.loadMusic(this, tileset.name);
 
 		// Add controls
 		this.player.addTouchScreenPointers(this);
@@ -93,31 +94,12 @@ export default class Level3 extends Phaser.Scene
 		// Setup camera bounds and zoom
 		this.camera.setCamera(this, 1.80);
 
-		// // NPCs will always look at the player
-		// this.npcLookDirection();
-
 		this.npcs.getChildren().forEach((npc) => {
-			npc.anims.play('Fada_stand', true);
+			// npc.anims.play('Fada_stand', true);
+			// // NPCs will always look at the player
+			// this.common.npcLookDirection(this, npc);
 		});
-		// this.npcs.getChildren().forEach((npc) => {
-		// 	const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
-		// 	if (distance < 300) {				
-		// 		// NOT SURE WHY WE NEED TO REINITIALIZE THIS VAR
-		// 		// BUT IF WE DON'T, MESSAGES ARE NOT SHOWN
-		// 		this.messageListShowing = [];
-				
-		// 		// For first interaction, show a message list when approaching NPCs
-		// 		if(this.firstInteraction && !this.message.messageDisplaying){
-		// 			this.messageListShowing = [
-		// 				npc.name + ': Que bé! Has aconseguit el rellotge.\nMalauradament... també necessitaràs un vestit',
-		// 				npc.name + ': Penso que dins del bosc, passat el jardí, el trobaràs.',
-		// 			];
-		// 			this.message.showMessageList(this, this.messageListShowing);
-		// 			this.firstInteraction = false;
-		// 		}
-		// 	}
-		// });
-
+		
 		// Check overlaps (show the 'B' button hint)
 		this.common.checkOverlapsStaticGroups(this.npcs, this);
 		// this.common.checkOverlapsStaticGroups(this.doors, this);
@@ -128,33 +110,20 @@ export default class Level3 extends Phaser.Scene
 	}
 
 	npcActions(player, npc) {
-		console.log('Interacting with npc.name: ' + npc.name);
-		npc.anims.stop();
-		npc.anims.play('Fada_talking', true);
-		if(this.firstInteraction && !this.message.messageDisplaying){
-			this.messageListShowing = [
-				npc.name + ': Hola personeta!',
-				npc.name + ': Per què no proves a ordenar les **caixes?**',
-			];
-			this.message.showMessageList(this, this.messageListShowing);
-			// this.firstInteraction = false;
-		}
-	}
-
-	npcLookDirection() {
-		const position = this.npcs.getChildren().find((npc) => {
-			if(this.player.x > npc.x + npc.width / 2){
-				npc.setFrame(7);
-			}else{
-				npc.setFrame(3);
+		if(npc.name == 'Bug'){
+			this.common.actionsBug(this, npc);
+		}else{
+			console.log('Interacting with npc.name: ' + npc.name);
+			npc.anims.stop();
+			npc.anims.play('Fada_talking', true);
+			if(this.firstInteraction && !this.message.messageDisplaying){
+				this.messageListShowing = [
+					npc.name + ': Hola personeta!',
+					npc.name + ': Per què no proves a ordenar les **caixes?**',
+				];
+				this.message.showMessageList(this, this.messageListShowing);
+				// this.firstInteraction = false;
 			}
-		})
-	}
-
-	loadMusic(){
-		// Create an instance of the audio object
-		this.backgroundMusic = this.sound.add('background_music_house', { loop: true, volume: 0.2});
-		// Play the audio file
-		this.backgroundMusic.play();
+		}
 	}
 }

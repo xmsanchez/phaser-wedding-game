@@ -324,7 +324,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 			const overlaps = [];
 			if(scene.doors !== null){
 				scene.physics.world.overlap(this, this.scene.doors.getChildren(), (player, door) => {
-					console.log('isOverlappingDoors. door.opened: ' + door.opened);
 					overlaps.push(door);
 				});
 			}

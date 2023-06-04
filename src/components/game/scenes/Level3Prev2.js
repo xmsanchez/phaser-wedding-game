@@ -75,7 +75,8 @@ export default class Level3Prev2 extends Phaser.Scene
 		// Add colliders, input, hud, music
 		this.common.addColliders(this);
 		this.common.setCollisions(this, 0, 1400);
-		this.loadMusic();
+		
+		this.common.loadMusic(this, tileset.name);
 
 		// Add controls
 		this.player.addTouchScreenPointers(this);
@@ -146,12 +147,5 @@ export default class Level3Prev2 extends Phaser.Scene
 				npc.setFrame(10);
 			}
 		})
-	}
-
-	loadMusic(){
-		// Create an instance of the audio object
-		this.backgroundMusic = this.sound.add('background_music_house', { loop: true, volume: 0.2});
-		// Play the audio file
-		this.backgroundMusic.play();
 	}
 }

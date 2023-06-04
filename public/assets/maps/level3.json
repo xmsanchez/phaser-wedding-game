@@ -588,15 +588,15 @@
          "tilewidth":16
         }, 
         {
-         "columns":79,
+         "columns":12,
          "firstgid":8324,
          "image":"..\/spritesheets\/npcs\/fairy.png",
-         "imageheight":64,
-         "imagewidth":5056,
+         "imageheight":448,
+         "imagewidth":768,
          "margin":0,
          "name":"fairy",
          "spacing":0,
-         "tilecount":79,
+         "tilecount":84,
          "tileheight":64,
          "tilewidth":64
         }],

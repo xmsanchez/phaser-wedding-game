@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level3.json",
+    "activeFile": "house-inside.json",
     "automapping.whileDrawing": true,
     "expandedProjectPaths": [
         "."
@@ -24,16 +24,20 @@
         },
         "house-inside.json": {
             "expandedObjectLayers": [
-                27,
                 29,
-                28
+                28,
+                27
             ],
             "scale": 2,
             "selectedLayer": 8,
             "viewCenter": {
-                "x": 283,
-                "y": 157.75
+                "x": 280.5,
+                "y": 155.25
             }
+        },
+        "house-inside.json#dog": {
+            "scaleInDock": 2,
+            "scaleInEditor": 1
         },
         "house-inside.json#livingroom": {
             "scaleInDock": 1,
@@ -43,7 +47,7 @@
             "scaleInDock": 1
         },
         "house-inside.json#objects": {
-            "scaleInDock": 1
+            "scaleInDock": 3
         },
         "house-inside.json#objects_16x16": {
             "scaleInDock": 3
@@ -362,16 +366,16 @@
         },
         "level3.json": {
             "expandedObjectLayers": [
-                27,
                 29,
+                45,
                 28,
-                45
+                27
             ],
             "scale": 1,
             "selectedLayer": 11,
             "viewCenter": {
-                "x": 245,
-                "y": 374.5
+                "x": 384,
+                "y": 303.5
             }
         },
         "level3.json#agrabah_market": {
@@ -384,7 +388,8 @@
             "scaleInDock": 0.33
         },
         "level3.json#fairy": {
-            "scaleInDock": 1
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "level3.json#mi": {
             "scaleInDock": 1
@@ -612,15 +617,15 @@
     "map.tileWidth": 16,
     "openFiles": [
         "level3.json",
-        "level2.json"
+        "house-inside.json"
     ],
     "project": "tiled-project.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "level2.json",
-        "house-outside.json",
         "house-inside.json",
         "level3.json",
+        "level2.json",
+        "house-outside.json",
         "level1.json",
         "z.level2-bunny-bak.json",
         "z.level2-bak.json",
@@ -632,8 +637,8 @@
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {
-        "height": 64,
-        "width": 64
+        "height": 32,
+        "width": 32
     },
     "tileset.type": 0
 }

@@ -438,7 +438,7 @@
                  "visible":true,
                  "width":32,
                  "x":64,
-                 "y":462.666666666667
+                 "y":480
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -525,7 +525,7 @@
         {
          "columns":12,
          "firstgid":53,
-         "image":"..\/spritesheets\/player\/player_options\/merged\/Lanto_Charas_1.png",
+         "image":"..\/spritesheets\/player\/player.png",
          "imageheight":32,
          "imagewidth":384,
          "margin":0,

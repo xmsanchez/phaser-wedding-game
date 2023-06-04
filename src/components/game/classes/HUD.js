@@ -86,6 +86,7 @@ export default class HUD {
 
     searchInventory(object) {
         console.log('Search inventory for object ' + object);
+        console.log('Full inventory: ' + JSON.stringify(this.inventory));
 		for (var i = 0; i < this.inventory.length; i++) {
 			if (this.inventory[i] == object) {
 				console.log('The user has one ' + object);

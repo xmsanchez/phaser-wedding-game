@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "house-inside.json",
+    "activeFile": "house-outside.json",
     "automapping.whileDrawing": true,
     "expandedProjectPaths": [
         "."
@@ -24,15 +24,15 @@
         },
         "house-inside.json": {
             "expandedObjectLayers": [
-                29,
                 28,
+                29,
                 27
             ],
             "scale": 2,
             "selectedLayer": 8,
             "viewCenter": {
-                "x": 280.5,
-                "y": 155.25
+                "x": 320,
+                "y": 160.25
             }
         },
         "house-inside.json#dog": {
@@ -53,24 +53,68 @@
             "scaleInDock": 3
         },
         "house-inside.json#player": {
-            "scaleInDock": 2
+            "scaleInDock": 2,
+            "scaleInEditor": 1
         },
         "house-inside.json#xavi": {
             "scaleInDock": 1
         },
+        "house-outside-castle-direction.json": {
+            "expandedObjectLayers": [
+                28,
+                29,
+                52
+            ],
+            "scale": 1.5,
+            "selectedLayer": 16,
+            "viewCenter": {
+                "x": 1218,
+                "y": 327
+            }
+        },
+        "house-outside-castle-direction.json#house-outside": {
+            "scaleInDock": 0.75
+        },
+        "house-outside-castle-direction.json#mi": {
+            "scaleInDock": 1
+        },
+        "house-outside-castle-direction.json#objects": {
+            "scaleInDock": 1
+        },
+        "house-outside-castle-direction.json#player": {
+            "scaleInDock": 2
+        },
+        "house-outside-castle-direction.json#stan": {
+            "scaleInDock": 1
+        },
+        "house-outside-castle-direction.json#tileset_field": {
+            "scaleInDock": 0.5
+        },
+        "house-outside-castle-direction.json#tileset_jungle": {
+            "scaleInDock": 1
+        },
+        "house-outside-castle-direction.json#treasure": {
+            "scaleInDock": 1
+        },
+        "house-outside-castle-direction.json#worker": {
+            "scaleInDock": 1
+        },
+        "house-outside-castle-direction.json#xavi": {
+            "scaleInDock": 1
+        },
         "house-outside.json": {
             "expandedObjectLayers": [
+                28,
+                29,
                 42,
                 43,
-                41,
-                29,
-                28
+                41
             ],
             "scale": 2,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 234.5,
-                "y": 291.25
+                "x": 194,
+                "y": 287.75
             }
         },
         "house-outside.json#bunny": {
@@ -135,17 +179,17 @@
         },
         "level1.json": {
             "expandedObjectLayers": [
-                29,
                 28,
-                51,
+                29,
                 52,
+                51,
                 27
             ],
-            "scale": 0.5,
+            "scale": 1.5,
             "selectedLayer": 18,
             "viewCenter": {
-                "x": 266,
-                "y": 413
+                "x": 800,
+                "y": 519.6666666666666
             }
         },
         "level1.json#background": {
@@ -178,7 +222,8 @@
             "scaleInDock": 3
         },
         "level1.json#player": {
-            "scaleInDock": 2
+            "scaleInDock": 2,
+            "scaleInEditor": 1
         },
         "level1.json#stan": {
             "scaleInDock": 1,
@@ -313,17 +358,17 @@
         },
         "level2.json": {
             "expandedObjectLayers": [
-                43,
-                27,
                 44,
                 28,
-                45
+                45,
+                43,
+                27
             ],
             "scale": 1,
             "selectedLayer": 13,
             "viewCenter": {
-                "x": 520,
-                "y": 172.5
+                "x": 1288,
+                "y": 200.5
             }
         },
         "level2.json#bunny": {
@@ -366,16 +411,16 @@
         },
         "level3.json": {
             "expandedObjectLayers": [
+                28,
                 29,
                 45,
-                28,
                 27
             ],
             "scale": 1,
-            "selectedLayer": 11,
+            "selectedLayer": 10,
             "viewCenter": {
-                "x": 384,
-                "y": 303.5
+                "x": 376,
+                "y": 298.5
             }
         },
         "level3.json#agrabah_market": {
@@ -398,7 +443,8 @@
             "scaleInDock": 3
         },
         "level3.json#player": {
-            "scaleInDock": 1
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "level3.json#tileset": {
             "scaleInDock": 0.5
@@ -617,15 +663,18 @@
     "map.tileWidth": 16,
     "openFiles": [
         "level3.json",
-        "house-inside.json"
+        "house-inside.json",
+        "house-outside.json",
+        "level1.json",
+        "level2.json"
     ],
     "project": "tiled-project.tiled-project",
     "property.type": "string",
     "recentFiles": [
         "house-inside.json",
+        "house-outside.json",
         "level3.json",
         "level2.json",
-        "house-outside.json",
         "level1.json",
         "z.level2-bunny-bak.json",
         "z.level2-bak.json",

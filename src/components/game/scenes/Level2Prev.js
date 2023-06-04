@@ -123,8 +123,10 @@ export default class Level2Prev extends Phaser.Scene
 		this.common.checkOverlapsStaticGroups(this.doors, this);
 
 		this.npcs.getChildren().forEach((npc) => {
+			const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
+			
 			// NPCs will always look at the player
-			this.common.npcLookDirection(this, npc);
+			this.common.npcLookDirection(this, npc, distance);
 		});
 
 		if(this.justArrived){
@@ -152,6 +154,7 @@ export default class Level2Prev extends Phaser.Scene
 			console.log('Stop scene Level2Prev, start scene Level2Prev2');
 			this.startScene = false;
 			this.registry.set('previousScene', this.scene.key);
+			console.log('Setting previousscene to ' + this.scene.key);
 			this.common.stopScene(this);
 			this.scene.start('PreLevel', { levelKey: 'Level2Prev2' });
 		}

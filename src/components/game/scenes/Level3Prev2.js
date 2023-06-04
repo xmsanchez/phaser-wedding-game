@@ -105,6 +105,9 @@ export default class Level3Prev2 extends Phaser.Scene
 				}
 			})
 		}
+		if(this.previousScene == 'Level3Prev3'){
+			this.player.x = 60;
+		}
 	}
 
 	update() {
@@ -117,10 +120,10 @@ export default class Level3Prev2 extends Phaser.Scene
 
 		// If player goes out of the screen to the left, start next scene
 		if(this.player.x < -30){
-			console.log('Stop scene Level3Prev2, start scene Level3');
+			console.log('Stop scene Level3Prev2, start scene Level3Prev3');
 			this.common.stopScene(this);
 			this.registry.set('previousScene', 'Level3Prev2');
-			this.scene.start('PreLevel', { levelKey: 'Level3' });
+			this.scene.start('PreLevel', { levelKey: 'Level3Prev3' });
 		}
 	}
 

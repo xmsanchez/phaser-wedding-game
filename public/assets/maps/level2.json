@@ -2395,7 +2395,7 @@
         {
          "columns":12,
          "firstgid":65,
-         "image":"..\/spritesheets\/player\/player_options\/merged\/Lanto_Charas_1.png",
+         "image":"..\/spritesheets\/player\/player.png",
          "imageheight":32,
          "imagewidth":384,
          "margin":0,

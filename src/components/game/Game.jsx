@@ -12,6 +12,7 @@ import Level2Prev2 from './scenes/Level2Prev2'
 import Level2 from './scenes/Level2'
 import Level3Prev from './scenes/Level3Prev'
 import Level3Prev2 from './scenes/Level3Prev2'
+import Level3Prev3 from './scenes/Level3Prev3'
 import Level3 from './scenes/Level3'
 
 const config = {
@@ -46,6 +47,7 @@ const config = {
 		Level2,
 		Level3Prev,
 		Level3Prev2,
+		Level3Prev3,
 		Level3,
 	]
 }

@@ -18,7 +18,11 @@ export default class Common {
 		scene.hud.destroy();
 		scene.scene.stop('UIScene');
 		scene.scene.stop();
-		scene.backgroundMusic.stop();
+		try {
+			scene.backgroundMusic.stop();
+		} catch (error) {
+			console.log(error);
+		}
 	}
 	
 	addPlayer(scene) {
@@ -33,7 +37,6 @@ export default class Common {
 		scene.player.setBounce(0.1);
 		scene.player.setCollideWorldBounds(true);
 		scene.player.createAnimations(scene);
-		scene.player.setSize(13);
 		return scene.player;
 	}
 
@@ -175,11 +178,18 @@ export default class Common {
 		});
 	}
 
-	npcLookDirection(scene, npc) {
+	npcLookDirection(scene, npc, distance) {
 		if(scene.player.x > npc.x + npc.width / 2){
 			npc.flipX = false;
 		}else{
 			npc.flipX = true;
+		}
+		if(npc.name == 'Bug'){
+			if(distance < 100){
+				npc.setFrame(23);
+			}else{
+				npc.setFrame(29);
+			}
 		}
 	}
 
@@ -195,6 +205,7 @@ export default class Common {
 		console.log('Stick is: ' + stick);
 		let bark = scene.sound.add('audio_dog_bark', { loop: false, volume: 0.5 });
 		bark.play();
+		npc.setFrame(24);
 		if(stick != null){
 			scene.message.showMessageList(scene, ["Woof, Woof, Woof! (en Bug et babeja una mica mentre mira amb nostàlgia el pal que t'ha regalat)"]);
 		}else{
@@ -694,6 +705,7 @@ export default class Common {
 
 			// If we are outside, allow the player to come back in
 			}else if(door.name == 'door-outside') {
+				scene.startScene = true;
 				if(sceneKey == 'Level1Prev'){
 					this.scene.scene.start('Level0');
 					this.scene.scene.stop();
@@ -737,7 +749,11 @@ export default class Common {
 				scene.backgroundMusic = scene.sound.add('background_music_tangled', { loop: true, volume: 0.2});
 				break;
 		}
-		// Play the audio file
-		scene.backgroundMusic.play();
+		try {
+			// Play the audio file
+			scene.backgroundMusic.play();
+		} catch (error) {
+			console.log('Error: There is not music for tileset ' + tilesetName);
+		}
 	}
 }

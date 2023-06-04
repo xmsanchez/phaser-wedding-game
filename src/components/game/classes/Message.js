@@ -16,7 +16,7 @@ export default class Message {
 
     // Iteratively show messages from a list
     showMessageList(scene, messages, callback) {
-        console.log('Show messages. Messages.length: ' + messages.length);
+        // console.log('Show messages. Messages.length: ' + messages.length);
         if (messages.length != 0) {
             this.showMessage(scene, messages[0]);
             scene.interactBtn.once('pointerdown', () => {
@@ -26,7 +26,7 @@ export default class Message {
                 this.showMessageList(scene, messages, callback);
             });
         }
-        console.log('Messages.length: ' + messages.length);
+        // console.log('Messages.length: ' + messages.length);
         if(messages.length == 1 && (callback != null || callback != undefined)){
             callback(scene);
         }

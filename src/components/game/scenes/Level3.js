@@ -97,7 +97,7 @@ export default class Level3 extends Phaser.Scene
 		this.npcs.getChildren().forEach((npc) => {
 			// npc.anims.play('Fada_stand', true);
 			// // NPCs will always look at the player
-			// this.common.npcLookDirection(this, npc);
+			// this.common.npcLookDirection(this, npc, distance);
 		});
 		
 		// Check overlaps (show the 'B' button hint)
@@ -118,8 +118,9 @@ export default class Level3 extends Phaser.Scene
 			npc.anims.play('Fada_talking', true);
 			if(this.firstInteraction && !this.message.messageDisplaying){
 				this.messageListShowing = [
-					npc.name + ': Hola personeta!',
-					npc.name + ': Per què no proves a ordenar les **caixes?**',
+					npc.name + ': Hola preciositat!',
+					npc.name + ": Per què no proves a ordenar les **caixes?**.",
+					npc-name + ": Només **has de tocar-les en l'ordre correcte**",
 				];
 				this.message.showMessageList(this, this.messageListShowing);
 				// this.firstInteraction = false;

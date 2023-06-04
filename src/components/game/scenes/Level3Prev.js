@@ -121,19 +121,18 @@ export default class Level3Prev extends Phaser.Scene
 	}
 
 	update() {
-		// this.doors[0].opened = true;
-		
 		// Update player movement based on events
 		this.player.playerMovement(this);
 		
 		// Setup camera bounds and zoom
 		this.camera.setCamera(this, 2.40);
 
-		// NPCs will always look at the player
-		this.common.npcLookDirection(this, npc);
-
 		this.npcs.getChildren().forEach((npc) => {
 			const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
+			
+			// NPCs will always look at the player
+			this.common.npcLookDirection(this, npc, distance);
+
 			if (distance < 300) {				
 				// NOT SURE WHY WE NEED TO REINITIALIZE THIS VAR
 				// BUT IF WE DON'T, MESSAGES ARE NOT SHOWN
@@ -147,7 +146,7 @@ export default class Level3Prev extends Phaser.Scene
 					}else{
 						this.messageListShowing = [
 							npc.name + ': Que bé! Has aconseguit el **rellotge.**\nMalauradament... també necessitaràs **un vestit**',
-							npc.name + ': Hauries **d\'anar al castell**, travessant la ciutat del desert. Penso que les obres del pont ja han acabat',
+							npc.name + ': Hauries **d\'anar al castell**, travessant el pont que hi ha sortint a mà esquerra.',
 							npc.name + ': Ànims! Ja gairabé ho tens tot!'
 						];
 						this.message.showMessageList(this, this.messageListShowing);
@@ -171,17 +170,20 @@ export default class Level3Prev extends Phaser.Scene
 	}
 
 	npcActions(player, npc) {
-		console.log('NpcActions, checking if inventory is empty or not');
-		if(npc.name == 'Xavi'){
-			// this.message.showMessage(scene, npc.name + ": Encara no has trobat el mapa? Ha de ser dins d'un bagul");
-			this.messageListShowing = [npc.name + ': Ves a buscar **el vestit**!']
-			this.message.showMessageList(this, this.messageListShowing)
-		}else if(npc.name == 'Miriam'){
-			this.messageListShowing = [
-				npc.name + ': Estic molt contenta de que hagis trobat **el rellotge!**',
-				npc.name + ': Ja has parlat amb el **Xavi** sobre el següent que necessitaràs?'
-			]
-			this.message.showMessageList(this, this.messageListShowing);
+		if(npc.name == 'Bug'){
+			this.common.actionsBug(this, npc);
+		}else{
+			if(npc.name == 'Xavi'){
+				// this.message.showMessage(scene, npc.name + ": Encara no has trobat el mapa? Ha de ser dins d'un bagul");
+				this.messageListShowing = [npc.name + ': Ves a buscar **el vestit**!']
+				this.message.showMessageList(this, this.messageListShowing)
+			}else if(npc.name == 'Miriam'){
+				this.messageListShowing = [
+					npc.name + ': Estic molt contenta de que hagis trobat **el rellotge!**',
+					npc.name + ': Ja has parlat amb el **Xavi** sobre el següent que necessitaràs?'
+				]
+				this.message.showMessageList(this, this.messageListShowing);
+			}
 		}
 	}
 }

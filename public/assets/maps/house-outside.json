@@ -93,7 +93,7 @@
                         {
                          "name":"text",
                          "type":"string",
-                         "value":"<-- Direcci\u00f3 al **desert**\nDirecci\u00f3 al **bosc** -->"
+                         "value":"<-- Direcci\u00f3 al **castell**\nDirecci\u00f3 al **bosc** -->"
                         }],
                  "rotation":0,
                  "type":"",
@@ -168,8 +168,8 @@
                  "type":"",
                  "visible":true,
                  "width":45,
-                 "x":176,
-                 "y":336
+                 "x":272,
+                 "y":320
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -221,7 +221,7 @@
          "y":0
         }],
  "nextlayerid":44,
- "nextobjectid":178,
+ "nextobjectid":180,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.1",

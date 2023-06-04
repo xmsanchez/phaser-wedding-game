@@ -60,7 +60,7 @@ export default class Level1Prev extends Phaser.Scene
 		this.common.createLevelLayer(this, 'bg_background', tileset);
 		this.ground = this.common.createLevelLayer(this, 'ground_fg', tileset);
 		
-		this.physics.world.setBounds(0, 0, this.map.widthInPixels + 30, this.map.heightInPixels * tileset.tileHeight);
+		this.physics.world.setBounds(-60, 60, this.map.widthInPixels + 120, this.map.heightInPixels * tileset.tileHeight);
 
 		// Spawn all interactable objects
 		this.common.spawnDoors(this);
@@ -82,17 +82,33 @@ export default class Level1Prev extends Phaser.Scene
 		// Setup camera bounds and zoom
 		this.camera.setCamera(this, 2.40);
 
+
+		this.checkCompleted();
+	}
+
+	checkCompleted() {
 		this.scenesVisited = this.registry.get('scenesVisited');
 		this.previousScene = this.registry.get('previousScene');
 		this.scenesVisited.push(this.currentScene);
-		console.log('this.scenesVisited: ' + this.scenesVisited);
-		console.log('this.previousScene: ' + this.previousScene);
-
-		if(this.previousScene == 'Level1'){
+		console.log('checkCompleted this.scenesVisited: ' + this.scenesVisited);
+		this.sceneRegistry = this.registry.get(this.scene.key);
+		let doorsOpened = this.sceneRegistry.doorsOpened;
+		for(let i = 0; i < doorsOpened.length; i++) {
+			this.doors.getChildren().forEach((door) => {
+				console.log('checkCompleted - Comaring to door.name: ' + door.name);
+				if(door.name === doorsOpened[i]) {
+					console.log('checkCompleted - Found it!! -> ' + door.name);
+					door.opened = true;
+					this.doorOpened = true;
+				}
+			})
+		}
+		if(this.previousScene == 'Level3Prev3'){
+			this.player.x = 60;
+		}else if(this.previousScene == 'Level1'){
 			this.player.x = this.map.widthInPixels - 30;
 		}
 	}
-
     update() {
 		// Update player movement based on events
 		this.player.playerMovement(this);
@@ -102,12 +118,18 @@ export default class Level1Prev extends Phaser.Scene
 		this.common.checkOverlapsStaticGroups(this.doors, this);
 
 		// If player goes out of the screen to the left, start next scene
-		if(this.player.x > this.map.widthInPixels){
+		if(this.player.x > this.map.widthInPixels + 30){
 			console.log('Stop scene Level1Prev, start scene Level1');
 			this.startScene = false;
 			this.registry.set('previousScene', this.scene.key);
 			this.common.stopScene(this);
 			this.scene.start('PreLevel', { levelKey: 'Level1', text: "El Mapa" });
+		}else if(this.player.x < -30){
+			console.log('Stop scene Level1Prev, start scene Level3Prev3');
+			this.startScene = false;
+			this.registry.set('previousScene', this.scene.key);
+			this.common.stopScene(this);
+			this.scene.start('PreLevel', { levelKey: 'Level3Prev3' });
 		}
     }
 

@@ -89,24 +89,6 @@ export default class Level2 extends Phaser.Scene
 
 		// Setup camera bounds and zoom
 		this.camera.setCamera(this, 2.40);
-
-		// Create a Phaser.Graphics object
-		const debugGraphics = this.add.graphics();
-
-		// Set the line style for the path
-		debugGraphics.lineStyle(2, 0xff0000);
-
-		// Iterate over the points and draw lines between them
-		const pathPoints = this.map.getObjectLayer('objectPath').objects;
-		for (let i = 0; i < pathPoints.length - 1; i++) {
-		const startPoint = pathPoints[i];
-		const endPoint = pathPoints[i + 1];
-		debugGraphics.moveTo(startPoint.x, startPoint.y);
-		debugGraphics.lineTo(endPoint.x, endPoint.y);
-		}
-
-		// Add the debug graphics to the scene
-		this.add.existing(debugGraphics);
 	}
 
     update() {

@@ -34,6 +34,7 @@ export default class Level2Prev2 extends Phaser.Scene
 		this.pathPoints = null;
 		this.bunnyReverseFlag = false;
 		this.bunnyCatched = false;
+		this.spawnBunny = true;
 
 		this.common = null;
 	}
@@ -60,14 +61,19 @@ export default class Level2Prev2 extends Phaser.Scene
 		this.common.createLevelLayer(this, 'bg_background', tileset);
 		this.ground = this.common.createLevelLayer(this, 'ground_fg', tileset);
 		
-		this.physics.world.setBounds(0, 60, this.map.widthInPixels + 60, this.map.heightInPixels * tileset.tileHeight);
+		this.physics.world.setBounds(-60, 60, this.map.widthInPixels + 120, this.map.heightInPixels * tileset.tileHeight);
 
 		// Spawn all interactable objects
 		this.common.spawnCartells(this);
-		this.bunny = this.common.spawnBunny(this);
+		this.common.spawnDoors(this);
 
 		// Spawn player
 		this.player = this.common.addPlayer(this);
+
+		this.checkCompleted();
+		if(this.spawnBunny){
+			this.bunny = this.common.spawnBunny(this);
+		}
 
 		// Add colliders, input, hud, music
 		this.common.addColliders(this);
@@ -80,6 +86,24 @@ export default class Level2Prev2 extends Phaser.Scene
 		this.player.setKeyboardControls(this);
 	}
 
+	checkCompleted() {
+		this.scenesVisited = this.registry.get('scenesVisited');
+		this.previousScene = this.registry.get('previousScene');
+		console.log('checkCompleted this.scenesVisited: ' + this.scenesVisited);
+		this.sceneRegistry = this.registry.get(this.scene.key);
+		
+		console.log('Scenes been visited: ' + this.scenesVisited);
+		if(this.scenesVisited.includes(this.scene.key)){
+			console.log("We've been already in this scene. We should hide the bunny.");
+			this.spawnBunny = false;
+		}else{
+			console.log("We've NOT been here yet, bunny must be spawn");
+			this.spawnBunny = true;
+		}
+
+		this.scenesVisited.push(this.currentScene);
+	}
+	
     update() {
 		// Update player movement based on events
 		this.player.playerMovement(this);
@@ -87,48 +111,72 @@ export default class Level2Prev2 extends Phaser.Scene
 		// Setup camera bounds and zoom
 		this.camera.setCamera(this, 2.40);
 
-		this.bunnies.getChildren().forEach((bunny) => {
-			bunny.flipX = true;
-			const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, bunny.x, bunny.y);
-			if (distance < 125) {		
-				this.playerLookDirection(bunny);
-				this.messageListShowing = [];
-				
-				setTimeout(() => {
-					// For first interaction, show a message list when approaching NPCs
-					if(this.firstInteraction && !this.message.messageDisplaying){
-						this.messageListShowing = [
-							bunny.name + ': Oh, no! Vaig tard, vaig tard.', 
-							bunny.name + ': Aquest rellotge marca **el dia i la hora** del casament. Vaig tard, vaig tard!!'
-						];
-						this.message.showMessageList(this, this.messageListShowing);
-						this.firstInteraction = false;
-						setTimeout(() => {
-							this.bunny.setVelocityY(-350);	
-						}, 400);
-					}	
-				}, 400);
-				
-				setTimeout(() => {
-					if(!this.message.messageDisplaying && this.messageListShowing.length == 0){
-						bunny.flipX = true;
-						bunny.anims.play('bunny-left', true);
-						bunny.setVelocityX(200);
-					}
-				}, 800);
-			}
-		});
+		try {
+			this.bunnies.getChildren().forEach((bunny) => {
+				bunny.flipX = true;
+				const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, bunny.x, bunny.y);
+				if (distance < 125) {		
+					this.playerLookDirection(bunny);
+					this.messageListShowing = [];
+					
+					setTimeout(() => {
+						// For first interaction, show a message list when approaching NPCs
+						if(this.firstInteraction && !this.message.messageDisplaying){
+							this.messageListShowing = [
+								bunny.name + ': Oh, no! Vaig tard, vaig tard.', 
+								bunny.name + ': Aquest rellotge marca **el dia i la hora** del casament. Vaig tard, vaig tard!!'
+							];
+							this.message.showMessageList(this, this.messageListShowing);
+							this.firstInteraction = false;
+							setTimeout(() => {
+								this.bunny.setVelocityY(-350);	
+							}, 400);
+						}	
+					}, 400);
+					
+					setTimeout(() => {
+						if(!this.message.messageDisplaying && this.messageListShowing.length == 0){
+							try {
+								bunny.flipX = true;
+								bunny.anims.play('bunny-left', true);
+								bunny.setVelocityX(200);
+							} catch (error) {
+								console.log(error);
+							}
+						}
+					}, 800);
+				}
+			});
+		} catch (error) {
+			console.log(error);
+		}		
 
 		// Check overlaps (show the 'B' button hint)
 		this.common.checkOverlapsStaticGroups(this.cartells, this);
+		// this.common.checkOverlapsStaticGroups(this.doors, this);
+
+		if (this.startScene) {
+			let previousScene = this.previousScene;
+			console.log('Stop scene Level2Prev2, start previousScene: ' + previousScene);
+			this.startScene = false;
+			this.registry.set('previousScene', this.scene.key);
+			this.common.stopScene(this);
+			this.scene.start('PreLevel', { levelKey: previousScene });
+		}
 
 		// If player goes out of the screen to the left, start next scene
-		if(this.player.x > this.map.widthInPixels){
+		if(this.player.x > this.map.widthInPixels + 30){
 			console.log('Stop scene Level2Prev2, start scene Level2');
 			this.startScene = false;
 			this.registry.set('previousScene', this.scene.key);
 			this.common.stopScene(this);
 			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level2', timeout: 5500, textSize: 38, text: "Mitja hora més tard,\ndesprés de travessar\nel bosc, evitant la\nxapa de l\'Stan..." });
+		}else if(this.player.x < -30){
+			console.log('Stop scene Level2Prev2, start scene Level2');
+			this.startScene = false;
+			this.registry.set('previousScene', this.scene.key);
+			this.common.stopScene(this);
+			this.scene.start('PreLevel', { levelKey: 'Level3Prev3' });
 		}
     }
 

@@ -93,6 +93,8 @@ export default class Level1 extends Phaser.Scene
 
 		// Spawn player
 		this.player = this.common.addPlayer(this);
+		// On this level, make bounds a little narrower
+		this.player.setSize(13);
 
 		// Add colliders, input, hud, music
 		this.common.addColliders(this);

@@ -127,31 +127,23 @@ export default class Level0 extends Phaser.Scene
 			const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
 			
 			// NPCs will always look at the player
-			this.common.npcLookDirection(this, npc);
+			this.common.npcLookDirection(this, npc, distance);
 
-			if (npc.name != 'Bug'){
-				if (distance < 75) {				
-					// NOT SURE WHY WE NEED TO REINITIALIZE THIS VAR
-					// BUT IF WE DON'T, MESSAGES ARE NOT SHOWN
-					this.messageListShowing = [];
-					
-					// For first interaction, show a message list when approaching NPCs
-					if(this.firstInteraction && !this.message.messageDisplaying){
-						this.messageListShowing = [
-							npc.name + ': Hola! Saps què?!\n\n**ENS CASEM!!!**', 
-							npc.name + ': Ara tenim un problema, i és que **hem perdut tota la informació** sobre el casament.\nEns ajudes a trobar-la?'
-						];
-						this.message.showMessageList(this, this.messageListShowing);
-						this.firstInteraction = false;
-						// Set also the global var to false
-						this.registry.set('firstInteraction', false);
-					}
-				}
-			}else{
-				if(distance < 100){
-					npc.setFrame(23);
-				}else{
-					npc.setFrame(29);
+			if (distance < 75) {				
+				// NOT SURE WHY WE NEED TO REINITIALIZE THIS VAR
+				// BUT IF WE DON'T, MESSAGES ARE NOT SHOWN
+				this.messageListShowing = [];
+				
+				// For first interaction, show a message list when approaching NPCs
+				if(this.firstInteraction && !this.message.messageDisplaying){
+					this.messageListShowing = [
+						npc.name + ': Hola! Saps què?!\n\n**ENS CASEM!!!**', 
+						npc.name + ': Ara tenim un problema, i és que **hem perdut tota la informació** sobre el casament.\nEns ajudes a trobar-la?'
+					];
+					this.message.showMessageList(this, this.messageListShowing);
+					this.firstInteraction = false;
+					// Set also the global var to false
+					this.registry.set('firstInteraction', false);
 				}
 			}
 		});

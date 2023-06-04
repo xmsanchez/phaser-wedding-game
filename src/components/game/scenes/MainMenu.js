@@ -43,6 +43,7 @@ export default class MainMenu extends Phaser.Scene {
 		this.load.tilemapTiledJSON('house-inside', 'assets/maps/house-inside.json');
 		// House outside (pròlegs)
 		this.load.tilemapTiledJSON('house-outside', 'assets/maps/house-outside.json');
+		this.load.tilemapTiledJSON('house-outside-castle-direction', 'assets/maps/house-outside-castle-direction.json');
 
 		// Maps for the different levels
 		this.load.tilemapTiledJSON('level1', 'assets/maps/level1.json');
@@ -65,6 +66,7 @@ export default class MainMenu extends Phaser.Scene {
 		this.load.spritesheet('npc_beast', 'assets/spritesheets/npcs/bestia.png', { frameWidth: 88, frameHeight: 88 });
 		this.load.spritesheet('npc_stan', 'assets/spritesheets/npcs/stan.png', { frameWidth: 66, frameHeight: 66 });
 		this.load.spritesheet('npc_fairy', 'assets/spritesheets/npcs/fairy.png', { frameWidth: 64, frameHeight: 64 });
+		this.load.spritesheet('npc_worker', 'assets/spritesheets/npcs/worker.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('treasure', 'assets/spritesheets/objects/treasure.png', {frameWidth: 16, frameHeight: 16});		
 		this.load.spritesheet('objects', 'assets/spritesheets/objects/objects.png', {frameWidth: 16, frameHeight: 16});
     }
@@ -146,11 +148,11 @@ export default class MainMenu extends Phaser.Scene {
 
 		// add a click event listener to start the Level1 scene
 		this.input.on('pointerdown', () => {
-			this.scene.start('PreLevel', { levelName: '', timeout: 200, levelKey: 'Level3', text: "L'arribada" });
+			this.scene.start('PreLevel', { levelName: '', timeout: 200, levelKey: 'Level0', text: "L'arribada" });
 		});
 		const enterKey = this.input.keyboard.addKey('ENTER');
 		enterKey.on('down', () => {
-			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level2', text: "L'arribada" });
+			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level1', text: "L'arribada" });
 		});
 	}
 

@@ -92,6 +92,7 @@ export default class Level0 extends Phaser.Scene
 		
 		// Setup camera bounds and zoom
 		this.camera.setCamera(this, 2.40);
+		this.cameras.main.fadeIn(250);
 
 		this.checkCompleted();
 	}
@@ -105,7 +106,6 @@ export default class Level0 extends Phaser.Scene
 		let doorsOpened = this.sceneRegistry.doorsOpened;
 		for(let i = 0; i < doorsOpened.length; i++) {
 			this.doors.getChildren().forEach((door) => {
-				console.log('checkCompleted - Comaring to door.name: ' + door.name);
 				if(door.name === doorsOpened[i]) {
 					console.log('checkCompleted - Found it!! -> ' + door.name);
 					door.opened = true;
@@ -148,13 +148,9 @@ export default class Level0 extends Phaser.Scene
 			}
 		});
 		
-		if (this.startScene) {
-			console.log('Stop scene Level0, start scene Level1');
-			this.startScene = false;
-			this.registry.set('previousScene', this.scene.key);
-			this.common.stopScene(this);
-			this.scene.start('PreLevel', { levelKey: 'Level1Prev' });
-		}
+		// if (this.startScene) {
+		// 	this.common.startScene(this, 'PreLevel', { levelKey: 'Level1Prev' });
+		// }
 	}
 
 	npcActions(player, npc) {

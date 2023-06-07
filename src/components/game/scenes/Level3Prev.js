@@ -86,6 +86,10 @@ export default class Level3Prev extends Phaser.Scene
 		this.player.addTouchScreenPointers(this);
 		this.player.setKeyboardControls(this);
 
+		// Setup camera bounds and zoom
+		this.camera.setCamera(this, 2.40);
+		this.cameras.main.fadeIn(250);
+
 		// Make Xavi a little bit closer
 		this.npcs.getChildren().forEach((npc) => {
 			if(npc.name == 'Xavi'){
@@ -123,9 +127,6 @@ export default class Level3Prev extends Phaser.Scene
 	update() {
 		// Update player movement based on events
 		this.player.playerMovement(this);
-		
-		// Setup camera bounds and zoom
-		this.camera.setCamera(this, 2.40);
 
 		this.npcs.getChildren().forEach((npc) => {
 			const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
@@ -159,14 +160,6 @@ export default class Level3Prev extends Phaser.Scene
 
 		this.common.checkOverlapsStaticGroups(this.npcs, this);
 		this.common.checkOverlapsStaticGroups(this.doors, this);
-
-		if (this.startScene) {
-			console.log('Stop scene Level3Prev, start scene Level3Prev2');
-			this.startScene = false;
-			this.registry.set('previousScene', this.scene.key);
-			this.common.stopScene(this);
-			this.scene.start('PreLevel', { levelKey: 'Level3Prev2' });
-		}
 	}
 
 	npcActions(player, npc) {

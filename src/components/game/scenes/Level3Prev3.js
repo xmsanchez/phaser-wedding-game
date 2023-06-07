@@ -107,6 +107,7 @@ export default class Level3Prev3 extends Phaser.Scene
 
 		// Setup camera bounds and zoom
 		this.camera.setCamera(this, 3);
+		this.cameras.main.fadeIn(250);
 
 		// // TODO: REMOVE THIS, THIS IS FOR DEBUGGING ONLY!!
 		// this.hud.inventory.push('clock');
@@ -169,20 +170,10 @@ export default class Level3Prev3 extends Phaser.Scene
 		});
 
 		if(this.player.x < 0){
-			console.log('Stop scene Level3Prev3, if user has all the objects, start Level3Prev4. Otherwise, return to previous level');
-			this.startScene = false;
-			this.registry.set('previousScene', this.scene.key);
-			this.common.stopScene(this);
-			this.scene.start('PreLevel', { levelName: 'El vestit', timeout: 2500, levelKey: 'Level3', text: 'El misteri\nde les caixes' });
+			this.common.startScene(this, 'PreLevel', { levelName: 'El vestit', timeout: 2500, levelKey: 'Level3', text: 'El misteri\nde les caixes' });
 		}else if(this.player.x > this.map.widthInPixels + 30){
 			let previousScene = this.previousScene;
-			this.startScene = false;
-			this.hud.destroy();
-			this.scene.stop('Level3Prev3');
-			this.registry.set('previousScene', this.scene.key);
-			// this.backgroundMusic.stop();
-			console.log('Previous scene is: ' + previousScene);
-			this.scene.start('PreLevel', { levelKey: previousScene });
+			this.common.startScene(this, 'PreLevel', { levelKey: previousScene });
 		}
     }
 

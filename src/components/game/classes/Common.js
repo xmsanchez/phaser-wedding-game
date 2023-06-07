@@ -12,16 +12,49 @@ export default class Common {
 		this.chest_opened_sound = scene.sound.add('audio_chest_opened', { loop: false, volume: 0.4 });
 		this.coin_sound = scene.sound.add('audio_coin', { loop: false, forceRestart: true });
 	}
+	
+	startScene(scene, sceneName, props) {
+		if(!this.sceneStarting){
+			this.sceneStarting = true;
+			console.log('startScene - Stop scene ' + scene.scene.key + ' and start ' + sceneName);
+			scene.registry.set('previousScene', scene.scene.key);
+
+			console.log('startScene - Fade out current scene and stop it');
+			scene.cameras.main.fadeOut(250);
+			this.stopMusic(scene);
+			scene.time.addEvent({
+				delay: 500,
+				callback: () => {
+					console.log('startScene - Delayed start of the new scene, start now!');
+					this.stopScene(scene);
+					scene.scene.start(sceneName, props);
+				}
+			});
+		}
+	}
 
 	stopScene(scene) {
-		scene.startScene = false;
 		scene.hud.destroy();
 		scene.scene.stop('UIScene');
 		scene.scene.stop();
+	}
+
+	stopMusic(scene) {
 		try {
-			scene.backgroundMusic.stop();
+			scene.tweens.add({
+				targets: scene.backgroundMusic,
+				volume: 0,
+				duration: 400, // Fade out duration: 1000ms (1s)
+				onComplete: () => {
+					try {
+						scene.backgroundMusic.stop();
+					} catch (error) {
+						console.log('Error stopping music: ' + error);
+					}
+				}
+			});
 		} catch (error) {
-			console.log(error);
+			console.log('Error fading out music: ' + error);
 		}
 	}
 	
@@ -665,7 +698,7 @@ export default class Common {
 		scene.hud.inventory.pop('key');
 		scene.hud.updateInventory(scene);
 		
-		scene.message.showMessageList(scene, ['Utilitzes la clau!\nObres la porta...']);
+		// scene.message.showMessageList(scene, ['Utilitzes la clau!\nObres la porta...']);
 	}
 
 	// Check if the door can be opened or is already opened.
@@ -700,20 +733,18 @@ export default class Common {
 					...sceneRegistry,
 					doorsOpened: [...sceneRegistry.doorsOpened, door.name]
 				});
-				console.log('door0_1 interacted. Start a new scene');
-				this.scene.startScene = true;
+				let newScene = 'Level1Prev';
+				if(sceneKey == 'Level2Prev' ){
+					newScene = 'Level2Prev2';
+				}
+				this.startScene(scene, 'PreLevel', { levelKey: newScene });
 
 			// If we are outside, allow the player to come back in
 			}else if(door.name == 'door-outside') {
-				scene.startScene = true;
 				if(sceneKey == 'Level1Prev'){
-					this.scene.scene.start('Level0');
-					this.scene.scene.stop();
-					this.scene.backgroundMusic.stop();
+					this.startScene(scene, 'PreLevel', { levelKey: 'Level0' });
 				}else if(sceneKey == 'Level3Prev2'){
-					this.scene.scene.start('Level3Prev');
-					this.scene.scene.stop();
-					this.scene.backgroundMusic.stop();
+					this.startScene(scene, 'PreLevel', { levelKey: 'Level3Prev' });
 				}
 
 			// Doors Level2

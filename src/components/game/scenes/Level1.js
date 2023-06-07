@@ -108,6 +108,7 @@ export default class Level1 extends Phaser.Scene
 
 		// Setup camera bounds and zoom
 		this.camera.setCamera(this, 3);
+		this.cameras.main.fadeIn(250);
 
 		this.checkCompleted();
 	}
@@ -169,19 +170,12 @@ export default class Level1 extends Phaser.Scene
 		});
 
 		if(this.player.x < 0){
-			console.log('Stop scene Level1, if user has the map, start Level2Prev. Otherwise, return to scene Level1Prev');
 			if(this.hasMap){
-				this.startScene = false;
-				this.registry.set('previousScene', this.scene.key);
-				this.common.stopScene(this);
-				this.scene.start('PreLevel', { levelName: '', timeout: 2000, levelKey: 'Level2Prev', text: 'Uns minuts\nmés tard...' });
+				this.startScene = true;
+				this.common.startScene(this, 'PreLevel', { levelName: '', timeout: 2000, levelKey: 'Level2Prev', text: 'Uns minuts\nmés tard...' });
 			}else{
-				this.startScene = false;
-				this.hud.destroy();
-				this.scene.stop('Level1');
-				this.registry.set('previousScene', this.scene.key);
-				this.backgroundMusic.stop();
-				this.scene.start('PreLevel', { levelKey: 'Level1Prev' });
+				this.startScene = true;
+				this.common.startScene(this, 'PreLevel', { levelKey: 'Level1Prev' });
 			}
 		}
     }

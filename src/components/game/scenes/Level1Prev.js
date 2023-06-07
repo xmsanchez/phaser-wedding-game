@@ -81,7 +81,7 @@ export default class Level1Prev extends Phaser.Scene
 
 		// Setup camera bounds and zoom
 		this.camera.setCamera(this, 2.40);
-
+		this.cameras.main.fadeIn(250);
 
 		this.checkCompleted();
 	}
@@ -95,7 +95,6 @@ export default class Level1Prev extends Phaser.Scene
 		let doorsOpened = this.sceneRegistry.doorsOpened;
 		for(let i = 0; i < doorsOpened.length; i++) {
 			this.doors.getChildren().forEach((door) => {
-				console.log('checkCompleted - Comaring to door.name: ' + door.name);
 				if(door.name === doorsOpened[i]) {
 					console.log('checkCompleted - Found it!! -> ' + door.name);
 					door.opened = true;
@@ -119,17 +118,9 @@ export default class Level1Prev extends Phaser.Scene
 
 		// If player goes out of the screen to the left, start next scene
 		if(this.player.x > this.map.widthInPixels + 30){
-			console.log('Stop scene Level1Prev, start scene Level1');
-			this.startScene = false;
-			this.registry.set('previousScene', this.scene.key);
-			this.common.stopScene(this);
-			this.scene.start('PreLevel', { levelKey: 'Level1', text: "El Mapa" });
+			this.common.startScene(this, 'PreLevel', { levelKey: 'Level1', text: "El Mapa" });
 		}else if(this.player.x < -30){
-			console.log('Stop scene Level1Prev, start scene Level3Prev3');
-			this.startScene = false;
-			this.registry.set('previousScene', this.scene.key);
-			this.common.stopScene(this);
-			this.scene.start('PreLevel', { levelKey: 'Level3Prev3' });
+			this.common.startScene(this, 'PreLevel', { levelKey: 'Level3Prev3' });
 		}
     }
 

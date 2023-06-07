@@ -85,6 +85,7 @@ export default class Level2Prev extends Phaser.Scene
 		
 		// Setup camera bounds and zoom
 		this.camera.setCamera(this, 2.40);
+		this.cameras.main.fadeIn(250);
 
 		this.checkCompleted();
 		
@@ -148,15 +149,6 @@ export default class Level2Prev extends Phaser.Scene
 				scene.hud.inventory.push('bruixola');
 				scene.hud.updateInventory(scene, 'bruixola');
 			});
-		}
-
-		if (this.startScene) {
-			console.log('Stop scene Level2Prev, start scene Level2Prev2');
-			this.startScene = false;
-			this.registry.set('previousScene', this.scene.key);
-			console.log('Setting previousscene to ' + this.scene.key);
-			this.common.stopScene(this);
-			this.scene.start('PreLevel', { levelKey: 'Level2Prev2' });
 		}
     }
 }

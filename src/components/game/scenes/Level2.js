@@ -89,6 +89,7 @@ export default class Level2 extends Phaser.Scene
 
 		// Setup camera bounds and zoom
 		this.camera.setCamera(this, 2.40);
+		this.cameras.main.fadeIn(250);
 	}
 
     update() {
@@ -122,11 +123,8 @@ export default class Level2 extends Phaser.Scene
 		}
 		if(this.levelFinished && !this.message.messageDisplaying){
 			setTimeout(() => {
-				this.startScene = false;
-				this.registry.set('previousScene', this.scene.key);
-				this.common.stopScene(this);
-				this.scene.start('PreLevel', { levelName: '', timeout: 4500, textSize: 38, levelKey: 'Level3Prev', text: 'Amb el mapa i el rellotge,\nja en el teu poder, vas\ncamí de tornada a casa...' });
-			}, 4000);
+				this.common.startScene(this, 'PreLevel', { levelName: '', timeout: 4500, textSize: 38, levelKey: 'Level3Prev', text: 'Amb el mapa i el rellotge,\nja en el teu poder, vas\ncamí de tornada a casa...' });
+			}, 2000);
 		}
     }
 }

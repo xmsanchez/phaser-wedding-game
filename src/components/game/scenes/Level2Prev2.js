@@ -84,6 +84,10 @@ export default class Level2Prev2 extends Phaser.Scene
 		// Add controls
 		this.player.addTouchScreenPointers(this);
 		this.player.setKeyboardControls(this);
+
+		// Setup camera bounds and zoom
+		this.camera.setCamera(this, 2.40);
+		this.cameras.main.fadeIn(250);
 	}
 
 	checkCompleted() {
@@ -108,9 +112,6 @@ export default class Level2Prev2 extends Phaser.Scene
 		// Update player movement based on events
 		this.player.playerMovement(this);
 		
-		// Setup camera bounds and zoom
-		this.camera.setCamera(this, 2.40);
-
 		try {
 			this.bunnies.getChildren().forEach((bunny) => {
 				bunny.flipX = true;
@@ -157,26 +158,14 @@ export default class Level2Prev2 extends Phaser.Scene
 
 		if (this.startScene) {
 			let previousScene = this.previousScene;
-			console.log('Stop scene Level2Prev2, start previousScene: ' + previousScene);
-			this.startScene = false;
-			this.registry.set('previousScene', this.scene.key);
-			this.common.stopScene(this);
-			this.scene.start('PreLevel', { levelKey: previousScene });
+			this.common.startScene(this, 'PreLevel', { levelKey: previousScene });
 		}
 
 		// If player goes out of the screen to the left, start next scene
 		if(this.player.x > this.map.widthInPixels + 30){
-			console.log('Stop scene Level2Prev2, start scene Level2');
-			this.startScene = false;
-			this.registry.set('previousScene', this.scene.key);
-			this.common.stopScene(this);
-			this.scene.start('PreLevel', { levelName: '', levelKey: 'Level2', timeout: 5500, textSize: 38, text: "Mitja hora més tard,\ndesprés de travessar\nel bosc, evitant la\nxapa de l\'Stan..." });
+			this.common.startScene(this, 'PreLevel', { levelName: '', levelKey: 'Level2', timeout: 5500, textSize: 38, text: "Mitja hora més tard,\ndesprés de travessar\nel bosc, evitant la\nxapa de l\'Stan..." });
 		}else if(this.player.x < -30){
-			console.log('Stop scene Level2Prev2, start scene Level2');
-			this.startScene = false;
-			this.registry.set('previousScene', this.scene.key);
-			this.common.stopScene(this);
-			this.scene.start('PreLevel', { levelKey: 'Level3Prev3' });
+			this.common.startScene(this, 'PreLevel', { levelKey: 'Level3Prev3' });
 		}
     }
 

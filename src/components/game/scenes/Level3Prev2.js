@@ -84,6 +84,7 @@ export default class Level3Prev2 extends Phaser.Scene
 		
 		// Setup camera bounds and zoom
 		this.camera.setCamera(this, 2.40);
+		this.cameras.main.fadeIn(250);
 
 		this.checkCompleted();
 	}
@@ -120,10 +121,7 @@ export default class Level3Prev2 extends Phaser.Scene
 
 		// If player goes out of the screen to the left, start next scene
 		if(this.player.x < -30){
-			console.log('Stop scene Level3Prev2, start scene Level3Prev3');
-			this.common.stopScene(this);
-			this.registry.set('previousScene', 'Level3Prev2');
-			this.scene.start('PreLevel', { levelKey: 'Level3Prev3' });
+			this.common.startScene(this, 'PreLevel', { levelKey: 'Level3Prev3' });
 		}
 	}
 

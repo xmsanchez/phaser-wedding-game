@@ -85,15 +85,16 @@ export default class Level3 extends Phaser.Scene
 		// Add controls
 		this.player.addTouchScreenPointers(this);
 		this.player.setKeyboardControls(this);
+		
+		// Setup camera bounds and zoom
+		this.camera.setCamera(this, 1.80);
+		this.cameras.main.fadeIn(250);
 	}
 
 	update() {
 		// Update player movement based on events
 		this.player.playerMovement(this);
 		
-		// Setup camera bounds and zoom
-		this.camera.setCamera(this, 1.80);
-
 		this.npcs.getChildren().forEach((npc) => {
 			// npc.anims.play('Fada_stand', true);
 			// // NPCs will always look at the player
@@ -103,10 +104,6 @@ export default class Level3 extends Phaser.Scene
 		// Check overlaps (show the 'B' button hint)
 		this.common.checkOverlapsStaticGroups(this.npcs, this);
 		// this.common.checkOverlapsStaticGroups(this.doors, this);
-
-		if (this.startScene) {
-			console.log('Stop scene Level3, start scene Level3');
-		}
 	}
 
 	npcActions(player, npc) {

@@ -80,9 +80,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		}
 
 		this.isOverlappingCoins(scene);
-		this.isOverlappingDoors(scene);
-		this.isOverlappingCartells(scene);
-		this.isOverlappingBunny(scene);
 	}
 
 	// The following functions will be called in the create loop

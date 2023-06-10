@@ -110,10 +110,10 @@ export default class Level3Prev3 extends Phaser.Scene
 		this.cameras.main.fadeIn(250);
 
 		// // TODO: REMOVE THIS, THIS IS FOR DEBUGGING ONLY!!
-		// this.hud.inventory.push('clock');
-		// this.hud.inventory.push('map');
-		// this.hud.updateInventory(this, 'clock');
-		// this.hud.updateInventory(this, 'map');
+		this.hud.inventory.push('clock');
+		this.hud.inventory.push('map');
+		this.hud.updateInventory(this, 'clock');
+		this.hud.updateInventory(this, 'map');
 
 		this.checkCompleted();
 		console.log('this.blocked is: ' + this.blocked);
@@ -170,7 +170,7 @@ export default class Level3Prev3 extends Phaser.Scene
 		});
 
 		if(this.player.x < 0){
-			this.common.startScene(this, 'PreLevel', { levelName: 'El vestit', timeout: 2500, levelKey: 'Level3', text: 'El misteri\nde les caixes' });
+			this.common.startScene(this, 'PreLevel', { levelKey: 'Level3' });
 		}else if(this.player.x > this.map.widthInPixels + 30){
 			let previousScene = this.previousScene;
 			this.common.startScene(this, 'PreLevel', { levelKey: previousScene });

@@ -57,6 +57,19 @@ export default class Common {
 			console.log('Error fading out music: ' + error);
 		}
 	}
+
+	fadeInMusic(scene, volume, duration) {
+		try {
+			scene.tweens.add({
+				targets: scene.backgroundMusic,
+				volume: volume,
+				duration: duration
+			});
+			scene.backgroundMusic.play();
+		} catch (error) {
+			console.log('Error fading in music: ' + error);
+		}
+	}
 	
 	addPlayer(scene) {
 		// Player Layer
@@ -153,26 +166,79 @@ export default class Common {
 	}
 
 	openTreasure(player, treasure, scene) {
+		let frameOpened = 11;
 		if(!treasure.opened){
-			console.log('Treasure IS NOT opened yet. Opening.');
-			treasure.opened = true;
-			treasure.setFrame(11);
-			console.log(treasure)
-			scene.common.chest_opened_sound.play();
+			// First, check if this needs special treatment
+			// Check if treasure contains the property "order"
+			if(treasure.order !== undefined && !scene.boxGameFinished){
+				console.log('Order property found. This is probably Level3: ' + treasure.order);
+				console.log('Treasure IS NOT opened yet. Opening.');
+				frameOpened = 15;
+				treasure.opened = true;
+				treasure.setFrame(frameOpened);
+				console.log('Order: ' + treasure.order);
 
-			const sceneRegistry = scene.registry.get(scene.scene.key);
-			scene.registry.set(scene.scene.key, {
-				...sceneRegistry,
-    			treasuresOpened: [...sceneRegistry.treasuresOpened, treasure.name]
-			});
+				scene.boxesPressed.push(treasure.order);
+				
+				switch(treasure.order){
+					case 1:
+						scene.piano_s1.play();
+						break;
+					case 2:
+						scene.piano_s2.play();
+						break;
+					case 3:
+						scene.piano_s3.play();
+						break;
+					case 4:
+						scene.piano_s4.play();
+						break;
+					case 5:
+						scene.piano_s5.play();
+						break;
+					case 6:
+						scene.piano_s6.play();
+						break;
+					case 7:
+						scene.piano_s7.play();
+						break;
+				}
 
-			// Show a message
-			scene.message.showMessageList(scene, ['Has trobat **' + treasure.containsText + '!**']);
-			
-			// Add a new object to the inventory
-			console.log('Add treasure contents to the inventory: ' + treasure.contents);
-			scene.hud.inventory.push(treasure.contents);
-			scene.hud.updateInventory(scene, treasure.contents);
+				// const sceneRegistry = scene.registry.get(scene.scene.key);
+				// scene.registry.set(scene.scene.key, {
+				// 	...sceneRegistry,
+				// 	treasuresOpened: [...sceneRegistry.treasuresOpened, treasure.name]
+				// });
+
+				// // Show a message
+				// scene.message.showMessageList(scene, ['Has trobat **' + treasure.containsText + '!**']);
+				
+				// // Add a new object to the inventory
+				// console.log('Add treasure contents to the inventory: ' + treasure.contents);
+				// scene.hud.inventory.push(treasure.contents);
+				// scene.hud.updateInventory(scene, treasure.contents);
+			}else if (treasure.order === undefined){
+				console.log('Order property NOT found.');
+				console.log('Treasure IS NOT opened yet. Opening.');
+				treasure.opened = true;
+				treasure.setFrame(frameOpened);
+				console.log(treasure)
+				scene.common.chest_opened_sound.play();
+
+				const sceneRegistry = scene.registry.get(scene.scene.key);
+				scene.registry.set(scene.scene.key, {
+					...sceneRegistry,
+					treasuresOpened: [...sceneRegistry.treasuresOpened, treasure.name]
+				});
+
+				// Show a message
+				scene.message.showMessageList(scene, ['Has trobat **' + treasure.containsText + '!**']);
+				
+				// Add a new object to the inventory
+				console.log('Add treasure contents to the inventory: ' + treasure.contents);
+				scene.hud.inventory.push(treasure.contents);
+				scene.hud.updateInventory(scene, treasure.contents);
+			}
 		}
 	}
 
@@ -192,15 +258,20 @@ export default class Common {
 		return newTreasure
 	}
 
-	spawnTreasures(scene) {
+	spawnTreasures(scene, frame) {
 		scene.treasures = scene.physics.add.staticGroup();
 		scene.treasuresLayer = scene.map.getObjectLayer('treasures');
 		var count = 0;
 		scene.treasuresLayer.objects.forEach((treasure) => {
 			count += 1;
-			var newTreasure = scene.physics.add.sprite(treasure.x, treasure.y, 'treasure', 8).setOrigin(0, 1);
+			var newTreasure = scene.physics.add.sprite(treasure.x, treasure.y, 'treasure', frame).setOrigin(0, 1).setScale(1.5);
 			newTreasure.id = count;
 			newTreasure = this.getTreasureContents(scene, treasure, newTreasure);
+
+			const order = treasure.properties.find(obj => obj.name === "order");
+			if(order != undefined){
+				newTreasure.order = order.value;
+			}
 
 			const container = this.drawHintContainer(scene, newTreasure);
 			newTreasure.container = container;
@@ -429,7 +500,7 @@ export default class Common {
 		scene.bunnyCatched = true;
 	}
 
-	spawnNpcs(scene, layer, frame) {
+	spawnNpcs(scene, layer) {
 		scene.npcs = scene.physics.add.staticGroup();
 		scene.npcsLayer = scene.map.getObjectLayer(layer);
 		var count = 0;
@@ -581,7 +652,7 @@ export default class Common {
 		}
 	}
 		
-	spawnCartells(scene, levelName) {
+	spawnCartells(scene) {
 		scene.cartells = scene.physics.add.staticGroup();
 		try {
 			scene.cartellsLayer = scene.map.getObjectLayer('cartells');
@@ -649,7 +720,36 @@ export default class Common {
 		  console.log('No doors found. Error: ' + error);
 		}
 	}
-
+		
+	// spawnBoxes(scene) {
+	// 	scene.boxes = scene.physics.add.staticGroup();
+	// 	try {
+	// 		scene.boxesLayer = scene.map.getObjectLayer('boxes');
+	// 		var count = 0;
+	// 		scene.boxesLayer.objects.forEach((box) => {
+	// 			count += 1;
+	// 			const newbox = scene.physics.add.sprite(box.x, box.y, 'objects', 15).setOrigin(0, 1)
+	// 			newbox.setImmovable(true)
+	// 			newbox.body.setAllowGravity(false);
+	// 			newbox.id = count;
+		
+	// 			// Custom data must be accessed from here and assigned to the new object...
+	// 			newbox.name = box.name;
+	// 			console.log('box ' + box.name + ' props:', box.properties);
+				
+	// 			newBox.order = box.properties.find(obj => obj.name === "order").value;
+	// 			newBox.contents = box.properties.find(obj => obj.name === "contains");
+	  
+	// 			const container = this.drawHintContainer(scene, newbox);
+	// 			newbox.container = container;
+	// 			newbox.container.setVisible(false);
+		
+	// 			scene.boxes.add(newbox);
+	// 		});	
+	// 	} catch (error) {
+	// 		console.log('No boxes found');
+	// 	}
+	// }
 	
 	drawHintContainer(scene, obj) {
 		// Create a container for the circle and text
@@ -777,7 +877,7 @@ export default class Common {
 				scene.backgroundMusic = scene.sound.add('background_music_bunny2', { loop: true, volume: 0.2});
 				break;
 			case 'castle_inside':
-				scene.backgroundMusic = scene.sound.add('background_music_tangled', { loop: true, volume: 0.2});
+				// scene.backgroundMusic = scene.sound.add('background_music_tangled', { loop: true, volume: 0.1});
 				break;
 		}
 		try {

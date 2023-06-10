@@ -37,6 +37,13 @@ export default class MainMenu extends Phaser.Scene {
 		this.load.audio('audio_coin', 'assets/audio/coin.mp3');
 		this.load.audio('audio_chest_opened', 'assets/audio/new_item.mp3');
 		this.load.audio('audio_dog_bark', 'assets/audio/dog_bark2.mp3');
+		this.load.audio('audio_piano_s1', 'assets/audio/piano/C5.mp3');
+		this.load.audio('audio_piano_s2', 'assets/audio/piano/D5.mp3');
+		this.load.audio('audio_piano_s3', 'assets/audio/piano/E5.mp3');
+		this.load.audio('audio_piano_s4', 'assets/audio/piano/F5.mp3');
+		this.load.audio('audio_piano_s5', 'assets/audio/piano/G5.mp3');
+		this.load.audio('audio_piano_s6', 'assets/audio/piano/A5.mp3');
+		this.load.audio('audio_piano_s7', 'assets/audio/piano/B5.mp3');
 
 		// Load maps
 		// House inside (pròlegs)
@@ -49,6 +56,7 @@ export default class MainMenu extends Phaser.Scene {
 		this.load.tilemapTiledJSON('level1', 'assets/maps/level1.json');
 		this.load.tilemapTiledJSON('level2', 'assets/maps/level2.json');
 		this.load.tilemapTiledJSON('level3', 'assets/maps/level3.json');
+		this.load.tilemapTiledJSON('level4', 'assets/maps/level4.json');
 		this.load.tilemapTiledJSON('level3-prev', 'assets/maps/level1.json');
 
 		// Some common tilesets
@@ -63,7 +71,7 @@ export default class MainMenu extends Phaser.Scene {
 		this.load.spritesheet('npc_mi', 'assets/spritesheets/npcs/mi.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('npc_bug', 'assets/spritesheets/npcs/bug.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('npc_bunny', 'assets/spritesheets/npcs/bunny.png', { frameWidth: 45, frameHeight: 45 });
-		this.load.spritesheet('npc_beast', 'assets/spritesheets/npcs/bestia.png', { frameWidth: 88, frameHeight: 88 });
+		this.load.spritesheet('npc_bestia', 'assets/spritesheets/npcs/bestia.png', { frameWidth: 64, frameHeight: 64 });
 		this.load.spritesheet('npc_stan', 'assets/spritesheets/npcs/stan.png', { frameWidth: 66, frameHeight: 66 });
 		this.load.spritesheet('npc_fairy', 'assets/spritesheets/npcs/fairy.png', { frameWidth: 64, frameHeight: 64 });
 		this.load.spritesheet('npc_worker', 'assets/spritesheets/npcs/worker.png', { frameWidth: 32, frameHeight: 32 });
@@ -114,6 +122,10 @@ export default class MainMenu extends Phaser.Scene {
 			doorsOpened: [],
 			treasuresOpened: [],
 		});
+		this.registry.set('Level3Prev3', {
+			doorsOpened: [],
+			treasuresOpened: [],
+		});
 		this.registry.set('Level3', {
 			doorsOpened: [],
 			treasuresOpened: [],
@@ -148,7 +160,7 @@ export default class MainMenu extends Phaser.Scene {
 
 		// add a click event listener to start the Level1 scene
 		this.input.on('pointerdown', () => {
-			this.scene.start('PreLevel', { levelName: '', timeout: 200, levelKey: 'Level0', text: "L'arribada" });
+			this.scene.start('PreLevel', { levelName: '', timeout: 200, levelKey: 'Level3', text: "L'arribada" });
 		});
 		const enterKey = this.input.keyboard.addKey('ENTER');
 		enterKey.on('down', () => {

@@ -70,6 +70,8 @@ export default class HUD {
                 frame = 30;
             }else if(currentObject == 'pal'){
                 frame = 31;
+            }else if(currentObject == 'vestit'){
+                frame = 32;
             }
             const item = scene.add.sprite(i * (tileSize + spacing), 0, 'objects', frame).setOrigin(0, 0).setScale(3);
             scene.hud.inventoryDisplay.add(item);

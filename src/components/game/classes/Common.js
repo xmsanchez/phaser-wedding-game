@@ -282,11 +282,14 @@ export default class Common {
 		});
 	}
 
-	npcLookDirection(scene, npc, distance) {
+	npcLookDirection(scene, npc, distance, defaultFlip) {
+		if(defaultFlip === undefined){
+			defaultFlip = false;
+		}
 		if(scene.player.x > npc.x + npc.width / 2){
-			npc.flipX = false;
+			npc.flipX = defaultFlip;
 		}else{
-			npc.flipX = true;
+			npc.flipX = !defaultFlip;
 		}
 		if(npc.name == 'Bug'){
 			if(distance < 100){
@@ -527,8 +530,12 @@ export default class Common {
 				this.setNpcStanAnimations(scene, spritesheet.value, npc.name);
 			}else if(npc.name == 'Fada'){
 				this.setNpcFairyAnimations(scene, spritesheet.value, npc.name);
-			}else{
+			}else if(npc.name == 'Xavi' || npc.name == 'Miriam'){
 				this.setNpcAnimations(scene, spritesheet.value, npc.name);
+			}else{
+				console.log('Set npc animations for ' + spritesheet.value + ' ' + npc.name);
+				newnpc.y = newnpc.y + 3;
+				this.setNpcDisneyAnimations(scene, spritesheet.value, npc.name);
 			}
 			
 			scene.npcs.add(newnpc);
@@ -591,6 +598,67 @@ export default class Common {
 			frameRate: 4,
 			repeat: -1,
 			duration: 300
+		});
+	}
+
+	setNpcDisneyAnimations(scene, layer, name, start, end) {
+		const totalFrames = scene.anims.generateFrameNumbers(layer).length;
+		let frames_stand = {start: 0, end: 0};
+		let frames_talking = {start: 0, end: 0};
+
+		switch (name) {
+			case 'Bèstia':
+				frames_stand = {frames: [2, 11]};
+				frames_talking = {frames: [0, 1, 2, 3, 8, 10]};
+			break;
+			case 'Aladdin':
+				frames_stand = {start: 37, end: 38};
+				frames_talking = {start: 37, end: 40};
+			break;
+			case 'Malèfica':
+				frames_stand = {frames: [0, 3]};
+				frames_talking = {start: 0, end: 5};
+			break;
+			case 'Gaston':
+				frames_stand = {frames: [0, 2]};
+				frames_talking = {start: 0, end: 5};
+			break;
+			case 'Geni':
+				frames_stand = {frames: [1, 3]};
+				frames_talking = {start: 1, end: 5};
+			break;
+			case 'Peter Pan':
+				frames_stand = {frames: [38, 39]};
+				frames_talking = {start: 38, end: 42};
+			break;
+			case 'Pluto':
+				frames_stand = {frames: [9, 21]};
+				frames_talking = {frames: [4, 8, 25, 34, 32, 33]};
+			break;
+			case 'Simba':
+				frames_stand = {frames: [5, 7]};
+				frames_talking = {start: 2, end: 9};
+			break;
+			case 'Hades':
+				frames_stand = {frames: [97, 98]};
+				frames_talking = {frames: [101, 103, 104, 107, 108, 110]};
+			break;
+		}
+		
+		scene.anims.create({
+			key: `${name}_stand`,
+			frames: scene.anims.generateFrameNumbers(layer, frames_stand),
+			frameRate: 1,
+			repeat: -1,
+			duration: 1200
+		});
+
+		scene.anims.create({
+			key: `${name}_talking`,
+			frames: scene.anims.generateFrameNumbers(layer, frames_talking),
+			frameRate: 4,
+			repeat: -1,
+			duration: 1200
 		});
 	}
 

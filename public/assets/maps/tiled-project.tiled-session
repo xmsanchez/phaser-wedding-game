@@ -411,17 +411,17 @@
         },
         "level3.json": {
             "expandedObjectLayers": [
-                27,
-                29,
-                28,
                 51,
-                52
+                27,
+                52,
+                28,
+                29
             ],
-            "scale": 0.75,
-            "selectedLayer": 17,
+            "scale": 1.5,
+            "selectedLayer": 12,
             "viewCenter": {
-                "x": 702.6666666666665,
-                "y": 620.6666666666667
+                "x": 526,
+                "y": 1476.3333333333333
             }
         },
         "level3.json#agrabah_market": {
@@ -443,8 +443,39 @@
         "level3.json#mi": {
             "scaleInDock": 1
         },
+        "level3.json#n_aladdin": {
+            "scaleInDock": 2,
+            "scaleInEditor": 1
+        },
         "level3.json#n_bestia": {
-            "scaleInDock": 1.5
+            "scaleInDock": 1.5,
+            "scaleInEditor": 1
+        },
+        "level3.json#n_gaston": {
+            "scaleInDock": 4
+        },
+        "level3.json#n_geni": {
+            "scaleInDock": 2
+        },
+        "level3.json#n_hades": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "level3.json#n_malefica": {
+            "scaleInDock": 4
+        },
+        "level3.json#n_peter": {
+            "scaleInDock": 2
+        },
+        "level3.json#n_pluto": {
+            "scaleInDock": 2
+        },
+        "level3.json#n_rapunzel": {
+            "scaleInDock": 1
+        },
+        "level3.json#n_simba": {
+            "scaleInDock": 3,
+            "scaleInEditor": 1
         },
         "level3.json#objects": {
             "scaleInDock": 1
@@ -464,7 +495,7 @@
             "scaleInDock": 0.5
         },
         "level3.json#tileset_field": {
-            "scaleInDock": 0.5,
+            "scaleInDock": 1,
             "scaleInEditor": 1
         },
         "level3.json#tileset_jungle": {
@@ -508,23 +539,32 @@
         },
         "level4.json": {
             "expandedObjectLayers": [
-                44,
                 45,
-                43,
                 27,
+                44,
+                43,
                 28
             ],
             "scale": 1.5,
-            "selectedLayer": 10,
+            "selectedLayer": 8,
             "viewCenter": {
-                "x": 338.33333333333337,
+                "x": 337.99999999999994,
                 "y": 326.33333333333337
             }
         },
         "level4.json#bunny": {
             "scaleInDock": 1
         },
+        "level4.json#castle_inside": {
+            "scaleInDock": 1
+        },
+        "level4.json#fairy": {
+            "scaleInDock": 1
+        },
         "level4.json#mi": {
+            "scaleInDock": 1
+        },
+        "level4.json#objects": {
             "scaleInDock": 1
         },
         "level4.json#objects_16x16": {
@@ -535,6 +575,12 @@
         },
         "level4.json#tileset": {
             "scaleInDock": 0.5
+        },
+        "level4.json#tileset_field": {
+            "scaleInDock": 1
+        },
+        "level4.json#tileset_jungle": {
+            "scaleInDock": 1
         },
         "level4.json#xavi": {
             "scaleInDock": 1
@@ -674,7 +720,7 @@
         }
     },
     "last.externalTilesetPath": "/home/xavi/Projects/xavi/gpt/games/platform-new/public/assets/maps",
-    "last.imagePath": "/home/xavi/Projects/xavi/gpt/games/phaser-wedding-game/public/assets/spritesheets/npcs",
+    "last.imagePath": "/home/xavi/Projects/xavi/gpt/games/phaser-wedding-game/public/assets/spritesheets/npcs/disney",
     "map.lastUsedFormat": "json",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
@@ -685,6 +731,7 @@
     "property.type": "bool",
     "recentFiles": [
         "level3.json",
+        "level4.json",
         "level1.json",
         "z.level1-bak.json",
         "z.level2-bak.json",
@@ -693,14 +740,13 @@
         "house-outside.json",
         "house-inside.json",
         "level2.json",
-        "level4.json",
         "rule1.tmx",
         "terrain.json"
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {
-        "height": 64,
-        "width": 64
+        "height": 85,
+        "width": 35
     },
     "tileset.type": 0
 }

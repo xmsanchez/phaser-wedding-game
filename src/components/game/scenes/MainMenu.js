@@ -71,7 +71,16 @@ export default class MainMenu extends Phaser.Scene {
 		this.load.spritesheet('npc_mi', 'assets/spritesheets/npcs/mi.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('npc_bug', 'assets/spritesheets/npcs/bug.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('npc_bunny', 'assets/spritesheets/npcs/bunny.png', { frameWidth: 45, frameHeight: 45 });
-		this.load.spritesheet('npc_bestia', 'assets/spritesheets/npcs/bestia.png', { frameWidth: 64, frameHeight: 64 });
+		this.load.spritesheet('npc_bestia', 'assets/spritesheets/npcs/disney/bestia.png', { frameWidth: 64, frameHeight: 64 });
+		this.load.spritesheet('npc_aladdin', 'assets/spritesheets/npcs/disney/aladdin.png', { frameWidth: 45, frameHeight: 60 });
+		this.load.spritesheet('npc_gaston', 'assets/spritesheets/npcs/disney/gaston.png', { frameWidth: 45, frameHeight: 60 });
+		this.load.spritesheet('npc_malefica', 'assets/spritesheets/npcs/disney/malefica.png', { frameWidth: 50, frameHeight: 70 });
+		this.load.spritesheet('npc_peter', 'assets/spritesheets/npcs/disney/peter.png', { frameWidth: 45, frameHeight: 60 });
+		this.load.spritesheet('npc_geni', 'assets/spritesheets/npcs/disney/geni.png', { frameWidth: 65, frameHeight: 85 });
+		this.load.spritesheet('npc_pluto', 'assets/spritesheets/npcs/disney/pluto.png', { frameWidth: 65, frameHeight: 45 });
+		this.load.spritesheet('npc_rapunzel', 'assets/spritesheets/npcs/disney/rapunzel.png', { frameWidth: 35, frameHeight: 50 });
+		this.load.spritesheet('npc_simba', 'assets/spritesheets/npcs/disney/simba.png', { frameWidth: 35, frameHeight: 35 });
+		this.load.spritesheet('npc_hades', 'assets/spritesheets/npcs/disney/hades.png', { frameWidth: 35, frameHeight: 85 });
 		this.load.spritesheet('npc_stan', 'assets/spritesheets/npcs/stan.png', { frameWidth: 66, frameHeight: 66 });
 		this.load.spritesheet('npc_fairy', 'assets/spritesheets/npcs/fairy.png', { frameWidth: 64, frameHeight: 64 });
 		this.load.spritesheet('npc_worker', 'assets/spritesheets/npcs/worker.png', { frameWidth: 32, frameHeight: 32 });

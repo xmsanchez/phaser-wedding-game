@@ -29,7 +29,7 @@ def process_spritesheet(file_path):
         x, y, w, h = cv2.boundingRect(contour)
 
         # Make sure the bounding box has reasonable size
-        if w > 1 and h > 1:
+        if w > 5 and h > 5:
             # Crop the image using the coordinates of the bounding rectangle
             sprite = np.copy(image[y:y+h, x:x+w])
 

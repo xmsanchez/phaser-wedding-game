@@ -89,10 +89,11 @@ export default class Level3 extends Phaser.Scene
 		this.common.createLevelLayer(this, 'top_bg1', tileset_field, 0.7);
 		this.common.createLevelLayer(this, 'bg_1', tileset_jungle, 0.8);
 		this.common.createLevelLayer(this, 'fg_background', tileset_jungle, 0.9);
-		this.common.createLevelLayer(this, 'ground_bg', tileset_jungle, 0.8);
+		this.common.createLevelLayer(this, 'ground_bg', tileset_field);
 		// this.common.createLevelLayer(this, 'rocks', tileset_field);
 		this.common.createLevelLayer(this, 'ground_decorations', tileset_field);
 		this.ground = this.common.createLevelLayer(this, 'ground_fg', tileset_jungle);
+		this.rocks = this.common.createLevelLayer(this, 'rocks', tileset_field);
 		this.platforms = this.common.createLevelLayer(this, 'platforms', tileset_field);
 		
 		this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels * tileset_jungle.tileHeight);
@@ -122,6 +123,17 @@ export default class Level3 extends Phaser.Scene
 		this.cameras.main.fadeIn(250);
 
 		this.checkCompleted();
+
+		this.npcs.getChildren().forEach((npc) => {
+			if(npc.name == 'Peter Pan'){
+				this.npcFly(npc, 20);
+			}else if (npc.name == 'Geni'){
+				this.npcFly(npc, 4);
+			}
+			npc.anims.play(npc.name + '_stand', true);
+		})
+
+		this.bark = this.sound.add('audio_dog_bark', { loop: false, volume: 0.5 });
 	}
 
 	checkCompleted() {
@@ -145,25 +157,203 @@ export default class Level3 extends Phaser.Scene
 		// Update player movement based on events
 		this.player.playerMovement(this);
 		
+		
 		this.npcs.getChildren().forEach((npc) => {
-			// npc.anims.play('Fada_stand', true);
-			// // NPCs will always look at the player
-			// this.common.npcLookDirection(this, npc, distance);
+			const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
+			if(!this.message.messageDisplaying){
+				npc.anims.play(npc.name + '_stand', true);
+			}
+
+			// NPCs will always look at the player
+			if(npc.name != 'Rapunzel'){
+				if(npc.name != 'Xavi' && npc.name != 'Miriam' && npc.name != 'Simba') {
+					this.common.npcLookDirection(this, npc, distance, true);
+				}else{
+					this.common.npcLookDirection(this, npc, distance);
+				}
+			}
 		});
 		
 		// Check overlaps (show the 'B' button hint)
 		this.common.checkOverlapsStaticGroups(this.npcs, this);
 		// this.common.checkOverlapsStaticGroups(this.treasures, this);
+	}
 
-		// if(this.player.x < 0){
-		// 	this.common.startScene(this, 'PreLevel', { levelName: 'El vestit', timeout: 2500, levelKey: 'Level4', text: 'El misteri\nde les caixes' });
-		// }else if(this.player.x > this.map.widthInPixels + 30){
-		// 	let previousScene = this.previousScene;
-		// 	this.common.startScene(this, 'PreLevel', { levelKey: previousScene });
-		// }
+	npcFly(npc, distance) {
+		this.tweens.add({
+			targets: npc,
+			y: npc.y + distance,
+			duration: 1200,
+			ease: 'Sine.easeInOut',
+			yoyo: true,
+			repeat: -1
+		});
 	}
 
 	npcActions(player, npc) {
-		
+		npc.anims.play(npc.name + '_talking', true);
+		switch(npc.name) {
+			case 'Bèstia':
+				this.npcActionsBeast(player, npc);
+				break;
+			case 'Aladdin':
+				this.npcActionsAladdin(player, npc);
+				break;
+			case 'Gaston':
+				this.npcActionsGaston(player, npc);
+				break;
+			case 'Malèfica':
+				this.npcActionsMaleficent(player, npc);
+				break;
+			case 'Peter Pan':
+				this.npcActionsPeterPan(player, npc);
+				break;
+			case 'Pluto':
+				this.npcActionsPluto(player, npc);
+				break;
+			case 'Rapunzel':
+				this.npcActionsRapunzel(player, npc);
+				break;
+			case 'Mickey Mouse':
+				this.npcActionsMickeyMouse(player, npc);
+				break;
+			case 'Geni':
+				this.npcActionsGenie(player, npc);
+				break;
+			case 'Simba':
+				this.npcActionsSimba(player, npc);
+				break;
+			case 'Hades':
+				this.npcActionsHades(player, npc);
+				break;
+		}
+	}
+
+	npcActionsAladdin(player, npc) {
+		if(!this.message.messageDisplaying) {
+			let dialog = [
+				npc.name + ": Hola, amic aventurer! T'agraden les emocions fortes?",
+				npc.name + ": Recordo els carrers d'Agrabah, obria portes en l'ordre correcte per evitar els guàrdies.",
+				npc.name + ": Aquí tens el meu consell, **la sisena caixa**, ha de ser **la primera** que obres."
+			]
+			this.message.showMessageList(this, dialog);
+		}
+	}
+
+	npcActionsGaston(player, npc) {
+		if(!this.message.messageDisplaying) {
+			let dialog = [
+				npc.name + ": Què fas aquí, petit ratolí?",
+				npc.name + ": Necessites una pista? No pots amb aquest desafiament?",
+				npc.name + ": Està bé, te la donaré perquè sóc el millor en tot. **La quarta caixa** és **la segona** que hauries d'obrir."
+			]
+			this.message.showMessageList(this, dialog);
+		}
+	}
+
+	npcActionsBeast(player, npc) {
+		if(!this.message.messageDisplaying) {
+			let dialog = [
+				npc.name + ": Per què em molestes?",
+				npc.name + ": Aquest castell està ple de secrets i en tinc un per a tu. **La vuitena caixa**, has de fer-la **la tercera** en obrir."
+			]
+			this.message.showMessageList(this, dialog);
+		}
+	}
+
+	npcActionsMaleficent(player, npc) {
+		if(!this.message.messageDisplaying) {
+			let dialog = [
+				npc.name + ": Ah, buscant respostes, no és així?",
+				npc.name + ": De vegades el camí correcte no és el més obvi. **La segona caixa**, fes-la **la quarta** a obrir."
+			]
+			this.message.showMessageList(this, dialog);
+		}
+	}
+
+	npcActionsPeterPan(player, npc) {
+		if(!this.message.messageDisplaying) {
+			let dialog = [
+				npc.name + ": Hola, company! Preparat per a una aventura al País de Mai Més?",
+				npc.name + ": No tots els tresors estan al final del mapa. **La novena caixa**, ha de ser **la cinquena** a obrir."
+			]
+			this.message.showMessageList(this, dialog);
+		}
+	}
+
+	npcActionsPluto(player, npc) {
+		if(!this.message.messageDisplaying) {
+			// this.bark.play();
+			let dialog = [
+				"(En Pluto mou la cua amb entusiasme quan li acaricies el cap)",
+				"(Assenyala amb la pota que **la primera caixa** ha de ser **la sisena** a obrir)",
+				"(Escoltes a en Bug lladrant perquè estàs fent cas a un altre gosset. Decideixes seguir el teu camí...)"
+			]
+			this.message.showMessageList(this, dialog, function(scene){
+				// Play the sound 3 times in a row, then stop
+				var playCount = 3;
+				scene.bark.play();
+				scene.bark.on('complete', function() {
+					playCount--;
+					if (playCount > 0) {
+						scene.bark.play();
+					} else {
+						scene.bark.stop();
+					}
+				});
+			});
+		}
+	}
+
+	npcActionsRapunzel(player, npc) {
+		if(!this.message.messageDisplaying) {
+			let dialog = [
+				npc.name + ": Hola! Aquest enigma que has de resoldre em recorda als misteris de la meva torre!",
+				npc.name + ": Et donaré una pista, **la tercera caixa** és **la setena** que hauries d'obrir."
+			]
+			this.message.showMessageList(this, dialog);
+		}
+	}
+
+	npcActionsMickeyMouse(player, npc) {
+		if(!this.message.messageDisplaying) {
+			let dialog = [
+				npc.name + ": Hola, amic! Preparat per a un bon moment?",
+				npc.name + ": Aquí va el meu consell, **la setena caixa** ha de ser **la vuitena** a obrir."
+			]
+			this.message.showMessageList(this, dialog);
+		}
+	}
+
+	npcActionsGenie(player, npc) {
+		if(!this.message.messageDisplaying) {
+			let dialog = [
+				npc.name + ": Hola, amic! Estàs llest per un desig?",
+				npc.name + ": Vols una pista? Doncs aquí va: **la cinquena caixa** ha de ser **la novena** a obrir."
+			]
+			this.message.showMessageList(this, dialog);
+		}
+	}
+
+	npcActionsSimba(player, npc) {
+		if(!this.message.messageDisplaying) {
+			let dialog = [
+				npc.name + ": Hola, amic! Sents la crida de la savana?",
+				npc.name + ": Aquest bosc és ple de misteris, igual que aquest enigma que has de resoldre.",
+				npc.name + ": El meu consell per a tu, **la setena caixa** ha de ser **la vuitena** a obrir."
+			]
+			this.message.showMessageList(this, dialog);
+		}
+	}
+	
+	npcActionsHades(player, npc) {
+		if(!this.message.messageDisplaying) {
+			let dialog = [
+				npc.name + ": Oh, un altre mortal perdut.",
+				npc.name + ": Els misteris dels déus són complexos, com aquest enigma que has de resoldre.",
+				npc.name + ": Però ja que estàs aquí, et donaré una pista. **La novena caixa**, ha de ser **la cinquena** a obrir."
+			]
+			this.message.showMessageList(this, dialog);
+		}
 	}
 }

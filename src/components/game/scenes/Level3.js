@@ -45,6 +45,10 @@ export default class Level3 extends Phaser.Scene
 		this.boxesOrder = [2, 1, 3];
 		this.boxGameFinished = false;
 		this.talkedToFada = false;
+
+		this.inInfraworld = false;
+		this.inInfraWorldRight = false;
+		this.inInfraWorldLeft = false;
 	}
 
 	preload()
@@ -77,6 +81,7 @@ export default class Level3 extends Phaser.Scene
 		// Add the loaded tiles image asset to the map
 		const tileset_field = this.map.addTilesetImage('tileset_field', 'tileset_field');
 		const tileset_jungle = this.map.addTilesetImage('tileset_jungle', 'tileset_jungle');
+		const castle_outside = this.map.addTilesetImage('castle_outside', 'castle_outside');
 
 		// Create all the layers
 		this.common.createLevelLayer(this, 'bg_5', tileset_jungle, 0.4);
@@ -90,16 +95,22 @@ export default class Level3 extends Phaser.Scene
 		this.common.createLevelLayer(this, 'bg_1', tileset_jungle, 0.8);
 		this.common.createLevelLayer(this, 'fg_background', tileset_jungle, 0.9);
 		this.common.createLevelLayer(this, 'ground_bg', tileset_field);
+		this.common.createLevelLayer(this, 'castle_outside', castle_outside);
 		// this.common.createLevelLayer(this, 'rocks', tileset_field);
 		this.common.createLevelLayer(this, 'ground_decorations', tileset_field);
 		this.ground = this.common.createLevelLayer(this, 'ground_fg', tileset_jungle);
+		this.fire = this.common.spawnFire(this);
+		// this.common.setFireAnimations(this, 'fire');
+		
 		this.rocks = this.common.createLevelLayer(this, 'rocks', tileset_field);
+		this.rocks2 = this.common.createLevelLayer(this, 'rocks2', tileset_jungle);
 		this.platforms = this.common.createLevelLayer(this, 'platforms', tileset_field);
 		
 		this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels * tileset_jungle.tileHeight);
 
 		// Spawn all interactable objects
 		this.common.spawnNpcs(this, 'npcs', 4);
+		this.common.spawnDoors(this);
 		// this.common.spawnTreasures(this);
 		// this.common.spawnCartells(this);
 
@@ -119,12 +130,19 @@ export default class Level3 extends Phaser.Scene
 		this.player.setKeyboardControls(this);
 
 		// Setup camera bounds and zoom
-		this.camera.setCamera(this, 3);
+		this.camera.setCamera(this, 2.5);
 		this.cameras.main.fadeIn(250);
 
 		this.checkCompleted();
 
 		this.npcs.getChildren().forEach((npc) => {
+			let vestit = this.hud.searchInventory('vestit');
+			if(vestit == null){
+				// If we don't have the dress just put these NPCs out of sight
+				if(npc.name == 'Xavi' || npc.name == 'Miriam'){
+					npc.x = -200;
+				}
+			}
 			if(npc.name == 'Peter Pan'){
 				this.npcFly(npc, 20);
 			}else if (npc.name == 'Geni'){
@@ -132,6 +150,11 @@ export default class Level3 extends Phaser.Scene
 			}
 			npc.anims.play(npc.name + '_stand', true);
 		})
+
+		if(this.previousScene == 'Level4'){
+			this.player.x = this.doors.getChildren()[0].x;
+			this.player.y = this.doors.getChildren()[0].y - 20;
+		}
 
 		this.bark = this.sound.add('audio_dog_bark', { loop: false, volume: 0.5 });
 	}
@@ -154,6 +177,7 @@ export default class Level3 extends Phaser.Scene
 	}
 
 	update() {
+
 		// Update player movement based on events
 		this.player.playerMovement(this);
 		
@@ -176,7 +200,39 @@ export default class Level3 extends Phaser.Scene
 		
 		// Check overlaps (show the 'B' button hint)
 		this.common.checkOverlapsStaticGroups(this.npcs, this);
+		this.common.checkOverlapsStaticGroups(this.doors, this);
 		// this.common.checkOverlapsStaticGroups(this.treasures, this);
+
+		if(this.player.y >= this.map.heightInPixels - 300){
+			this.inInfraworld = true;
+			if(this.player.x > this.map.widthInPixels - 350){
+				console.log('Must set this.infraworldright as true: ' + this.inInfraWorldRight);
+				this.inInfraWorldRight = true;
+				this.inInfraWorldLeft = false;
+			}else if(this.player.x < 625){
+				console.log('Must set this.infraworldleft as true: ' + this.inInfraWorldLeft);
+				this.inInfraWorldRight = false;
+				this.inInfraWorldLeft = true;
+			}
+		}
+
+		// If player falls out from the screen, restore it
+		if (this.player.y > this.map.heightInPixels) {
+			if(this.inInfraWorldRight){
+				console.log('infraworld Must spawn at the right');
+				console.log("this.inInfraWorldLeft: " + this.inInfraWorldLeft);
+				console.log("this.inInfraWorldRight: " + this.inInfraWorldRight);
+				this.player.x = this.map.widthInPixels - 250;
+				this.player.y = this.map.heightInPixels - 100;
+			}
+			if(this.inInfraWorldLeft){
+				console.log('infraworld Must spawn at the left');
+				console.log("this.inInfraWorldLeft: " + this.inInfraWorldLeft);
+				console.log("this.inInfraWorldRight: " + this.inInfraWorldRight);
+				this.player.x = 625;
+				this.player.y = this.map.heightInPixels - 100;
+			}
+		}
 	}
 
 	npcFly(npc, distance) {
@@ -255,7 +311,7 @@ export default class Level3 extends Phaser.Scene
 		if(!this.message.messageDisplaying) {
 			let dialog = [
 				npc.name + ": Per què em molestes?",
-				npc.name + ": Aquest castell està ple de secrets i en tinc un per a tu. **La vuitena caixa**, has de fer-la **la tercera** en obrir."
+				npc.name + ": Aquest castell està ple de secrets i en tinc un per a tu. **La vuitena caixa**, ha de ser **la tercera** en obrir."
 			]
 			this.message.showMessageList(this, dialog);
 		}

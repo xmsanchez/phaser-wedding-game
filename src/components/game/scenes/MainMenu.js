@@ -67,6 +67,7 @@ export default class MainMenu extends Phaser.Scene {
 		this.load.image('house-outside','assets/tilesets/house-outside/house-outside.png');
 		
 		this.load.spritesheet('player', 'assets/spritesheets/player/player.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.spritesheet('player2', 'assets/spritesheets/player/heroes.png', { frameWidth: 24, frameHeight: 32 });
 		this.load.spritesheet('npc_xavi', 'assets/spritesheets/npcs/xavi.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('npc_mi', 'assets/spritesheets/npcs/mi.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('npc_bug', 'assets/spritesheets/npcs/bug.png', { frameWidth: 32, frameHeight: 32 });
@@ -86,6 +87,7 @@ export default class MainMenu extends Phaser.Scene {
 		this.load.spritesheet('npc_worker', 'assets/spritesheets/npcs/worker.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('treasure', 'assets/spritesheets/objects/treasure.png', {frameWidth: 16, frameHeight: 16});		
 		this.load.spritesheet('objects', 'assets/spritesheets/objects/objects.png', {frameWidth: 16, frameHeight: 16});
+		this.load.spritesheet('fire', 'assets/spritesheets/objects/fire1.png', {frameWidth: 16, frameHeight: 16});
     }
 
 	create() {
@@ -169,7 +171,7 @@ export default class MainMenu extends Phaser.Scene {
 
 		// add a click event listener to start the Level1 scene
 		this.input.on('pointerdown', () => {
-			this.scene.start('PreLevel', { levelName: '', timeout: 200, levelKey: 'Level3', text: "L'arribada" });
+			this.scene.start('PreLevel', { levelName: '', timeout: 200, levelKey: 'Level4', text: "L'arribada" });
 		});
 		const enterKey = this.input.keyboard.addKey('ENTER');
 		enterKey.on('down', () => {

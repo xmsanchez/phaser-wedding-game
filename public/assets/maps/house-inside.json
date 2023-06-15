@@ -357,7 +357,7 @@
          "y":0
         }],
  "nextlayerid":41,
- "nextobjectid":169,
+ "nextobjectid":171,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.1",
@@ -444,6 +444,19 @@
          "tilecount":36,
          "tileheight":32,
          "tilewidth":32
+        }, 
+        {
+         "columns":12,
+         "firstgid":1373,
+         "image":"..\/spritesheets\/player\/heroes.png",
+         "imageheight":256,
+         "imagewidth":288,
+         "margin":0,
+         "name":"player2",
+         "spacing":0,
+         "tilecount":96,
+         "tileheight":32,
+         "tilewidth":24
         }],
  "tilewidth":16,
  "type":"map",

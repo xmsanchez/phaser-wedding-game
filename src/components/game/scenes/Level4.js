@@ -82,7 +82,7 @@ export default class Level4 extends Phaser.Scene
 		this.common.createLevelLayer(this, 'ground_decorations', tileset);
 		this.common.createLevelLayer(this, 'decorations', tileset);
 		
-		this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels * tileset.tileHeight);
+		this.physics.world.setBounds(-60, 0, this.map.widthInPixels + 60, this.map.heightInPixels * tileset.tileHeight);
 
 		// Spawn all interactable objects
 		this.common.spawnNpcs(this, 'npcs');
@@ -105,11 +105,30 @@ export default class Level4 extends Phaser.Scene
 		this.camera.setCamera(this, 1.80);
 		this.cameras.main.fadeIn(250);
 
+		this.checkCompleted();
+
 		this.npcs.getChildren().forEach((npc) => {
 			if(npc.name == 'Fada'){
 				this.npc = npc;
 			}
 		});
+	}
+
+	checkCompleted() {
+		this.scenesVisited = this.registry.get('scenesVisited');
+		this.previousScene = this.registry.get('previousScene');
+		this.scenesVisited.push(this.currentScene);
+		console.log('checkCompleted this.scenesVisited: ' + this.scenesVisited);
+		this.sceneRegistry = this.registry.get(this.scene.key);
+		// let treasuresOpened = this.sceneRegistry.treasuresOpened;
+		// for(let i = 0; i < treasuresOpened.length; i++) {
+		// 	this.treasures.getChildren().forEach((treasure) => {
+		// 		if(treasure.name === treasuresOpened[i]) {
+		// 			treasure.opened = true;
+		// 			treasure.setFrame(11);
+		// 		}
+		// 	})
+		// }
 	}
 
 	update() {
@@ -153,6 +172,11 @@ export default class Level4 extends Phaser.Scene
 				});
 				this.boxesPressed = [];
 			}
+		}
+
+		// If player goes out of the screen to the left, start next scene
+		if(this.player.x < -30){
+			this.common.startScene(this, 'PreLevel', { levelKey: 'Level3' });
 		}
 	}
 
@@ -199,7 +223,7 @@ export default class Level4 extends Phaser.Scene
 				}else if(!this.boxGameFinished){
 					let dialog = [
 						npc.name + ': Recorda: Prova a ordenar les **caixes**.',
-						npc.name + ": No saps quin és l'**ordre correcte?**. Torna al **bosc** i **parla amb tothom** qui trobis, et donaran les pistes que necessites!",
+						npc.name + ": No saps quin és l'**ordre correcte?**. Torna al **bosc** sortint aquí a l'esquerra i **parla amb tothom** qui trobis, et donaran les pistes que necessites!",
 					];
 					this.message.showMessageList(this, dialog);
 				}else{

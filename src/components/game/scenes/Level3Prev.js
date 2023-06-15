@@ -147,7 +147,9 @@ export default class Level3Prev extends Phaser.Scene
 					}else{
 						this.messageListShowing = [
 							npc.name + ': Que bé! Has aconseguit el **rellotge.**\nMalauradament... també necessitaràs **un vestit**',
-							npc.name + ': Hauries **d\'anar al castell**, travessant el pont que hi ha sortint a mà esquerra.',
+							npc.name + ': Has **d\'anar al castell**, travessant el pont que hi ha sortint a mà esquerra.',
+							npc.name + ": Escolta amb **molta atenció**: Al castell has de **resoldre un enigma**. Al bosc trobaràs **altres personatges** que t'ajudaran a resoldre l'**enigma**",
+							npc.name + ": Pren nota de tot allò que et diguin i podràs resoldre el problema",
 							npc.name + ': Ànims! Ja gairabé ho tens tot!'
 						];
 						this.message.showMessageList(this, this.messageListShowing);

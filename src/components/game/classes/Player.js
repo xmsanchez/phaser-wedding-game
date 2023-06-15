@@ -456,4 +456,90 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 			frameRate: 20
 		});
 	}
+
+	// // TEST SPRITESHEET
+	// createAnimations(scene){
+	// 	this.anims.create({
+	// 		key: 'idle',
+	// 		frames: this.anims.generateFrameNumbers('player', { frames: [25] }),
+	// 		frameRate: 10,
+	// 		repeat: -1
+	// 	});
+
+	// 	this.anims.create({
+	// 		key: 'idleRight',
+	// 		frames: this.anims.generateFrameNumbers('player', { frames: [13] }),
+	// 		frameRate: 10,
+	// 		repeat: -1
+	// 	});
+
+	// 	this.anims.create({
+	// 		key: 'idleLeft',
+	// 		frames: this.anims.generateFrameNumbers('player', { frames: [37] }),
+	// 		frameRate: 10,
+	// 		repeat: -1
+	// 	});
+
+	// 	this.anims.create({
+	// 		key: 'left',
+	// 		frames: this.anims.generateFrameNumbers('player', { start: 36, end: 38 }),
+	// 		frameRate: 10,
+	// 		repeat: -1
+	// 	});
+		
+	// 	this.anims.create({
+	// 		key: 'right',
+	// 		frames: this.anims.generateFrameNumbers('player', { start: 12, end: 14 }),
+	// 		frameRate: 10,
+	// 		repeat: -1
+	// 	});
+	
+	// 	this.anims.create({
+	// 		key: 'up',
+	// 		frames: this.anims.generateFrameNumbers('player', { frames: [4, 0, 1] }),
+	// 		frameRate: 10,
+	// 		repeat: -1
+	// 	});
+
+	// 	this.anims.create({
+	// 		key: 'down',
+	// 		frames: this.anims.generateFrameNumbers('player', { frames: [3, 2, 11] }),
+	// 		frameRate: 10,
+	// 		repeat: -1
+	// 	});
+
+	// 	this.anims.create({
+	// 		key: 'climb',
+	// 		frames: this.anims.generateFrameNumbers('player', { start: 9, end: 11 }),
+	// 		frameRate: 10,
+	// 		repeat: -1
+	// 	});
+	
+	// 	this.anims.create({
+	// 		key: 'jump',
+	// 		frames: this.anims.generateFrameNumbers('player', { frames: [48, 54] }),
+	// 		frameRate: 2,
+	// 		repeat: 0
+	// 	});
+
+	// 	this.anims.create({
+	// 		key: 'jumpLeft',
+	// 		frames: this.anims.generateFrameNumbers('player', { frames: [48, 54] }),
+	// 		frameRate: 2,
+	// 		repeat: 0
+	// 	});
+
+	// 	this.anims.create({
+	// 		key: 'jumpRight',
+	// 		frames: this.anims.generateFrameNumbers('player', { frames: [48, 54] }),
+	// 		frameRate: 2,
+	// 		repeat: 0
+	// 	});
+
+	// 	this.anims.create({
+	// 		key: 'turn',
+	// 		frames: [{ key: 'player', frame: 3 }],
+	// 		frameRate: 20
+	// 	});
+	// }
 }

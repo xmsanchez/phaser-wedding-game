@@ -110,10 +110,10 @@ export default class Level3Prev3 extends Phaser.Scene
 		this.cameras.main.fadeIn(250);
 
 		// // TODO: REMOVE THIS, THIS IS FOR DEBUGGING ONLY!!
-		this.hud.inventory.push('clock');
-		this.hud.inventory.push('map');
-		this.hud.updateInventory(this, 'clock');
-		this.hud.updateInventory(this, 'map');
+		// this.hud.inventory.push('clock');
+		// this.hud.inventory.push('map');
+		// this.hud.updateInventory(this, 'clock');
+		// this.hud.updateInventory(this, 'map');
 
 		this.checkCompleted();
 		console.log('this.blocked is: ' + this.blocked);

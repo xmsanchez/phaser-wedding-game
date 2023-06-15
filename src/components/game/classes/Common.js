@@ -20,6 +20,7 @@ export default class Common {
 			scene.registry.set('previousScene', scene.scene.key);
 
 			console.log('startScene - Fade out current scene and stop it');
+			console.log('Previous scene is: ' + scene.registry.get('previousScene'));
 			scene.cameras.main.fadeOut(250);
 			this.stopMusic(scene);
 			scene.time.addEvent({
@@ -126,13 +127,14 @@ export default class Common {
 	  
 	addColliders(scene) {
 		// Add colliders for player and different objects
-		const { player, ground, platforms, walls, bridge, rocks, treasures, coins, bunny } = scene;
+		const { player, ground, platforms, walls, bridge, rocks, rocks2, treasures, coins, bunny } = scene;
 	  
 		this.addCollider(scene, player, ground);
 		this.addCollider(scene, player, platforms);
 		this.addCollider(scene, player, walls);
 		this.addCollider(scene, player, bridge);
 		this.addCollider(scene, player, rocks);
+		this.addCollider(scene, player, rocks2);
 		this.addCollider(scene, treasures, ground);
 		this.addCollider(scene, treasures, platforms);
 		this.addCollider(scene, player, coins);
@@ -159,6 +161,7 @@ export default class Common {
 		scene.map.setCollisionBetween(from, to, true, true, 'walls');
 		scene.map.setCollisionBetween(from, to, true, true, 'bridge');
 		scene.map.setCollisionBetween(from, to, true, true, 'rocks');
+		scene.map.setCollisionBetween(from, to, true, true, 'rocks2');
 		scene.map.setCollisionByProperty('collects', true, 'solid');
 
 		// Enable physics for the scene (e.g., using Arcade Physics)
@@ -581,6 +584,23 @@ export default class Common {
 		});
 	}
 
+	setFireAnimations(scene, layer, key) {
+		const totalFrames = scene.anims.generateFrameNumbers(layer).length;
+
+		let randomFrames = [];
+		for (let i = 0; i < 5; i++) {
+			let randomIndex = Phaser.Math.Between(0, totalFrames - 1);
+			randomFrames.push(randomIndex);
+		}
+	
+		scene.anims.create({
+			key: key,  // Use the unique key here
+			frames: randomFrames.map(index => ({ key: layer, frame: index })),
+			frameRate: 10,
+			repeat: -1
+		});
+	}
+
 	setNpcFairyAnimations(scene, layer, name) {
 		const totalFrames = scene.anims.generateFrameNumbers(layer).length;
 		
@@ -756,6 +776,33 @@ export default class Common {
 		scene.message.showMessageList(scene, [cartell.textCartell]);
 	}
 
+	spawnFire(scene) {
+		scene.fire = scene.physics.add.staticGroup();
+		try {
+			scene.fireLayer = scene.map.getObjectLayer('fire');
+			var count = 0;
+			scene.fireLayer.objects.forEach((fire) => {
+				count += 1;
+				const newfire = scene.physics.add.sprite(fire.x, fire.y, 'fire', 0).setOrigin(0, 1).setScale(5);
+				newfire.setImmovable(true)
+				newfire.body.setAllowGravity(false);
+				newfire.id = count;
+				scene.fire.add(newfire);
+
+				// Use a unique key for each animation
+				const animKey = `fire${count}`;
+				this.setFireAnimations(scene, 'fire', animKey);
+
+				// Start the animation right away
+				newfire.anims.play(animKey, true);
+			});
+			// this.setFireAnimations(scene, spritesheet.value);
+		} catch (error) {
+			console.log('No fire found');
+		}
+		return scene.fire;
+	}
+
 	spawnDoors(scene) {
 		scene.doors = scene.physics.add.staticGroup();
 		try {
@@ -913,7 +960,10 @@ export default class Common {
 					this.startScene(scene, 'PreLevel', { levelKey: 'Level0' });
 				}else if(sceneKey == 'Level3Prev2'){
 					this.startScene(scene, 'PreLevel', { levelKey: 'Level3Prev' });
-				}
+		 		}
+			
+			}else if(door.name == 'door_castle'){
+				this.startScene(scene, 'PreLevel', { levelKey: 'Level4' });
 
 			// Doors Level2
 			}else if (door.name == 'door1_2') {

@@ -13,7 +13,7 @@ export default class Common {
 		this.coin_sound = scene.sound.add('audio_coin', { loop: false, forceRestart: true });
 	}
 	
-	startScene(scene, sceneName, props) {
+	startScene(scene, sceneName, props, fadeOutTime = 250, delay = 500) {
 		if(!this.sceneStarting){
 			this.sceneStarting = true;
 			console.log('startScene - Stop scene ' + scene.scene.key + ' and start ' + sceneName);
@@ -21,10 +21,10 @@ export default class Common {
 
 			console.log('startScene - Fade out current scene and stop it');
 			console.log('Previous scene is: ' + scene.registry.get('previousScene'));
-			scene.cameras.main.fadeOut(250);
+			scene.cameras.main.fadeOut(fadeOutTime);
 			this.stopMusic(scene);
 			scene.time.addEvent({
-				delay: 500,
+				delay: delay,
 				callback: () => {
 					console.log('startScene - Delayed start of the new scene, start now!');
 					this.stopScene(scene);

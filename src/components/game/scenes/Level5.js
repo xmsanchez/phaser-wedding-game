@@ -4,11 +4,11 @@ import Camera from '../classes/Camera';
 ////////////////////////////////////////////////////////
 // EL DESERT
 ////////////////////////////////////////////////////////
-export default class Level3 extends Phaser.Scene
+export default class Level5 extends Phaser.Scene
 {
 	constructor()
 	{
-		super('Level3');
+		super('Level5');
 
 		this.jumpKeyReleased = true;
 		this.jump = false;
@@ -26,7 +26,7 @@ export default class Level3 extends Phaser.Scene
 		this.player = null;
 		this.joystick = null;
 		this.startScene = false;
-		this.currentScene = 'Level3';
+		this.currentScene = 'Level5';
 
 		this.npcs = null;
 		this.treasures = null;
@@ -54,7 +54,15 @@ export default class Level3 extends Phaser.Scene
 	}
 
 	preload()
-    { }
+    {
+		this.piano_s1 = this.sound.add('audio_piano_s1', { loop: false, volume: 0.4 });
+		this.piano_s2 = this.sound.add('audio_piano_s2', { loop: false, volume: 0.4 });
+		this.piano_s3 = this.sound.add('audio_piano_s3', { loop: false, volume: 0.4 });
+		this.piano_s4 = this.sound.add('audio_piano_s4', { loop: false, volume: 0.4 });
+		this.piano_s5 = this.sound.add('audio_piano_s5', { loop: false, volume: 0.4 });
+		this.piano_s6 = this.sound.add('audio_piano_s6', { loop: false, volume: 0.4 });
+		this.piano_s7 = this.sound.add('audio_piano_s7', { loop: false, volume: 0.4 });
+	 }
 
 	create()
 	{
@@ -70,43 +78,27 @@ export default class Level3 extends Phaser.Scene
 		this.joystickBaseScale = null;
 
 		// Create the tilemap using the loaded JSON file
-		this.map = this.make.tilemap({ key: 'level3' });
+		this.map = this.make.tilemap({ key: 'level5' });
 	
 		// Add the loaded tiles image asset to the map
-		const tileset_field = this.map.addTilesetImage('tileset_field', 'tileset_field');
-		const tileset_jungle = this.map.addTilesetImage('tileset_jungle', 'tileset_jungle');
+		const tileset_night = this.map.addTilesetImage('tileset_night', 'tileset_night');
+		const tileset_sky = this.map.addTilesetImage('tileset_sky', 'tileset_sky');
 		const castle_outside = this.map.addTilesetImage('castle_outside', 'castle_outside');
 
 		// Create all the layers
-		this.common.createLevelLayer(this, 'bg_5', tileset_jungle, 0.4);
-		this.common.createLevelLayer(this, 'bg_4', tileset_jungle, 0.5);
-		this.common.createLevelLayer(this, 'bg_3', tileset_jungle, 0.6);
-		this.common.createLevelLayer(this, 'bg_2', tileset_jungle, 0.7);
-		this.common.createLevelLayer(this, 'top_bg4', tileset_field, 0.4);
-		this.common.createLevelLayer(this, 'top_bg3', tileset_field, 0.5);
-		this.common.createLevelLayer(this, 'top_bg2', tileset_field, 0.6);
-		this.common.createLevelLayer(this, 'top_bg1', tileset_field, 0.7);
-		this.common.createLevelLayer(this, 'bg_1', tileset_jungle, 0.8);
-		this.common.createLevelLayer(this, 'fg_background', tileset_jungle, 0.9);
-		this.common.createLevelLayer(this, 'ground_bg', tileset_field);
+		this.common.createLevelLayer(this, 'top_bg4', tileset_sky, 0.4);
+		this.common.createLevelLayer(this, 'top_bg3', tileset_sky, 0.5);
+		this.common.createLevelLayer(this, 'top_bg2', tileset_sky, 0.6);
+		this.common.createLevelLayer(this, 'top_bg1', tileset_sky, 0.7);
+		this.common.createLevelLayer(this, 'ground_bg', tileset_night);
 		this.common.createLevelLayer(this, 'castle_outside', castle_outside);
-		// this.common.createLevelLayer(this, 'rocks', tileset_field);
-		this.common.createLevelLayer(this, 'ground_decorations', tileset_field);
-		this.ground = this.common.createLevelLayer(this, 'ground_fg', tileset_jungle);
-		this.fire = this.common.spawnFire(this);
-		// this.common.setFireAnimations(this, 'fire');
+		// this.common.createLevelLayer(this, 'rocks', tileset_night);
+		this.ground = this.common.createLevelLayer(this, 'ground_fg', tileset_night);
 		
-		this.rocks = this.common.createLevelLayer(this, 'rocks', tileset_field);
-		this.rocks2 = this.common.createLevelLayer(this, 'rocks2', tileset_jungle);
-		this.platforms = this.common.createLevelLayer(this, 'platforms', tileset_field);
-		
-		this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels * tileset_jungle.tileHeight);
+		this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels * tileset_night.tileHeight);
 
 		// Spawn all interactable objects
 		this.common.spawnNpcs(this, 'npcs', 4);
-		this.common.spawnDoors(this);
-		// this.common.spawnTreasures(this);
-		// this.common.spawnCartells(this);
 
 		// Spawn player
 		this.player = this.common.addPlayer(this);
@@ -117,7 +109,7 @@ export default class Level3 extends Phaser.Scene
 		this.common.addColliders(this);
 		this.common.setCollisions(this, 0, 20000);
 
-		this.common.loadMusic(this, tileset_jungle.name);
+		this.common.loadMusic(this, tileset_night.name);
 
 		// Add controls
 		this.player.addTouchScreenPointers(this);
@@ -130,13 +122,6 @@ export default class Level3 extends Phaser.Scene
 		this.checkCompleted();
 
 		this.npcs.getChildren().forEach((npc) => {
-			this.vestit = this.hud.searchInventory('vestit');
-			if(this.vestit == null){
-				// If we don't have the dress just put these NPCs out of sight
-				if(npc.name == 'Xavi' || npc.name == 'Miriam'){
-					npc.x = -200;
-				}
-			}
 			if(npc.name == 'Peter Pan'){
 				this.npcFly(npc, 20);
 			}else if (npc.name == 'Geni'){
@@ -147,22 +132,6 @@ export default class Level3 extends Phaser.Scene
 			}
 		})
 
-		if(this.previousScene == 'Level4'){
-			this.player.x = this.doors.getChildren()[0].x;
-			this.player.y = this.doors.getChildren()[0].y - 20;
-		}
-
-		if(this.vestit != null){
-			this.cameras.main.y = this.player.y - 250;
-		}
-
-		this.bark = this.sound.add('audio_dog_bark', { loop: false, volume: 0.5 });
-
-		this.finishDialog = [
-			'Xavi: Que bé, has aconseguit **tot el que necessitàvem**. Que crack!!',
-			'Miriam: Ara ja **podem anar tots al casament**! Ai, que ploro :)',
-			'Miriam: Estem tant, tant **contents**...'
-		];
 	}
 
 	checkCompleted() {
@@ -171,79 +140,10 @@ export default class Level3 extends Phaser.Scene
 		this.scenesVisited.push(this.currentScene);
 		console.log('checkCompleted this.scenesVisited: ' + this.scenesVisited);
 		this.sceneRegistry = this.registry.get(this.scene.key);
-		let treasuresOpened = this.sceneRegistry.treasuresOpened;
-		for(let i = 0; i < treasuresOpened.length; i++) {
-			this.treasures.getChildren().forEach((treasure) => {
-				if(treasure.name === treasuresOpened[i]) {
-					treasure.opened = true;
-					treasure.setFrame(11);
-				}
-			})
-		}
 	}
 
 	update() {
-		// Update player movement based on events
-		this.player.playerMovement(this);
 		
-		// The player has completed the game!!
-		if(this.vestit != null){
-			this.npcActionsXaviMiriamGameFinished(this);
-		}else{
-			this.npcs.getChildren().forEach((npc) => {
-				const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
-				if(!this.message.messageDisplaying){
-					if(npc.name != 'Xavi' && npc.name != 'Miriam'){
-						npc.anims.play(npc.name + '_stand', true);
-					}
-				}
-	
-				// NPCs will always look at the player
-				if(npc.name != 'Rapunzel'){
-					if(npc.name != 'Xavi' && npc.name != 'Miriam' && npc.name != 'Simba') {
-						this.common.npcLookDirection(this, npc, distance, true);
-					}else{
-						this.common.npcLookDirection(this, npc, distance);
-					}
-				}
-			});
-			
-			// Check overlaps (show the 'B' button hint)
-			this.common.checkOverlapsStaticGroups(this.npcs, this);
-			this.common.checkOverlapsStaticGroups(this.doors, this);
-			// this.common.checkOverlapsStaticGroups(this.treasures, this);
-	
-			if(this.player.y >= this.map.heightInPixels - 300){
-				this.inInfraworld = true;
-				if(this.player.x > this.map.widthInPixels - 350){
-					console.log('Must set this.infraworldright as true: ' + this.inInfraWorldRight);
-					this.inInfraWorldRight = true;
-					this.inInfraWorldLeft = false;
-				}else if(this.player.x < 625){
-					console.log('Must set this.infraworldleft as true: ' + this.inInfraWorldLeft);
-					this.inInfraWorldRight = false;
-					this.inInfraWorldLeft = true;
-				}
-			}
-	
-			// If player falls out from the screen, restore it
-			if (this.player.y > this.map.heightInPixels) {
-				if(this.inInfraWorldRight){
-					console.log('infraworld Must spawn at the right');
-					console.log("this.inInfraWorldLeft: " + this.inInfraWorldLeft);
-					console.log("this.inInfraWorldRight: " + this.inInfraWorldRight);
-					this.player.x = this.map.widthInPixels - 250;
-					this.player.y = this.map.heightInPixels - 100;
-				}
-				if(this.inInfraWorldLeft){
-					console.log('infraworld Must spawn at the left');
-					console.log("this.inInfraWorldLeft: " + this.inInfraWorldLeft);
-					console.log("this.inInfraWorldRight: " + this.inInfraWorldRight);
-					this.player.x = 625;
-					this.player.y = this.map.heightInPixels - 100;
-				}
-			}
-		}
 	}
 
 	npcFly(npc, distance) {
@@ -305,7 +205,7 @@ export default class Level3 extends Phaser.Scene
 	npcActionsXaviMiriamGameFinished(player, npc) {
 		if(!this.message.messageDisplaying){
 			this.message.showMessageList(this, this.finishDialog, function(scene){
-				scene.common.startScene(scene, 'PreLevel', { textSize: 40, timeout: 5000, levelName: 'Epíleg', levelKey: 'Level5', text: 'I així, ens encaminem\ncap a les afores,\nmentre es fa de nit...' }, 4000, 5000);
+				scene.common.startScene(scene, 'PreLevel', { textSize: 40, timeout: 5000, levelName: 'Epíleg', levelKey: 'Level0', text: 'I així, ens encaminem\ncap a les afores,\nmentre es fa de nit...' }, 4000, 5000);
 			});
 		}
 	}

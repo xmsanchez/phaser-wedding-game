@@ -15,6 +15,7 @@ import Level3Prev2 from './scenes/Level3Prev2'
 import Level3Prev3 from './scenes/Level3Prev3'
 import Level3 from './scenes/Level3'
 import Level4 from './scenes/Level4'
+import Level5 from './scenes/Level5'
 
 const config = {
 	type: Phaser.AUTO,
@@ -50,7 +51,8 @@ const config = {
 		Level3Prev2,
 		Level3Prev3,
 		Level3,
-		Level4
+		Level4,
+		Level5
 	]
 }
 

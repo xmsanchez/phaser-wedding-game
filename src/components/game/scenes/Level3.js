@@ -49,18 +49,12 @@ export default class Level3 extends Phaser.Scene
 		this.inInfraworld = false;
 		this.inInfraWorldRight = false;
 		this.inInfraWorldLeft = false;
+
+		this.vestit = false;
 	}
 
 	preload()
-    {
-		this.piano_s1 = this.sound.add('audio_piano_s1', { loop: false, volume: 0.4 });
-		this.piano_s2 = this.sound.add('audio_piano_s2', { loop: false, volume: 0.4 });
-		this.piano_s3 = this.sound.add('audio_piano_s3', { loop: false, volume: 0.4 });
-		this.piano_s4 = this.sound.add('audio_piano_s4', { loop: false, volume: 0.4 });
-		this.piano_s5 = this.sound.add('audio_piano_s5', { loop: false, volume: 0.4 });
-		this.piano_s6 = this.sound.add('audio_piano_s6', { loop: false, volume: 0.4 });
-		this.piano_s7 = this.sound.add('audio_piano_s7', { loop: false, volume: 0.4 });
-	 }
+    { }
 
 	create()
 	{
@@ -136,8 +130,8 @@ export default class Level3 extends Phaser.Scene
 		this.checkCompleted();
 
 		this.npcs.getChildren().forEach((npc) => {
-			let vestit = this.hud.searchInventory('vestit');
-			if(vestit == null){
+			this.vestit = this.hud.searchInventory('vestit');
+			if(this.vestit == null){
 				// If we don't have the dress just put these NPCs out of sight
 				if(npc.name == 'Xavi' || npc.name == 'Miriam'){
 					npc.x = -200;
@@ -148,7 +142,9 @@ export default class Level3 extends Phaser.Scene
 			}else if (npc.name == 'Geni'){
 				this.npcFly(npc, 4);
 			}
-			npc.anims.play(npc.name + '_stand', true);
+			if(npc.name != 'Xavi' && npc.name != 'Miriam'){
+				npc.anims.play(npc.name + '_stand', true);
+			}
 		})
 
 		if(this.previousScene == 'Level4'){
@@ -156,7 +152,17 @@ export default class Level3 extends Phaser.Scene
 			this.player.y = this.doors.getChildren()[0].y - 20;
 		}
 
+		if(this.vestit != null){
+			this.cameras.main.y = this.player.y - 250;
+		}
+
 		this.bark = this.sound.add('audio_dog_bark', { loop: false, volume: 0.5 });
+
+		this.finishDialog = [
+			'Xavi: Que bé, has aconseguit **tot el que necessitàvem**. Que crack!!',
+			'Miriam: Ara ja **podem anar tots al casament**! Ai, que ploro :)',
+			'Miriam: Estem tant, tant **contents**...'
+		];
 	}
 
 	checkCompleted() {
@@ -177,60 +183,65 @@ export default class Level3 extends Phaser.Scene
 	}
 
 	update() {
-
 		// Update player movement based on events
 		this.player.playerMovement(this);
 		
-		
-		this.npcs.getChildren().forEach((npc) => {
-			const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
-			if(!this.message.messageDisplaying){
-				npc.anims.play(npc.name + '_stand', true);
-			}
-
-			// NPCs will always look at the player
-			if(npc.name != 'Rapunzel'){
-				if(npc.name != 'Xavi' && npc.name != 'Miriam' && npc.name != 'Simba') {
-					this.common.npcLookDirection(this, npc, distance, true);
-				}else{
-					this.common.npcLookDirection(this, npc, distance);
+		// The player has completed the game!!
+		if(this.vestit != null){
+			this.npcActionsXaviMiriamGameFinished(this);
+		}else{
+			this.npcs.getChildren().forEach((npc) => {
+				const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
+				if(!this.message.messageDisplaying){
+					if(npc.name != 'Xavi' && npc.name != 'Miriam'){
+						npc.anims.play(npc.name + '_stand', true);
+					}
+				}
+	
+				// NPCs will always look at the player
+				if(npc.name != 'Rapunzel'){
+					if(npc.name != 'Xavi' && npc.name != 'Miriam' && npc.name != 'Simba') {
+						this.common.npcLookDirection(this, npc, distance, true);
+					}else{
+						this.common.npcLookDirection(this, npc, distance);
+					}
+				}
+			});
+			
+			// Check overlaps (show the 'B' button hint)
+			this.common.checkOverlapsStaticGroups(this.npcs, this);
+			this.common.checkOverlapsStaticGroups(this.doors, this);
+			// this.common.checkOverlapsStaticGroups(this.treasures, this);
+	
+			if(this.player.y >= this.map.heightInPixels - 300){
+				this.inInfraworld = true;
+				if(this.player.x > this.map.widthInPixels - 350){
+					console.log('Must set this.infraworldright as true: ' + this.inInfraWorldRight);
+					this.inInfraWorldRight = true;
+					this.inInfraWorldLeft = false;
+				}else if(this.player.x < 625){
+					console.log('Must set this.infraworldleft as true: ' + this.inInfraWorldLeft);
+					this.inInfraWorldRight = false;
+					this.inInfraWorldLeft = true;
 				}
 			}
-		});
-		
-		// Check overlaps (show the 'B' button hint)
-		this.common.checkOverlapsStaticGroups(this.npcs, this);
-		this.common.checkOverlapsStaticGroups(this.doors, this);
-		// this.common.checkOverlapsStaticGroups(this.treasures, this);
-
-		if(this.player.y >= this.map.heightInPixels - 300){
-			this.inInfraworld = true;
-			if(this.player.x > this.map.widthInPixels - 350){
-				console.log('Must set this.infraworldright as true: ' + this.inInfraWorldRight);
-				this.inInfraWorldRight = true;
-				this.inInfraWorldLeft = false;
-			}else if(this.player.x < 625){
-				console.log('Must set this.infraworldleft as true: ' + this.inInfraWorldLeft);
-				this.inInfraWorldRight = false;
-				this.inInfraWorldLeft = true;
-			}
-		}
-
-		// If player falls out from the screen, restore it
-		if (this.player.y > this.map.heightInPixels) {
-			if(this.inInfraWorldRight){
-				console.log('infraworld Must spawn at the right');
-				console.log("this.inInfraWorldLeft: " + this.inInfraWorldLeft);
-				console.log("this.inInfraWorldRight: " + this.inInfraWorldRight);
-				this.player.x = this.map.widthInPixels - 250;
-				this.player.y = this.map.heightInPixels - 100;
-			}
-			if(this.inInfraWorldLeft){
-				console.log('infraworld Must spawn at the left');
-				console.log("this.inInfraWorldLeft: " + this.inInfraWorldLeft);
-				console.log("this.inInfraWorldRight: " + this.inInfraWorldRight);
-				this.player.x = 625;
-				this.player.y = this.map.heightInPixels - 100;
+	
+			// If player falls out from the screen, restore it
+			if (this.player.y > this.map.heightInPixels) {
+				if(this.inInfraWorldRight){
+					console.log('infraworld Must spawn at the right');
+					console.log("this.inInfraWorldLeft: " + this.inInfraWorldLeft);
+					console.log("this.inInfraWorldRight: " + this.inInfraWorldRight);
+					this.player.x = this.map.widthInPixels - 250;
+					this.player.y = this.map.heightInPixels - 100;
+				}
+				if(this.inInfraWorldLeft){
+					console.log('infraworld Must spawn at the left');
+					console.log("this.inInfraWorldLeft: " + this.inInfraWorldLeft);
+					console.log("this.inInfraWorldRight: " + this.inInfraWorldRight);
+					this.player.x = 625;
+					this.player.y = this.map.heightInPixels - 100;
+				}
 			}
 		}
 	}
@@ -247,42 +258,70 @@ export default class Level3 extends Phaser.Scene
 	}
 
 	npcActions(player, npc) {
-		npc.anims.play(npc.name + '_talking', true);
-		switch(npc.name) {
-			case 'Bèstia':
-				this.npcActionsBeast(player, npc);
-				break;
-			case 'Aladdin':
-				this.npcActionsAladdin(player, npc);
-				break;
-			case 'Gaston':
-				this.npcActionsGaston(player, npc);
-				break;
-			case 'Malèfica':
-				this.npcActionsMaleficent(player, npc);
-				break;
-			case 'Peter Pan':
-				this.npcActionsPeterPan(player, npc);
-				break;
-			case 'Pluto':
-				this.npcActionsPluto(player, npc);
-				break;
-			case 'Rapunzel':
-				this.npcActionsRapunzel(player, npc);
-				break;
-			case 'Mickey Mouse':
-				this.npcActionsMickeyMouse(player, npc);
-				break;
-			case 'Geni':
-				this.npcActionsGenie(player, npc);
-				break;
-			case 'Simba':
-				this.npcActionsSimba(player, npc);
-				break;
-			case 'Hades':
-				this.npcActionsHades(player, npc);
-				break;
+		if(npc.name != 'Xavi' && npc.name != 'Miriam'){
+			npc.anims.play(npc.name + '_talking', true);
+			switch(npc.name) {
+				case 'Bèstia':
+					this.npcActionsBeast(player, npc);
+					break;
+				case 'Aladdin':
+					this.npcActionsAladdin(player, npc);
+					break;
+				case 'Gaston':
+					this.npcActionsGaston(player, npc);
+					break;
+				case 'Malèfica':
+					this.npcActionsMaleficent(player, npc);
+					break;
+				case 'Peter Pan':
+					this.npcActionsPeterPan(player, npc);
+					break;
+				case 'Pluto':
+					this.npcActionsPluto(player, npc);
+					break;
+				case 'Rapunzel':
+					this.npcActionsRapunzel(player, npc);
+					break;
+				case 'Mickey Mouse':
+					this.npcActionsMickeyMouse(player, npc);
+					break;
+				case 'Geni':
+					this.npcActionsGenie(player, npc);
+					break;
+				case 'Simba':
+					this.npcActionsSimba(player, npc);
+					break;
+				case 'Hades':
+					this.npcActionsHades(player, npc);
+					break;
+			}
+
+		// Define actions for Xavi and Miriam
+		}else{
+			this.npcActionsXaviMiriam(player, npc);
 		}
+	}
+
+	npcActionsXaviMiriamGameFinished(player, npc) {
+		if(!this.message.messageDisplaying){
+			this.message.showMessageList(this, this.finishDialog, function(scene){
+				scene.common.startScene(scene, 'PreLevel', { textSize: 40, timeout: 5000, levelName: 'Epíleg', levelKey: 'Level5', text: 'I així, ens encaminem\ncap a les afores,\nmentre es fa de nit...' }, 4000, 5000);
+			});
+		}
+	}
+
+	npcActionsXaviMiriam(player, npc) {
+		let dialog = [];
+		if(npc.name == 'Xavi'){
+			dialog = [
+				npc.name + ': Ei, hola!'
+			]
+		}else if (npc.name == 'Miriam'){
+			dialog = [
+				npc.name + ': Holaaa!'
+			]
+		}
+		this.message.showMessageList(this, dialog);
 	}
 
 	npcActionsAladdin(player, npc) {

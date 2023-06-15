@@ -112,6 +112,10 @@ export default class Level4 extends Phaser.Scene
 				this.npc = npc;
 			}
 		});
+
+		// // TODO REMOVE THIS, ONLY SET FOR DEBUG
+		// this.hud.inventory.push('vestit');
+		// this.hud.updateInventory(this, 'vestit');
 	}
 
 	checkCompleted() {

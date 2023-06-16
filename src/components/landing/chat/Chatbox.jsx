@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { socket } from './Socket'
 import Message from './Message';
 import InputBox from './InputBox';
 import LoadingIndicator from './LoadingIndicator';
@@ -9,8 +8,8 @@ import Settings from './Settings';
 import roles from './Roles';
 import styles from './styles/ChatBox.module.css';
 
-const API_URL = 'http://127.0.0.1:5000';
-// const API_URL = 'https://europe-west1-xavi-332016.cloudfunctions.net/gpt-chatbot-api'
+// const API_URL = 'http://127.0.0.1:8080';
+const API_URL = 'https://europe-west1-xavi-332016.cloudfunctions.net/gpt-chatbot-api'
 
 const Chatbox = () => {
   const [settingsOpenAiKey, setSettingsOpenAiKey] = useState('');
@@ -26,15 +25,12 @@ const Chatbox = () => {
     { role: 'system', content: roles.ChatBot },
   ]);
 
-  const [isConnected, setIsConnected] = useState(false);
-  const [result, setResult] = useState('');
-
   const messageContainerRef = useRef(null);
 
   useEffect(() => {
     setConversation(prevConversation => prevConversation.map(item => {
       if (item.role === 'system') {
-        // console.log('Updating system role: ', settingsRole)
+        console.log('Updating system role: ', settingsRole)
         return { ...item, content: settingsRole };
       }
       return item;
@@ -69,134 +65,103 @@ const Chatbox = () => {
   
     return result;
   }
-  
-  // const stream = (message) => {
-  //   const userMessage = { role: 'user', content: message };
-  //   setConversation((prevConversation) => [...prevConversation, userMessage]);
-  //   setLoading(true);
 
-  //   const requestBody = {
-  //     conversation: [...conversation, userMessage],
-  //     settings: { openAiKey: settingsOpenAiKey, enableVoice: settingsEnableVoice, model: settingsModel, temperature: settingsTemperature, stream: settingsStream }
-  //   };
-  //   let responseMessage;
-  //   const assistantMessage = { role: 'assistant', content: message };
-  //   console.log('assistantMessage: ', assistantMessage);
-  //   socket.emit('request_chatGPT_description', [...conversation, userMessage]);
-
-
-  //   setAssistantMessage('');
-  // }
-
-  const stream = (message) => {
-    setAssistantMessage('');
+  const sendMessage = async (message) => {
     const userMessage = { role: 'user', content: message };
     setConversation((prevConversation) => [...prevConversation, userMessage]);
     setLoading(true);
 
     const requestBody = {
-      conversation: conversation.concat(userMessage).map(({ streaming, ...msg }) => msg)
+      conversation: [...conversation, userMessage],
+      settings: { openAiKey: settingsOpenAiKey, enableVoice: settingsEnableVoice, model: settingsModel, temperature: settingsTemperature, stream: settingsStream }
     };
+  
+    if (!settingsStream) {
+      await requestNoStream(requestBody);
+    } else {
+      await requestStream(requestBody);
+    }
+  
+    setLoading(false);
+  };
+  
+  const requestNoStream = async (requestBody) => {  
+    let response = {};
+    let responseData;
     let responseMessage;
-    const assistantMessage = { role: 'assistant', content: message };
-    console.log('assistantMessage: ', assistantMessage);
-    socket.emit('request_chatGPT_description', conversation.concat(userMessage).map(({ streaming, ...msg }) => msg));
-
-
-    setAssistantMessage('');
-  }
   
-  const [assistantMessage, setAssistantMessage] = useState('');
-  
-  useEffect(() => {
-    if (assistantMessage) {
-      const messages = [...conversation];
-      const lastIndex = messages.length - 1;
-  
-      if (
-        messages[lastIndex] &&
-        messages[lastIndex].role === "assistant" &&
-        messages[lastIndex].streaming === true
-      ) {
-        messages[lastIndex].content = assistantMessage;
-      } else {
-        messages.push({
-          role: "assistant",
-          content: assistantMessage,
-          streaming: true,
-        });
+    try {
+      response = await Promise.race([
+        fetch(API_URL + '/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody),
+        }),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Request timeout')), 120000)
+        ),
+      ]);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
-      setConversation(messages);
+      responseData = await response.json();
+      responseMessage = responseData.text || "Sorry, I couldn't understand you. Please try again.";
+    } catch (error) {
+      console.log(error);
+      responseMessage = 'Sorry, something is not working. Please try again. ';
     }
-  }, [assistantMessage]);
-
-  useEffect(() => {
-    function onChunk(value) {
-      setAssistantMessage((prevMessage) => prevMessage + value);
-      setLoading(false);
+    const assistantMessage = { role: 'assistant', content: responseMessage };
+  
+    if (response.hasOwnProperty('status')) {
+      if (response.status === 401) {
+        setApiMessage("You are not authorized to access the API");
+      }
+    } else {
+      setApiMessage('');
+      setConversation((prevConversation) => [
+        ...prevConversation,
+        assistantMessage,
+      ]);
     }
+  };
+  
+  const requestStream = async (requestBody) => {
+    let responseMessage;
 
-      function onConnect() {
-          setIsConnected(true);
-      }
+    const clientId = generateClientId(); 
 
-      if (socket.connected) {
-          onConnect()
-      }
+    const eventSource = new EventSource(API_URL + `/stream?clientId=${clientId}`)
 
-      socket.on('chatGPT_descripiton_chunk', onChunk)
-      socket.on('connect', onConnect)
+    eventSource.addEventListener('message', (event) => {
+      console.log('Stream: ' + event.data);
+      responseMessage = event.data.message;
+    });
 
-      return () => {
-          socket.off('chatGPT_descripiton_chunk', onChunk)
-          socket.off('connect', onConnect)
-      };
-  }, []);
-  
-  // useEffect(() => {
-  //   let completeMessage = '';
-  //   let chunkTimeout = null;
-  
-  //   function onChunk(value) {
-  //     // Clear the existing timeout if a new chunk comes in
-  //     if (chunkTimeout) {
-  //       clearTimeout(chunkTimeout);
-  //     }
-  
-  //     completeMessage += value;
-  
-  //     // Set a new timeout
-  //     chunkTimeout = setTimeout(() => {
-  //       const assistantMessage = { role: 'assistant', content: completeMessage };
-  //       setConversation((prevConversation) => [
-  //         ...prevConversation,
-  //         assistantMessage,
-  //       ]);
-  //       setLoading(false);
-  //       completeMessage = ''; // Reset the complete message
-  //     }, 1000); // 1 second timeout
-  //   }
-  
-  //   function onConnect() {
-  //     setIsConnected(true);
-  //   }
-  
-  //   if (socket.connected) {
-  //     onConnect();
-  //   }
-  
-  //   socket.on('chatGPT_descripiton_chunk', onChunk);
-  //   socket.on('connect', onConnect);
-  
-  //   return () => {
-  //     socket.off('chatGPT_descripiton_chunk', onChunk);
-  //     socket.off('connect', onConnect);
-  //     if (chunkTimeout) {
-  //       clearTimeout(chunkTimeout);
-  //     }
-  //   };
-  // }, []);
+    eventSource.addEventListener('error', (event) => {
+      console.error(`Error occurred while receiving streaming data: ${event}`);
+      eventSource.close();
+    });
 
+    fetch(API_URL + '/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    }).then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to start streaming data');
+        }
+
+        console.log('Started streaming data');
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  
   return (
     <div className={styles.mainContainer}>
       {showSettings &&
@@ -237,7 +202,8 @@ const Chatbox = () => {
             ))}
           {loading && <LoadingIndicator />}
         </div>
-        <InputBox sendMessage={stream} />
+        <InputBox sendMessage={sendMessage} />
+        {/* <button onClick={() => cleanHistory()} type="submit">Clean history</button> */}
       </div>
     </div>
   );

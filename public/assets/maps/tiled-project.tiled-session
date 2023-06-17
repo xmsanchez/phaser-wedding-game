@@ -609,14 +609,14 @@
         },
         "level5.json": {
             "expandedObjectLayers": [
-                29,
-                28
+                28,
+                29
             ],
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 920.5,
-                "y": 382.5
+                "x": 576.5,
+                "y": 738.5
             }
         },
         "level5.json#castle_outside": {

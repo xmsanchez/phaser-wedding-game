@@ -1001,7 +1001,7 @@ export default class Common {
 				// scene.backgroundMusic = scene.sound.add('background_music_tangled', { loop: true, volume: 0.1});
 				break;
 			case 'tileset_night':
-				scene.backgroundMusic = scene.sound.add('background_music_tangled_real', { loop: true, volume: 0.4});
+				scene.backgroundMusic = scene.sound.add('background_music_tangled_real', { loop: false, volume: 0.4});
 		}
 		try {
 			// Play the audio file

@@ -43,4 +43,10 @@ export default class UIScene extends Phaser.Scene {
         this.registry.set('HUD', this.hud);
         this.registry.set('Message', this.message);
     }
+
+    toggleUIVisibility(visible) {
+        this.joystick.joystick.setVisible(false);
+        this.jumpBtn.setVisible(visible);
+        this.interactBtn.setVisible(visible);
+    }
 }

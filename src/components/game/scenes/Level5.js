@@ -203,11 +203,21 @@ export default class Level5 extends Phaser.Scene
 		this.manageText('Direcció:\n- Xavier Miranda Sánchez',
 							29000, 6000, 1500, '40px', 'left');
 		this.manageText('Disseny de nivells:\n- Xavier Miranda Sánchez\n- Miriam Garcia Sala',
-							41000, 6000, 1500, '40px', 'left');
+							39000, 6000, 1500, '40px', 'left');
+		this.manageText('Programació:\n- Xavier Miranda Sánchez',
+							49000, 6000, 1500, '40px', 'left');
+		this.manageText('Assistents de programació:\n- GPT-4',
+							59000, 6000, 1500, '40px', 'left');
+		this.manageText('Becari:\n- GPT-3.5',
+							69000, 6000, 1500, '40px', 'left');
+		this.manageText('Art:\n- Xavier Miranda Sánchez\n- www.spriters-resource.com\n- Adobe Stock\n- Google Images',
+							79000, 6000, 1500, '40px', 'left');
+		this.manageText('Àudio:\n- Creative Commons (recursos varis)',
+							89000, 6000, 1500, '40px', 'left');
 		this.manageText('Beta testers:\n- Xavier Miranda Sánchez\n- Miriam Garcia Sala\n- Arnau Morató Codorniu',
-							53000, 6000, 1500, '40px', 'left');
+							99000, 6000, 1500, '40px', 'left');
 		this.manageText('Gràcies', 
-							6500, 2000, 1500, '80px');
+							109000, 50000, 1500, '80px');
 	}
 
 	manageText(text, startTime, endTime, duration, textSize = '32px', showStyle = 'center') {

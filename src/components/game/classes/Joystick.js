@@ -74,20 +74,4 @@ export default class Joystick {
     createCursorKeys() {
         return this.joystick.createCursorKeys();
     }
-
-    // Create a method to hide the joystick and the buttons
-    hide() {
-        this.joystick.setVisible(false);
-        this.btnContainers.forEach(container => {
-            container.setVisible(false);
-        });
-    }
-
-    // Create a method to show the joystick and the buttons
-    show() {
-        this.joystick.setVisible(true);
-        this.btnContainers.forEach(container => {
-            container.setVisible(true);
-        });
-    }
 }

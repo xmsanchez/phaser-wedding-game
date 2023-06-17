@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level4.json",
+    "activeFile": "level5.json",
     "automapping.whileDrawing": true,
     "expandedProjectPaths": [
         "."
@@ -11,7 +11,7 @@
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "": {
-            "scaleInDock": 3,
+            "scaleInDock": 1,
             "scaleInEditor": 1.5
         },
         "#tileset": {
@@ -25,14 +25,14 @@
         "house-inside.json": {
             "expandedObjectLayers": [
                 29,
-                27,
-                28
+                28,
+                27
             ],
             "scale": 3,
             "selectedLayer": 8,
             "viewCenter": {
-                "x": 388.66666666666663,
-                "y": 173.83333333333331
+                "x": 387.83333333333326,
+                "y": 173.5
             }
         },
         "house-inside.json#dog": {
@@ -414,18 +414,18 @@
         },
         "level3.json": {
             "expandedObjectLayers": [
-                29,
-                27,
-                28,
                 51,
+                29,
+                57,
                 52,
-                57
+                28,
+                27
             ],
             "scale": 0.5,
             "selectedLayer": 20,
             "viewCenter": {
-                "x": 806,
-                "y": 1067
+                "x": 805,
+                "y": 1065
             }
         },
         "level3.json#agrabah_market": {
@@ -555,14 +555,14 @@
         "level4.json": {
             "expandedObjectLayers": [
                 45,
-                27,
-                28
+                28,
+                27
             ],
             "scale": 1,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 543,
-                "y": 328.5
+                "x": 309.5,
+                "y": 326.5
             }
         },
         "level4.json#bunny": {
@@ -613,10 +613,10 @@
                 28
             ],
             "scale": 1,
-            "selectedLayer": 12,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 763,
-                "y": 387.5
+                "x": 920.5,
+                "y": 382.5
             }
         },
         "level5.json#castle_outside": {
@@ -670,10 +670,17 @@
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "level5.json#sky_night": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
         "level5.json#stan": {
+            "dynamicWrapping": false,
             "scaleInDock": 1
         },
         "level5.json#tileset_field": {
+            "dynamicWrapping": false,
             "scaleInDock": 1
         },
         "level5.json#tileset_jungle": {
@@ -841,22 +848,21 @@
         }
     },
     "last.externalTilesetPath": "/home/xavi/Projects/xavi/gpt/games/platform-new/public/assets/maps",
-    "last.imagePath": "/home/xavi/Projects/xavi/gpt/games/phaser-wedding-game/public/assets/tilesets/tileset_field",
+    "last.imagePath": "/home/xavi/Projects/xavi/gpt/games/phaser-wedding-game/public/assets/tilesets",
     "map.lastUsedFormat": "json",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
     "openFiles": [
-        "level5.json",
-        "level4.json"
+        "level5.json"
     ],
     "project": "tiled-project.tiled-project",
     "property.type": "bool",
     "recentFiles": [
         "level5.json",
+        "house-inside.json",
         "level4.json",
         "level3.json",
         "level1.json",
-        "house-inside.json",
         "rule2.tmx",
         "z.level1-bak.json",
         "z.level2-bak.json",
@@ -867,8 +873,9 @@
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {
-        "height": 16,
-        "width": 16
+        "height": 47,
+        "width": 32
     },
-    "tileset.type": 0
+    "tileset.type": 0,
+    "tileset.useTransparentColor": false
 }

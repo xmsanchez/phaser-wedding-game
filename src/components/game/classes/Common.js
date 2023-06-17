@@ -536,7 +536,7 @@ export default class Common {
 			}else if(npc.name == 'Xavi' || npc.name == 'Miriam'){
 				this.setNpcAnimations(scene, spritesheet.value, npc.name);
 			}else{
-				console.log('Set npc animations for ' + spritesheet.value + ' ' + npc.name);
+				// console.log('Set npc animations for ' + spritesheet.value + ' ' + npc.name);
 				newnpc.y = newnpc.y + 3;
 				this.setNpcDisneyAnimations(scene, spritesheet.value, npc.name);
 			}
@@ -997,6 +997,11 @@ export default class Common {
 			case 'castle_inside':
 				// scene.backgroundMusic = scene.sound.add('background_music_tangled', { loop: true, volume: 0.1});
 				break;
+			case 'castle_inside':
+				// scene.backgroundMusic = scene.sound.add('background_music_tangled', { loop: true, volume: 0.1});
+				break;
+			case 'tileset_night':
+				scene.backgroundMusic = scene.sound.add('background_music_tangled_real', { loop: true, volume: 0.4});
 		}
 		try {
 			// Play the audio file

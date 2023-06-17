@@ -51,18 +51,12 @@ export default class Level5 extends Phaser.Scene
 		this.inInfraWorldLeft = false;
 
 		this.vestit = false;
+		this.lanterns = null;
+		this.spawnTimer = null;
 	}
 
 	preload()
-    {
-		this.piano_s1 = this.sound.add('audio_piano_s1', { loop: false, volume: 0.4 });
-		this.piano_s2 = this.sound.add('audio_piano_s2', { loop: false, volume: 0.4 });
-		this.piano_s3 = this.sound.add('audio_piano_s3', { loop: false, volume: 0.4 });
-		this.piano_s4 = this.sound.add('audio_piano_s4', { loop: false, volume: 0.4 });
-		this.piano_s5 = this.sound.add('audio_piano_s5', { loop: false, volume: 0.4 });
-		this.piano_s6 = this.sound.add('audio_piano_s6', { loop: false, volume: 0.4 });
-		this.piano_s7 = this.sound.add('audio_piano_s7', { loop: false, volume: 0.4 });
-	 }
+    { }
 
 	create()
 	{
@@ -73,6 +67,8 @@ export default class Level5 extends Phaser.Scene
 		this.common.addInput(this);
 		this.message = this.registry.get('Message');
 		this.hud = this.registry.get('HUD');
+		// In this scene we will hide the inventory
+		this.hud.container.setVisible(false);
 
 		this.initialCameraZoom = 1;
 		this.joystickBaseScale = null;
@@ -82,7 +78,7 @@ export default class Level5 extends Phaser.Scene
 	
 		// Add the loaded tiles image asset to the map
 		const tileset_night = this.map.addTilesetImage('tileset_night', 'tileset_night');
-		const tileset_sky = this.map.addTilesetImage('tileset_sky', 'tileset_sky');
+		const tileset_sky = this.map.addTilesetImage('sky_night', 'sky_night');
 		const castle_outside = this.map.addTilesetImage('castle_outside', 'castle_outside');
 
 		// Create all the layers
@@ -111,13 +107,63 @@ export default class Level5 extends Phaser.Scene
 
 		this.common.loadMusic(this, tileset_night.name);
 
-		// Add controls
-		this.player.addTouchScreenPointers(this);
-		this.player.setKeyboardControls(this);
+		// // Add controls
+		// this.player.addTouchScreenPointers(this);
+		// this.player.setKeyboardControls(this);
 
 		// Setup camera bounds and zoom
-		this.camera.setCamera(this, 2.5);
-		this.cameras.main.fadeIn(250);
+		this.camera.setCameraLastScene(this, 1.5);
+		this.cameras.main.fadeIn(4000);
+		this.cameras.main.scrollY = this.map.heightInPixels;
+		console.log('Map in pixels is: ' + this.map.heightInPixels);
+	
+		let camera = this.cameras.main;
+		this.player.setFrame(10);
+
+		// Begin to move the camera to the left after a delay
+		this.time.delayedCall(1000, () => {
+			console.log('Move the camera at x axis');
+			this.tweens.add({
+				targets: camera,
+				scrollX: 200, // target position
+				duration: 18000, // how long the tween should take in milliseconds
+				ease: 'Sine.easeInOut' // easing function to make the movement smooth
+			});
+		});
+	
+		// After n seconds, begin to move the camera up
+		this.time.delayedCall(5000, () => {
+			console.log('Move the camera at y axis');
+			this.tweens.add({
+				targets: camera,
+				zoom: 1,
+				scrollY: 300, // target position
+				duration: 9000, // how long the tween should take in milliseconds
+				ease: 'Sine.easeInOut' // easing function to make the movement smooth
+			});
+		});
+
+		// After n seconds, begin to move the camera up again
+		this.time.delayedCall(24000, () => {
+			console.log('Move the camera at y axis');
+			this.tweens.add({
+				targets: camera,
+				zoom: 1.7,
+				scrollY: -600, // target position
+				duration: 20000, // how long the tween should take in milliseconds
+				ease: 'Sine.easeInOut' // easing function to make the movement smooth
+			});
+		});
+
+		this.lanterns = this.physics.add.group();
+
+		this.spawnLanterns();
+		// this.spawnTimer = this.time.addEvent({
+		// 	delay: 15000, // delay in ms
+		// 	callback: this.spawnLanterns,
+		// 	callbackScope: this,
+		// 	loop: true
+		// });
 
 		this.checkCompleted();
 
@@ -129,9 +175,56 @@ export default class Level5 extends Phaser.Scene
 			}
 			if(npc.name != 'Xavi' && npc.name != 'Miriam'){
 				npc.anims.play(npc.name + '_stand', true);
+			}else{
+				npc.flipX = true;
 			}
 		})
 
+		this.lights.enable();
+        this.lights.setAmbientColor(0xFFFFFF);
+		
+		this.thankYouText = null;
+		this.manageText();
+	}
+
+	manageText() {
+		this.thankYouText = this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2, 
+			'Gràcies per acompanyar-nos\nen aquest viatge', {
+			fontSize: '32px',
+			fill: '#FFFFFF',
+			align: 'center'
+		}).setOrigin(0.5, 0.5); // Set origin to the center of text
+
+		// Make the text invisible initially
+		this.thankYouText.setVisible(false);
+		this.thankYouText.setAlpha(0);
+
+		// Fix the text position on the screen, regardless of camera movement
+		this.thankYouText.setScrollFactor(0, 0);
+
+		this.time.delayedCall(3000, () => {
+			this.tweens.add({
+				targets: this.thankYouText,
+				duration: 3000, // longer duration
+				ease: 'Sine.easeInOut',
+				yoyo: false,
+				repeat: 0,
+				alpha: 1,
+				onComplete: () => { // Add onComplete callback
+					this.time.delayedCall(3000, () => { // Delay for 3000ms before fading out
+						this.tweens.add({
+							targets: this.thankYouText,
+							duration: 3000, // fade-out duration
+							ease: 'Sine.easeInOut',
+							yoyo: false,
+							repeat: 0,
+							alpha: 0
+						});
+					});
+				}	
+			});
+			this.thankYouText.setVisible(true);
+		})
 	}
 
 	checkCompleted() {
@@ -143,7 +236,52 @@ export default class Level5 extends Phaser.Scene
 	}
 
 	update() {
+		this.thankYouText.setScale(1 / this.cameras.main.zoom);
+	}
+
+	spawnLanterns() {
+		for(let i = 0; i < 600; i++) {
+			let lantern = this.lanterns.create(Phaser.Math.Between(200, 650), this.player.y + 5, 'lantern');
+			lantern.body.allowGravity = false; // Disable gravity for this lantern
+			lantern.setScale(0.5);
+			lantern.setPipeline('Light2D').setAlpha(0.05);
+	
+			// Create the animation immediately, but with a delay
+			let delay = Phaser.Math.Between(0, 300000); // random delay
+	
+			this.time.delayedCall(6000, () => {// Make the lantern move upwards slowly
+				this.tweens.add({
+					targets: lantern,
+					duration: 500, // longer duration
+					ease: 'Sine.easeInOut',
+					yoyo: false,
+					repeat: 0,
+					alpha: 1,
+					delay: delay // start after the random delay
+				});
+
+				// Make the lantern move upwards slowly
+				this.tweens.add({
+					targets: lantern,
+					y: lantern.y - 2000, // move upwards a larger distance
+					duration: 100000, // longer duration
+					ease: 'Sine.easeInOut',
+					yoyo: false,
+					delay: delay, // start after the random delay
+				});
 		
+				// Make the lantern move left and right in a swirl-like motion
+				this.tweens.add({
+					targets: lantern,
+					x: { start: lantern.x, to: [lantern.x, lantern.x + 20] }, // move left then right
+					duration: 5000, // 3 seconds
+					ease: 'Sine.easeInOut',
+					repeat: -1, // Repeat forever
+					yoyo: true,
+					delay: delay, // start after the random delay
+				});
+			});
+		}
 	}
 
 	npcFly(npc, distance) {

@@ -22,12 +22,14 @@ export default class MainMenu extends Phaser.Scene {
 		// Load common tilesets
 		this.load.image('tileset_field','assets/tilesets/tileset_field/tileset.png');
 		this.load.image('tileset_night','assets/tilesets/tileset_field/tileset_night.png');
+		this.load.image('sky_night','assets/tilesets/sky_night/sky_night.png');
 		this.load.image('tileset_jungle','assets/tilesets/tileset_jungle/tileset_jungle_embed.png');
 		this.load.image('swamp', 'assets/tilesets/tileset_swamp/swamp.png');
 		this.load.image('swamp_bg', 'assets/tilesets/tileset_swamp/swamp_bg.png');
 
 		// Load audio music
 		this.load.audio('background_music_tangled', 'assets/audio/tangled.mp3');
+		this.load.audio('background_music_tangled_real', 'assets/audio/tangled_can_see_the_light.mp3');
 		this.load.audio('background_music_house', 'assets/audio/music/PerituneMaterial_Dawning_Tale.mp3');
 		this.load.audio('background_music_bunny1', 'assets/audio/music/Fluffing-a-Duck.mp3');
 		this.load.audio('background_music_bunny2', 'assets/audio/music/Run-Amok.mp3');
@@ -87,9 +89,10 @@ export default class MainMenu extends Phaser.Scene {
 		this.load.spritesheet('npc_stan', 'assets/spritesheets/npcs/stan.png', { frameWidth: 66, frameHeight: 66 });
 		this.load.spritesheet('npc_fairy', 'assets/spritesheets/npcs/fairy.png', { frameWidth: 64, frameHeight: 64 });
 		this.load.spritesheet('npc_worker', 'assets/spritesheets/npcs/worker.png', { frameWidth: 32, frameHeight: 32 });
-		this.load.spritesheet('treasure', 'assets/spritesheets/objects/treasure.png', {frameWidth: 16, frameHeight: 16});		
-		this.load.spritesheet('objects', 'assets/spritesheets/objects/objects.png', {frameWidth: 16, frameHeight: 16});
-		this.load.spritesheet('fire', 'assets/spritesheets/objects/fire1.png', {frameWidth: 16, frameHeight: 16});
+		this.load.spritesheet('lantern', 'assets/spritesheets/objects/lantern_illuminated.png', {frameWidth: 96, frameHeight: 141 });
+		this.load.spritesheet('treasure', 'assets/spritesheets/objects/treasure.png', {frameWidth: 16, frameHeight: 16 });		
+		this.load.spritesheet('objects', 'assets/spritesheets/objects/objects.png', {frameWidth: 16, frameHeight: 16 });
+		this.load.spritesheet('fire', 'assets/spritesheets/objects/fire1.png', {frameWidth: 16, frameHeight: 16 });
     }
 
 	create() {
@@ -173,7 +176,7 @@ export default class MainMenu extends Phaser.Scene {
 
 		// add a click event listener to start the Level1 scene
 		this.input.on('pointerdown', () => {
-			this.scene.start('PreLevel', { levelName: '', timeout: 200, levelKey: 'Level0', text: "L'arribada" });
+			this.scene.start('PreLevel', { levelName: '', timeout: 200, levelKey: 'Level5', text: "L'arribada" });
 		});
 		const enterKey = this.input.keyboard.addKey('ENTER');
 		enterKey.on('down', () => {

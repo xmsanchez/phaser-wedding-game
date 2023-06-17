@@ -53,6 +53,7 @@ export default class Level5 extends Phaser.Scene
 		this.vestit = false;
 		this.lanterns = null;
 		this.spawnTimer = null;
+		this.textList = [];
 	}
 
 	preload()
@@ -69,6 +70,11 @@ export default class Level5 extends Phaser.Scene
 		this.hud = this.registry.get('HUD');
 		// In this scene we will hide the inventory
 		this.hud.container.setVisible(false);
+		let joystick = this.registry.get('joystick');
+        let interactBtn = this.registry.get('interactBtn');
+        let jumpBtn = this.registry.get('jumpBtn');
+        let UI = this.registry.get('UI');
+		UI.toggleUIVisibility(false);
 
 		this.initialCameraZoom = 1;
 		this.joystickBaseScale = null;
@@ -85,7 +91,7 @@ export default class Level5 extends Phaser.Scene
 		this.common.createLevelLayer(this, 'top_bg4', tileset_sky, 0.4);
 		this.common.createLevelLayer(this, 'top_bg3', tileset_sky, 0.5);
 		this.common.createLevelLayer(this, 'top_bg2', tileset_sky, 0.6);
-		this.common.createLevelLayer(this, 'top_bg1', tileset_sky, 0.7);
+		this.common.createLevelLayer(this, 'top_bg1', tileset_sky, 0.4);
 		this.common.createLevelLayer(this, 'ground_bg', tileset_night);
 		this.common.createLevelLayer(this, 'castle_outside', castle_outside);
 		// this.common.createLevelLayer(this, 'rocks', tileset_night);
@@ -183,38 +189,79 @@ export default class Level5 extends Phaser.Scene
 		this.lights.enable();
         this.lights.setAmbientColor(0xFFFFFF);
 		
-		this.thankYouText = null;
-		this.manageText();
+		this.finalSceneTexts();
 	}
 
-	manageText() {
-		this.thankYouText = this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2, 
-			'Gràcies per acompanyar-nos\nen aquest viatge', {
-			fontSize: '32px',
-			fill: '#FFFFFF',
-			align: 'center'
-		}).setOrigin(0.5, 0.5); // Set origin to the center of text
+	finalSceneTexts(){
+		// manageText(text, startTime, endDelay, duration, fadeDuration, textSize = '32px', showStyle = 'center')
+		this.manageText('Gràcies per acompanyar-nos\nen aquest viatge', 
+							2000, 2000, 1500);
+		this.manageText('Ha estat un plaer treballar\nen aquest projecte', 
+							8000, 2000, 1500);
+		this.manageText('Us esperem a tots al casament\n- Dia 30\n- Recepció a les 16:30\n- Dress code: Qualsevol cosa excepte blanc\n- Allotjament: Booking :-)', 
+							14000, 2000, 20000, '27px', 'resum')
+		this.manageText('Direcció:\n- Xavier Miranda Sánchez',
+							29000, 6000, 1500, '40px', 'left');
+		this.manageText('Disseny de nivells:\n- Xavier Miranda Sánchez\n- Miriam Garcia Sala',
+							41000, 6000, 1500, '40px', 'left');
+		this.manageText('Beta testers:\n- Xavier Miranda Sánchez\n- Miriam Garcia Sala\n- Arnau Morató Codorniu',
+							53000, 6000, 1500, '40px', 'left');
+		this.manageText('Gràcies', 
+							6500, 2000, 1500, '80px');
+	}
+
+	manageText(text, startTime, endTime, duration, textSize = '32px', showStyle = 'center') {
+		let finalText;
+		if(showStyle == 'resum'){
+			finalText = this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2, 
+				text, {
+				fontSize: textSize,
+				fill: '#FFFFFF',
+				align: 'left'
+			})
+		}else{
+			finalText = this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2, 
+				text, {
+				fontSize: textSize,
+				fill: '#FFFFFF',
+				align: showStyle
+			})
+		}
+		
+
+		// Show it at the screen center
+		if(showStyle == 'center'){
+			finalText.setOrigin(0.5, 0.5); // Set origin to the center of text
+		}else if(showStyle == 'left'){
+			finalText.setOrigin(0.5, 0.1);
+			finalText.y = 320;
+		}else if(showStyle == 'right'){
+			finalText.setOrigin(0.3, 0.9);
+			finalText.y = this.cameras.main.height;
+		}else if(showStyle == 'resum'){		
+			finalText.setOrigin(0.5, 0.1);	
+		}
 
 		// Make the text invisible initially
-		this.thankYouText.setVisible(false);
-		this.thankYouText.setAlpha(0);
+		finalText.setVisible(false);
+		finalText.setAlpha(0);
 
 		// Fix the text position on the screen, regardless of camera movement
-		this.thankYouText.setScrollFactor(0, 0);
+		finalText.setScrollFactor(0, 0);
 
-		this.time.delayedCall(3000, () => {
+		this.time.delayedCall(startTime, () => {
 			this.tweens.add({
-				targets: this.thankYouText,
-				duration: 3000, // longer duration
+				targets: finalText,
+				duration: endTime, // longer duration
 				ease: 'Sine.easeInOut',
 				yoyo: false,
 				repeat: 0,
 				alpha: 1,
 				onComplete: () => { // Add onComplete callback
-					this.time.delayedCall(3000, () => { // Delay for 3000ms before fading out
+					this.time.delayedCall(duration, () => { // Delay for 3000ms before fading out
 						this.tweens.add({
-							targets: this.thankYouText,
-							duration: 3000, // fade-out duration
+							targets: finalText,
+							duration: endTime, // fade-out duration
 							ease: 'Sine.easeInOut',
 							yoyo: false,
 							repeat: 0,
@@ -223,8 +270,9 @@ export default class Level5 extends Phaser.Scene
 					});
 				}	
 			});
-			this.thankYouText.setVisible(true);
+			finalText.setVisible(true);
 		})
+		this.textList.push(finalText);
 	}
 
 	checkCompleted() {
@@ -236,18 +284,20 @@ export default class Level5 extends Phaser.Scene
 	}
 
 	update() {
-		this.thankYouText.setScale(1 / this.cameras.main.zoom);
+		for(let i = 0; i < this.textList.length; i++){
+			this.textList[i].setScale(1 / this.cameras.main.zoom);	
+		}
 	}
 
 	spawnLanterns() {
-		for(let i = 0; i < 600; i++) {
+		for(let i = 0; i < 400; i++) {
 			let lantern = this.lanterns.create(Phaser.Math.Between(200, 650), this.player.y + 5, 'lantern');
 			lantern.body.allowGravity = false; // Disable gravity for this lantern
 			lantern.setScale(0.5);
 			lantern.setPipeline('Light2D').setAlpha(0.05);
 	
 			// Create the animation immediately, but with a delay
-			let delay = Phaser.Math.Between(0, 300000); // random delay
+			let delay = Phaser.Math.Between(0, 150000); // random delay
 	
 			this.time.delayedCall(6000, () => {// Make the lantern move upwards slowly
 				this.tweens.add({
@@ -275,6 +325,17 @@ export default class Level5 extends Phaser.Scene
 					targets: lantern,
 					x: { start: lantern.x, to: [lantern.x, lantern.x + 20] }, // move left then right
 					duration: 5000, // 3 seconds
+					ease: 'Sine.easeInOut',
+					repeat: -1, // Repeat forever
+					yoyo: true,
+					delay: delay, // start after the random delay
+				});
+
+				// Make the lantern move slowly to the right, like if there was wind
+				this.tweens.add({
+					targets: lantern,
+					x: lantern.x + Phaser.Math.Between(100, 500),
+					duration: 50000, // 3 seconds
 					ease: 'Sine.easeInOut',
 					repeat: -1, // Repeat forever
 					yoyo: true,

@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level5.json",
+    "activeFile": "",
     "automapping.whileDrawing": true,
     "expandedProjectPaths": [
         "."
@@ -361,17 +361,17 @@
         },
         "level2.json": {
             "expandedObjectLayers": [
-                45,
-                44,
-                43,
                 28,
-                27
+                45,
+                27,
+                43,
+                44
             ],
             "scale": 1,
-            "selectedLayer": 13,
+            "selectedLayer": 11,
             "viewCenter": {
-                "x": 1282,
-                "y": 196.5
+                "x": 491.5,
+                "y": 242
             }
         },
         "level2.json#bunny": {
@@ -554,15 +554,15 @@
         },
         "level4.json": {
             "expandedObjectLayers": [
-                45,
                 28,
+                45,
                 27
             ],
             "scale": 1,
-            "selectedLayer": 10,
+            "selectedLayer": 8,
             "viewCenter": {
-                "x": 309.5,
-                "y": 326.5
+                "x": 520.5,
+                "y": 587
             }
         },
         "level4.json#bunny": {
@@ -615,8 +615,8 @@
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 576.5,
-                "y": 738.5
+                "x": 1488.5,
+                "y": 1124.5
             }
         },
         "level5.json#castle_outside": {
@@ -853,14 +853,14 @@
     "map.tileHeight": 16,
     "map.tileWidth": 16,
     "openFiles": [
-        "level5.json"
     ],
     "project": "tiled-project.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "level4.json",
+        "level2.json",
         "level5.json",
         "house-inside.json",
-        "level4.json",
         "level3.json",
         "level1.json",
         "rule2.tmx",
@@ -868,8 +868,7 @@
         "z.level2-bak.json",
         "z.level2-bunny-bak.json",
         "house-outside-castle-direction.json",
-        "house-outside.json",
-        "level2.json"
+        "house-outside.json"
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {

@@ -73,8 +73,8 @@ export default class Level3 extends Phaser.Scene
 		this.map = this.make.tilemap({ key: 'level3' });
 	
 		// Add the loaded tiles image asset to the map
-		const tileset_field = this.map.addTilesetImage('tileset_field', 'tileset_field');
-		const tileset_jungle = this.map.addTilesetImage('tileset_jungle', 'tileset_jungle');
+		const tileset_field = this.map.addTilesetImage('tileset_field', 'tileset_evening');
+		const tileset_jungle = this.map.addTilesetImage('tileset_jungle', 'tileset_jungle_evening');
 		const castle_outside = this.map.addTilesetImage('castle_outside', 'castle_outside');
 
 		// Create all the layers

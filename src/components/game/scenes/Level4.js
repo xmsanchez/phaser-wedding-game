@@ -41,8 +41,7 @@ export default class Level4 extends Phaser.Scene
 		this.message = null;
 
 		this.boxesPressed = [];
-		// this.boxesOrder = [2, 1, 3, 4, 5, 6, 7, 8, 9];
-		this.boxesOrder = [2, 1, 3];
+		this.boxesOrder = [6, 4, 8, 2, 9, 1, 3, 7, 5];
 		this.boxGameFinished = false;
 		this.boxGameTunePlaying = false;
 		this.talkedToFada = false;
@@ -57,6 +56,8 @@ export default class Level4 extends Phaser.Scene
 		this.piano_s5 = this.sound.add('audio_piano_s5', { loop: false, volume: 1 });
 		this.piano_s6 = this.sound.add('audio_piano_s6', { loop: false, volume: 1 });
 		this.piano_s7 = this.sound.add('audio_piano_s7', { loop: false, volume: 1 });
+		this.piano_s8 = this.sound.add('audio_piano_s7', { loop: false, volume: 1 });
+		this.piano_s9 = this.sound.add('audio_piano_s7', { loop: false, volume: 1 });
 	 }
 
 	create()
@@ -146,6 +147,21 @@ export default class Level4 extends Phaser.Scene
 			this.common.checkOverlapsStaticGroups(this.treasures, this);
 		}
 
+		// NOTE: this.boxesPressed is populated in Common().openTreasure() function
+		if(!this.boxGameFinished && (this.boxesPressed.length != this.boxesOrder.length) && (!this.message.messageDisplaying)){
+			if(!this.comparaArraysIncomplete(this.boxesPressed, this.boxesOrder)){
+				this.message.showMessage(this, "No has pressionat les tecles en l'ordre correcte!", function(scene){
+					scene.treasures.getChildren().forEach((treasure) => {
+						treasure.opened = false;
+						treasure.setFrame(14);
+					})
+				});
+				this.boxesPressed = [];
+			}else{
+				console.log('So far the player is getting it right :-)');
+			}
+		}
+
 		if(!this.boxGameFinished && (this.boxesPressed.length == this.boxesOrder.length) && (!this.message.messageDisplaying)){
 			if(this.comparaArrays(this.boxesPressed, this.boxesOrder)){
 				this.boxGameIsFinished(this, function(scene){
@@ -195,6 +211,16 @@ export default class Level4 extends Phaser.Scene
 		}
 	}
 
+	comparaArraysIncomplete(array1, array2) {
+		for (let i = 0; i < array1.length; i++) {
+		  if (array1[i] !== array2[i]) {
+			return false;
+		  }
+		}
+	  
+		return true;
+	}
+	
 	comparaArrays(array1, array2) {
 		if (array1.length !== array2.length) {
 		  return false;
@@ -207,7 +233,7 @@ export default class Level4 extends Phaser.Scene
 		}
 	  
 		return true;
-	  }
+	}
 
 	npcActions(player, npc) {
 		if(npc.name == 'Bug'){

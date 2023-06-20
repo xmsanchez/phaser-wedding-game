@@ -21,9 +21,11 @@ export default class MainMenu extends Phaser.Scene {
 
 		// Load common tilesets
 		this.load.image('tileset_field','assets/tilesets/tileset_field/tileset.png');
+		this.load.image('tileset_evening','assets/tilesets/tileset_field/tileset_evening.png');
 		this.load.image('tileset_night','assets/tilesets/tileset_field/tileset_night.png');
 		this.load.image('sky_night','assets/tilesets/sky_night/sky_night.png');
 		this.load.image('tileset_jungle','assets/tilesets/tileset_jungle/tileset_jungle_embed.png');
+		this.load.image('tileset_jungle_evening','assets/tilesets/tileset_jungle/tileset_jungle_embed_evening.png');
 		this.load.image('swamp', 'assets/tilesets/tileset_swamp/swamp.png');
 		this.load.image('swamp_bg', 'assets/tilesets/tileset_swamp/swamp_bg.png');
 
@@ -176,7 +178,7 @@ export default class MainMenu extends Phaser.Scene {
 
 		// add a click event listener to start the Level1 scene
 		this.input.on('pointerdown', () => {
-			this.scene.start('PreLevel', { levelName: '', timeout: 200, levelKey: 'Level5', text: "L'arribada" });
+			this.scene.start('PreLevel', { levelName: '', timeout: 200, levelKey: 'Level0', text: "L'arribada" });
 		});
 		const enterKey = this.input.keyboard.addKey('ENTER');
 		enterKey.on('down', () => {

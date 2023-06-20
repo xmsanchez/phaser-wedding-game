@@ -185,25 +185,31 @@ export default class Common {
 				
 				switch(treasure.order){
 					case 1:
-						scene.piano_s1.play();
+						scene.piano_s5.play();
 						break;
 					case 2:
-						scene.piano_s2.play();
+						scene.piano_s4.play();
 						break;
 					case 3:
 						scene.piano_s3.play();
 						break;
 					case 4:
-						scene.piano_s4.play();
+						scene.piano_s2.play();
 						break;
 					case 5:
-						scene.piano_s5.play();
+						scene.piano_s3.play();
 						break;
 					case 6:
-						scene.piano_s6.play();
+						scene.piano_s2.play();
 						break;
 					case 7:
-						scene.piano_s7.play();
+						scene.piano_s1.play();
+						break;
+					case 8:
+						scene.piano_s2.play();
+						break;
+					case 9:
+						scene.piano_s3.play();
 						break;
 				}
 
@@ -406,16 +412,19 @@ export default class Common {
 	bunnyMovement(scene) {
 		if (scene.player.y > scene.cameras.main.height - 800) {
 			console.log('Player has fallen below the bottom of the screen: ' + scene.player.y);
-			scene.player.x = 750;
-			scene.player.y = 100;
-			scene.bunny.x = 800;
-			scene.bunny.y = 100;
+			// scene.player.x = 750;
+			// scene.player.y = 100;
+			// scene.bunny.x = 800;
+			// scene.bunny.y = 100;
 	
-			// Reset pathPoints to the original values
-			scene.pathPoints = [...scene.pathPointsInitial];
+			// // Reset pathPoints to the original values
+			// scene.pathPoints = [...scene.pathPointsInitial];
+			scene.scene.restart();
 		}
+
 		// Bunny related code
 		let bunnySpeed = 250;
+
 		if (scene.bunnyCatched) {
 			// Stop bunny movement
 			scene.bunny.setVelocity(0, 0);
@@ -430,8 +439,8 @@ export default class Common {
 					scene.bunnyReverseFlag = false;
 				}
 
-				if(playerDistance > 150){
-					bunnySpeed = 160;
+				if(playerDistance > 150 || scene.bunny.x > 1100){
+					bunnySpeed = 170;
 				}else{
 					bunnySpeed = 250;
 				}

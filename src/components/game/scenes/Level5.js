@@ -198,26 +198,29 @@ export default class Level5 extends Phaser.Scene
 							2000, 2000, 1500);
 		this.manageText('Ha estat un plaer treballar\nen aquest projecte', 
 							8000, 2000, 1500);
-		this.manageText('Us esperem a tots al casament\n- Dia 30\n- Recepció a les 16:30\n- Dress code: Qualsevol cosa excepte blanc\n- Allotjament: Booking :-)', 
+		this.manageText('Us esperem a tots al casament\n- Dia 30 de Setembre\n- Recepció a les 18:00\n- Dress code: Formal. Ningú pot portar blanc\n  - excepte la núvia\n- Allotjament: Booking :-)', 
 							14000, 2000, 20000, '27px', 'resum')
 		this.manageText('Direcció:\n- Xavier Miranda Sánchez',
-							29000, 6000, 1500, '40px', 'left');
+							30000, 8000, 1500, '40px', 'left');
 		this.manageText('Disseny de nivells:\n- Xavier Miranda Sánchez\n- Miriam Garcia Sala',
-							39000, 6000, 1500, '40px', 'left');
+							45000, 8000, 1500, '40px', 'left');
+		this.manageText('Amb la colaboració de:\n- Arnau Morató Codorniu',
+							60000, 8000, 1500, '40px', 'left');
 		this.manageText('Programació:\n- Xavier Miranda Sánchez',
-							49000, 6000, 1500, '40px', 'left');
-		this.manageText('Assistents de programació:\n- GPT-4',
-							59000, 6000, 1500, '40px', 'left');
+							75000, 8000, 1500, '40px', 'left');
+		this.manageText('Assistent de programació:\n- GPT-4',
+							90000, 8000, 1500, '40px', 'left');
 		this.manageText('Becari:\n- GPT-3.5',
-							69000, 6000, 1500, '40px', 'left');
-		this.manageText('Art:\n- Xavier Miranda Sánchez\n- www.spriters-resource.com\n- Adobe Stock\n- Google Images',
-							79000, 6000, 1500, '40px', 'left');
-		this.manageText('Àudio:\n- Creative Commons (recursos varis)',
-							89000, 6000, 1500, '40px', 'left');
+							105000, 8000, 1500, '40px', 'left');
+		this.manageText('Pixel Art:\n- Xavier Miranda Sánchez\n- Miriam Garcia Sala\n- www.spriters-resource.com\n- Adobe Stock\n- Google Images',
+							120000, 8000, 1500, '40px', 'left');
+		this.manageText('Àudio:\n- Creative Commons',
+							135000, 8000, 1500, '40px', 'left');
 		this.manageText('Beta testers:\n- Xavier Miranda Sánchez\n- Miriam Garcia Sala\n- Arnau Morató Codorniu',
-							99000, 6000, 1500, '40px', 'left');
-		this.manageText('Gràcies', 
-							109000, 50000, 1500, '80px');
+							150000, 8000, 1500, '40px', 'left');
+		this.manageText('Agraïments:\n- A tots els que ens\nacompanyareu en un dia\nmolt especial :-)',
+		 					175000, 8000, 1500, '40px', 'left');
+		this.manageText('Gràcies', 200000, 8000, 1500, '80px');
 	}
 
 	manageText(text, startTime, endTime, duration, textSize = '32px', showStyle = 'center') {
@@ -309,7 +312,7 @@ export default class Level5 extends Phaser.Scene
 			// Create the animation immediately, but with a delay
 			let delay = Phaser.Math.Between(0, 150000); // random delay
 	
-			this.time.delayedCall(6000, () => {// Make the lantern move upwards slowly
+			this.time.delayedCall(5000, () => {// Make the lantern move upwards slowly
 				this.tweens.add({
 					targets: lantern,
 					duration: 500, // longer duration

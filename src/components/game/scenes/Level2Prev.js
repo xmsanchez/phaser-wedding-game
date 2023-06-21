@@ -148,6 +148,7 @@ export default class Level2Prev extends Phaser.Scene
 			this.message.showMessageList(this, dialog, function(scene){
 				scene.hud.inventory.push('bruixola');
 				scene.hud.updateInventory(scene, 'bruixola');
+				scene.common.chest_opened_sound.play();
 			});
 		}
     }

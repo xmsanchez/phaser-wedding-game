@@ -132,7 +132,7 @@ export default class Level5 extends Phaser.Scene
 			this.tweens.add({
 				targets: camera,
 				scrollX: 200, // target position
-				duration: 18000, // how long the tween should take in milliseconds
+				duration: 17000, // how long the tween should take in milliseconds
 				ease: 'Sine.easeInOut' // easing function to make the movement smooth
 			});
 		});
@@ -197,30 +197,30 @@ export default class Level5 extends Phaser.Scene
 		this.manageText('Gràcies per acompanyar-nos\nen aquest viatge', 
 							2000, 2000, 1500);
 		this.manageText('Ha estat un plaer treballar\nen aquest projecte', 
-							8000, 2000, 1500);
+							7000, 2000, 1500);
 		this.manageText('Us esperem a tots al casament\n- Dia 30 de Setembre\n- Recepció a les 18:00\n- Dress code: Formal. Ningú pot portar blanc\n  - excepte la núvia\n- Allotjament: Booking :-)', 
 							14000, 2000, 20000, '27px', 'resum')
 		this.manageText('Direcció:\n- Xavier Miranda Sánchez',
-							30000, 8000, 1500, '40px', 'left');
+							30000, 7000, 1500, '40px', 'left');
 		this.manageText('Disseny de nivells:\n- Xavier Miranda Sánchez\n- Miriam Garcia Sala',
-							45000, 8000, 1500, '40px', 'left');
+							45000, 7000, 1500, '40px', 'left');
 		this.manageText('Amb la colaboració de:\n- Arnau Morató Codorniu',
-							60000, 8000, 1500, '40px', 'left');
+							60000, 7000, 1500, '40px', 'left');
 		this.manageText('Programació:\n- Xavier Miranda Sánchez',
-							75000, 8000, 1500, '40px', 'left');
+							75000, 7000, 1500, '40px', 'left');
 		this.manageText('Assistent de programació:\n- GPT-4',
-							90000, 8000, 1500, '40px', 'left');
+							90000, 7000, 1500, '40px', 'left');
 		this.manageText('Becari:\n- GPT-3.5',
-							105000, 8000, 1500, '40px', 'left');
+							105000, 7000, 1500, '40px', 'left');
 		this.manageText('Pixel Art:\n- Xavier Miranda Sánchez\n- Miriam Garcia Sala\n- www.spriters-resource.com\n- Adobe Stock\n- Google Images',
-							120000, 8000, 1500, '40px', 'left');
+							120000, 7000, 1500, '40px', 'left');
 		this.manageText('Àudio:\n- Creative Commons',
-							135000, 8000, 1500, '40px', 'left');
+							135000, 7000, 1500, '40px', 'left');
 		this.manageText('Beta testers:\n- Xavier Miranda Sánchez\n- Miriam Garcia Sala\n- Arnau Morató Codorniu',
-							150000, 8000, 1500, '40px', 'left');
+							150000, 7000, 1500, '40px', 'left');
 		this.manageText('Agraïments:\n- A tots els que ens\nacompanyareu en un dia\nmolt especial :-)',
-		 					175000, 8000, 1500, '40px', 'left');
-		this.manageText('Gràcies', 200000, 8000, 1500, '80px');
+		 					175000, 7000, 1500, '40px', 'left');
+		this.manageText('Gràcies', 200000, 7000, 1500, '80px');
 	}
 
 	manageText(text, startTime, endTime, duration, textSize = '32px', showStyle = 'center') {

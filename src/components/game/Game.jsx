@@ -22,7 +22,6 @@ const config = {
 	width: 800,
 	height: 1200,
 	scale: {
-		// mode: Phaser.Scale.ENVELOP,
 		mode: Phaser.Scale.FIT,
 	},
 	physics: {
@@ -57,7 +56,6 @@ const config = {
 }
 
 function Game() {
-	console.log('INITIATING GAME');
 	const gameRef = useRef(null);
 	
 	useEffect(() => {

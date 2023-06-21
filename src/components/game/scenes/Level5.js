@@ -113,10 +113,6 @@ export default class Level5 extends Phaser.Scene
 
 		this.common.loadMusic(this, tileset_night.name);
 
-		// // Add controls
-		// this.player.addTouchScreenPointers(this);
-		// this.player.setKeyboardControls(this);
-
 		// Setup camera bounds and zoom
 		this.camera.setCameraLastScene(this, 1.5);
 		this.cameras.main.fadeIn(4000);
@@ -144,34 +140,30 @@ export default class Level5 extends Phaser.Scene
 				targets: camera,
 				zoom: 1,
 				scrollY: 300, // target position
-				duration: 9000, // how long the tween should take in milliseconds
+				duration: 13000, // how long the tween should take in milliseconds
 				ease: 'Sine.easeInOut' // easing function to make the movement smooth
 			});
 		});
 
 		// After n seconds, begin to move the camera up again
-		this.time.delayedCall(24000, () => {
+		this.time.delayedCall(27000, () => {
 			console.log('Move the camera at y axis');
 			this.tweens.add({
 				targets: camera,
-				zoom: 1.7,
+				zoom: 1.8,
 				scrollY: -600, // target position
-				duration: 20000, // how long the tween should take in milliseconds
+				duration: 24000, // how long the tween should take in milliseconds
 				ease: 'Sine.easeInOut' // easing function to make the movement smooth
 			});
+		});
+
+		this.time.delayedCall(230000, () => {
+			this.cameras.main.fadeOut(4000);
 		});
 
 		this.lanterns = this.physics.add.group();
 
 		this.spawnLanterns();
-		// this.spawnTimer = this.time.addEvent({
-		// 	delay: 15000, // delay in ms
-		// 	callback: this.spawnLanterns,
-		// 	callbackScope: this,
-		// 	loop: true
-		// });
-
-		this.checkCompleted();
 
 		this.npcs.getChildren().forEach((npc) => {
 			if(npc.name == 'Peter Pan'){
@@ -198,7 +190,7 @@ export default class Level5 extends Phaser.Scene
 							2000, 2000, 1500);
 		this.manageText('Ha estat un plaer treballar\nen aquest projecte', 
 							7000, 2000, 1500);
-		this.manageText('Us esperem a tots al casament\n- Dia 30 de Setembre\n- Recepció a les 18:00\n- Dress code: Formal. Ningú pot portar blanc\n  - excepte la núvia\n- Allotjament: Booking :-)', 
+		this.manageText('Us esperem a tots al casament\n- Dia 30 de Setembre\n- Recepció a les 16:30\n- Dress code: Formal. El color blanc\n  està reservat per la núvia!!\n- Allotjament: Booking :-)', 
 							14000, 2000, 20000, '27px', 'resum')
 		this.manageText('Direcció:\n- Xavier Miranda Sánchez',
 							30000, 7000, 1500, '40px', 'left');
@@ -226,7 +218,7 @@ export default class Level5 extends Phaser.Scene
 	manageText(text, startTime, endTime, duration, textSize = '32px', showStyle = 'center') {
 		let finalText;
 		if(showStyle == 'resum'){
-			finalText = this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2, 
+			finalText = this.add.text(this.cameras.main.width / 2, (this.cameras.main.height / 2) - 120, 
 				text, {
 				fontSize: textSize,
 				fill: '#FFFFFF',
@@ -286,14 +278,6 @@ export default class Level5 extends Phaser.Scene
 			finalText.setVisible(true);
 		})
 		this.textList.push(finalText);
-	}
-
-	checkCompleted() {
-		this.scenesVisited = this.registry.get('scenesVisited');
-		this.previousScene = this.registry.get('previousScene');
-		this.scenesVisited.push(this.currentScene);
-		console.log('checkCompleted this.scenesVisited: ' + this.scenesVisited);
-		this.sceneRegistry = this.registry.get(this.scene.key);
 	}
 
 	update() {

@@ -30,7 +30,7 @@ export default class MainMenu extends Phaser.Scene {
 		this.load.image('swamp_bg', 'assets/tilesets/tileset_swamp/swamp_bg.png');
 
 		// Load audio music
-		this.load.audio('background_music_tangled', 'assets/audio/tangled.mp3');
+		this.load.audio('background_music_tangled', 'assets/audio/tangled_revamped.mp3');
 		this.load.audio('background_music_tangled_real', 'assets/audio/tangled_can_see_the_light.mp3');
 		this.load.audio('background_music_house', 'assets/audio/music/PerituneMaterial_Dawning_Tale.mp3');
 		this.load.audio('background_music_bunny1', 'assets/audio/music/Fluffing-a-Duck.mp3');
@@ -42,6 +42,9 @@ export default class MainMenu extends Phaser.Scene {
 		this.load.audio('audio_coin', 'assets/audio/coin.mp3');
 		this.load.audio('audio_chest_opened', 'assets/audio/new_item.mp3');
 		this.load.audio('audio_dog_bark', 'assets/audio/dog_bark2.mp3');
+		this.load.audio('audio_footsteps', 'assets/audio/footsteps.flac');
+		// this.load.audio('audio_jump', 'assets/audio/jump1.wav');
+		this.load.audio('audio_birds', 'assets/audio/nature_birds.mp3');
 		this.load.audio('audio_piano_s1', 'assets/audio/piano/C5.mp3');
 		this.load.audio('audio_piano_s2', 'assets/audio/piano/D5.mp3');
 		this.load.audio('audio_piano_s3', 'assets/audio/piano/E5.mp3');

@@ -68,17 +68,17 @@ export default class Level1 extends Phaser.Scene
 		const tileset_jungle = this.map.addTilesetImage('tileset_jungle', 'tileset_jungle');
 
 		// Create all the layers
-		this.common.createLevelLayer(this, 'bg_5', tileset_jungle, 0.4);
-		this.common.createLevelLayer(this, 'bg_4', tileset_jungle, 0.5);
-		this.common.createLevelLayer(this, 'bg_3', tileset_jungle, 0.6);
-		this.common.createLevelLayer(this, 'bg_2', tileset_jungle, 0.7);
-		this.common.createLevelLayer(this, 'top_bg4', tileset_field, 0.4);
-		this.common.createLevelLayer(this, 'top_bg3', tileset_field, 0.5);
-		this.common.createLevelLayer(this, 'top_bg2', tileset_field, 0.6);
-		this.common.createLevelLayer(this, 'top_bg1', tileset_field, 0.7);
-		this.common.createLevelLayer(this, 'bg_1', tileset_jungle, 0.8);
-		this.common.createLevelLayer(this, 'fg_background', tileset_jungle, 0.9);
-		this.common.createLevelLayer(this, 'ground_bg', tileset_jungle, 0.8);
+		this.common.createLevelLayer(this, 'bg_5', tileset_jungle, 0.7);
+		this.common.createLevelLayer(this, 'bg_4', tileset_jungle, 0.8);
+		this.common.createLevelLayer(this, 'bg_3', tileset_jungle, 0.9);
+		this.common.createLevelLayer(this, 'bg_2', tileset_jungle);
+		this.common.createLevelLayer(this, 'top_bg4', tileset_field, 0.7);
+		this.common.createLevelLayer(this, 'top_bg3', tileset_field, 0.8);
+		this.common.createLevelLayer(this, 'top_bg2', tileset_field, 0.9);
+		this.common.createLevelLayer(this, 'top_bg1', tileset_field);
+		this.common.createLevelLayer(this, 'bg_1', tileset_jungle);
+		this.common.createLevelLayer(this, 'fg_background', tileset_jungle);
+		this.common.createLevelLayer(this, 'ground_bg', tileset_jungle);
 		// this.common.createLevelLayer(this, 'rocks', tileset_field);
 		this.common.createLevelLayer(this, 'ground_decorations', tileset_field);
 		this.ground = this.common.createLevelLayer(this, 'ground_fg', tileset_jungle);
@@ -139,7 +139,6 @@ export default class Level1 extends Phaser.Scene
 		this.common.checkOverlapsStaticGroups(this.treasures, this);
 		this.common.checkOverlapsStaticGroups(this.cartells, this);
 		
-		let dialog = [];
 		this.npcs.getChildren().forEach((npc) => {
 			// NPCs will always look at the player
 			this.common.npcLookDirection(this, npc);
@@ -148,10 +147,10 @@ export default class Level1 extends Phaser.Scene
 				npc.anims.stop();
 				npc.setFrame(2);
 			}
-			const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
-			if (distance < 55) {
-				if(this.firstInteraction && !this.message.messageDisplaying){
-					dialog = [
+			if (this.firstInteraction) {
+				const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
+				if(distance < 55 && !this.message.messageDisplaying){
+					let dialog = [
 					//	'Ei, Hola!', 'Soc l\'Stan!',
 						'No estaràs pas buscant el mapa cap a Monkey Island, no?',
 						'Potser busques un vaixell?',
@@ -159,7 +158,7 @@ export default class Level1 extends Phaser.Scene
 						'Que per què venc vaixells en un bosc?',
 						'És una pregunta excelent! Doncs veuràs, tot va començar el dia en que...',
 						'Que tens pressa? Que busques **el mapa** d\'un casament?',
-						'Bé, doncs si trobes la **clau** per obrir aquest bagul, et donaré **el mapa** que busques!'
+						'Bé, doncs si trobes una **clau** que he perdut en aquest bosc, et donaré **el mapa** que busques!'
 					];
 					npc.anims.play('Stan_stand', true);
 					this.message.showMessageList(this, dialog, function(scene){

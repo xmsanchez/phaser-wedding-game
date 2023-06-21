@@ -423,7 +423,7 @@ export default class Common {
 		}
 
 		// Bunny related code
-		let bunnySpeed = 250;
+		let bunnySpeed = 320;
 
 		if (scene.bunnyCatched) {
 			// Stop bunny movement
@@ -439,16 +439,16 @@ export default class Common {
 					scene.bunnyReverseFlag = false;
 				}
 
-				if(playerDistance > 150 || scene.bunny.x > 1100){
+				if(playerDistance > 150 || scene.bunny.x > 1250){
 					bunnySpeed = 170;
 				}else{
-					bunnySpeed = 250;
+					bunnySpeed = 300;
 				}
 	
 				// Initially, the bunny is not reversing
 				scene.bunnyIsReversing = false;
 
-				if (playerDistance < 70 && !scene.bunnyReverseFlag) {
+				if (playerDistance < 90 && !scene.bunnyReverseFlag) {
 					scene.bunnyReverseFlag = true;
 					console.log('Player distance <50: ' + playerDistance);
 					// Only reverse the path if the bunny is not already doing so
@@ -456,7 +456,7 @@ export default class Common {
 						scene.pathPoints.reverse();
 						scene.bunnyIsReversing = true;
 					}
-				} else if (playerDistance > 70 && scene.bunnyReverseFlag) {
+				} else if (playerDistance > 90 && scene.bunnyReverseFlag) {
 					scene.bunnyReverseFlag = false;
 					console.log('Player distance >50: ' + playerDistance);
 					// Only reverse the path if the bunny is currently reversing
@@ -919,7 +919,11 @@ export default class Common {
 		door.opened = true; 
 
 		// Remove the used from the inventory
-		scene.hud.inventory.pop('key');
+		let keyIndex = scene.hud.inventory.indexOf('key');
+		if (keyIndex !== -1) { // Only do this if the 'key' was found
+			scene.hud.inventory.splice(keyIndex, 1);
+		}
+		console.log('Popped key, inventory is now: ' + scene.hud.inventory);
 		scene.hud.updateInventory(scene);
 		
 		// scene.message.showMessageList(scene, ['Utilitzes la clau!\nObres la porta...']);
@@ -960,6 +964,8 @@ export default class Common {
 				let newScene = 'Level1Prev';
 				if(sceneKey == 'Level2Prev' ){
 					newScene = 'Level2Prev2';
+				}else if(sceneKey == 'Level3Prev'){
+					newScene = 'Level3Prev2';
 				}
 				this.startScene(scene, 'PreLevel', { levelKey: newScene });
 
@@ -995,10 +1001,11 @@ export default class Common {
 				scene.backgroundMusic = scene.sound.add('background_music_house', { loop: true, volume: 0.2});
 				break;
 			case 'house-outside':
-				scene.backgroundMusic = scene.sound.add('background_music_bunny1', { loop: true, volume: 0.2});
+				scene.backgroundMusic = scene.sound.add('audio_birds', { loop: true, volume: 0.2});
 				break;
 			case 'tileset_jungle':
 				scene.backgroundMusic = scene.sound.add('background_music_woods2', { loop: true, volume: 0.2});
+				scene.backgroundMusic2 = scene.sound.add('audio_birds', { loop: false, volume: 0.4});
 				break;
 			case 'swamp':
 				scene.backgroundMusic = scene.sound.add('background_music_bunny2', { loop: true, volume: 0.2});
@@ -1011,10 +1018,15 @@ export default class Common {
 				break;
 			case 'tileset_night':
 				scene.backgroundMusic = scene.sound.add('background_music_tangled_real', { loop: false, volume: 0.4});
+				break;
+			case 'tileset_field':
+				scene.backgroundMusic = scene.sound.add('audio_birds', { loop: false, volume: 0.4});
+				break;
 		}
 		try {
 			// Play the audio file
 			scene.backgroundMusic.play();
+			scene.backgroundMusic2.play();
 		} catch (error) {
 			console.log('Error: There is not music for tileset ' + tilesetName);
 		}

@@ -12,6 +12,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		this.scene = scene;
 
 		this.lastMove = 'idle';
+
+		// scene.jumpSound = scene.sound.add('audio_jump', { loop: false, volume: 0.3});
+		scene.footstepsSound = scene.sound.add('audio_footsteps', { loop: true, volume: 0.3});
     }
 
 	// This function will run in the update loop
@@ -30,8 +33,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 				}
 				if(scene.player.body.onFloor()){
 					scene.player.anims.play('left', true);
+					if(!scene.footstepsSound.isPlaying){
+						scene.footstepsSound.play({ loop: false });
+					}
 				}else{
 					scene.player.anims.play('jumpLeft', true);
+					// if(!scene.jumpSound.isPlaying){
+					// 	scene.jumpSound.play({ loop: false });
+					// }
 				}
 			} else if (this.moveRight) {
 				this.lastMove = 'idleRight';
@@ -41,8 +50,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 				}
 				if(scene.player.body.onFloor()){
 					scene.player.anims.play('right', true);
+					if(!scene.footstepsSound.isPlaying){
+						scene.footstepsSound.play({ loop: false } );
+					}
 				}else{
 					scene.player.anims.play('jumpRight', true);
+					// if(!scene.jumpSound.isPlaying){
+					// 	scene.jumpSound.play({ loop: false });
+					// }
 				}
 			} else {
 				// If no keys are pressed, the player decelerates
@@ -53,6 +68,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 			if (this.jump && scene.player.body.onFloor() && this.jumpKeyReleased) {
 				scene.player.setVelocityY(jumpVelocity);
 				scene.player.play('jump', true);
+				// if(!scene.jumpSound.isPlaying && this.lastMove !== undefined){
+				// 	scene.jumpSound.play({ loop: false });
+				// }
 				this.jump = false;
 				this.jumpKeyReleased = false;
 			}

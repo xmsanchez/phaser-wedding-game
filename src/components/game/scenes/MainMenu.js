@@ -75,6 +75,7 @@ export default class MainMenu extends Phaser.Scene {
 		this.load.image('house-outside','assets/tilesets/house-outside/house-outside.png');
 		this.load.image('house-outside','assets/tilesets/house-outside/house-outside.png');
 		
+		this.load.spritesheet('logo', 'assets/spritesheets/logo_pixelart_medium_white.png', { frameWidth: 395, frameHeight: 420 });
 		this.load.spritesheet('player', 'assets/spritesheets/player/player.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('player2', 'assets/spritesheets/player/heroes.png', { frameWidth: 24, frameHeight: 32 });
 		this.load.spritesheet('npc_xavi', 'assets/spritesheets/npcs/xavi.png', { frameWidth: 32, frameHeight: 32 });
@@ -163,16 +164,17 @@ export default class MainMenu extends Phaser.Scene {
 		const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
 		const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
 
-		var titleText = 'The Wedding';
-		this.add.text(screenCenterX, screenCenterY - 100, titleText, { font: '115px Arial' }).setOrigin(0.5);
+		// var titleText = 'The Wedding';
+		// this.add.text(screenCenterX, screenCenterY - 100, titleText, { font: '115px Arial' }).setOrigin(0.5);
+		var titleSprite = this.add.sprite(screenCenterX, screenCenterY - 290, 'logo');
 
-		var startText = this.add.text(screenCenterX, screenCenterY + 40, 'Toca la pantalla per continuar', {
+		var startText = this.add.text(screenCenterX, screenCenterY, 'Toca la pantalla per continuar', {
 			font: 'italic 30px Arial',
 		}).setOrigin(0.5);
 
 		var instructionsText =
-			'Instruccions: Utilitza el joystick esquerre per moure el personatge. Utilitza el botó dret per saltar/interactuar.';
-		this.add.text(screenCenterX, screenCenterY + 190, instructionsText, {
+			"Instruccions:\nUtilitza el joystick per moure't.\nUtilitza el botó verd per saltar.\nUtilitza el botó vermell per interactuar.";
+		this.add.text(screenCenterX, screenCenterY + 130, instructionsText, {
 				font: '25px Arial',
 				wordWrap: { width: 500, useAdvancedWrap: true },
 			}).setOrigin(0.5);

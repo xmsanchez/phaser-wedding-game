@@ -30,7 +30,7 @@ const Chatbox = () => {
   useEffect(() => {
     setConversation(prevConversation => prevConversation.map(item => {
       if (item.role === 'system') {
-        console.log('Updating system role: ', settingsRole)
+        // console.log('Updating system role: ', settingsRole)
         return { ...item, content: settingsRole };
       }
       return item;

@@ -1,5 +1,9 @@
+root {
+    background-color: #330c43;
+}
+
 body {
-    background-color: white;
+    background-color: #330c43;
     display: flex;
     min-height: 100vh;
     flex-direction: column;
@@ -9,6 +13,7 @@ body {
 .bodyLanding {
     width: 100%;
     align-items: center;
+    background-color: #330c43;
 }
 
 main {
@@ -23,11 +28,12 @@ div h2 {
     justify-content: center;
     text-align: center;
     font-size: 30px;
-    color: purple;
+    margin-top: 80px;
+    color: #b4528d;
 }
 
 button:focus, button:active {
-    background-color: #800080 !important;
+    background-color: #b4528d !important;
     box-shadow: none !important;
 }
 
@@ -55,6 +61,7 @@ button:focus, button:active {
     align-items: center;
     width: 80%;
     margin: auto;
+    margin-bottom: 50px;
 }
 
 #bodySection {
@@ -62,24 +69,19 @@ button:focus, button:active {
 }
 
 #googleFormsSection {
-    background-color: white;
-}
-
-#footerSection {
-    
+    background-color: #330c43;
 }
 
 p {
-    font-size: 20px;
-    color: black !important;
-    text-align: left;
+    font-size: 17px;
+    color: white !important;
     margin: 15px;
 }
 
 #chatContainer {
     height: 300px;
     overflow-y: auto;
-    background-color: white;
+    background-color: black;
     border: 1px solid #ccc;
     padding: 10px;
     display: flex;
@@ -111,8 +113,8 @@ p {
     color: black;
 }
 .user-message {
-    background-color: #800080;
-    color: white;
+    background-color: #b4528d;
+    color: black;
     align-self: flex-start;
 }
 .bot-message {

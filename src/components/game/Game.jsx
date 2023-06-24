@@ -57,7 +57,7 @@ const config = {
 
 function Game() {
 	const gameRef = useRef(null);
-	
+
 	useEffect(() => {
 	  gameRef.current = new Phaser.Game(config);
 	  

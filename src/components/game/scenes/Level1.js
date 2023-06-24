@@ -72,9 +72,9 @@ export default class Level1 extends Phaser.Scene
 		this.common.createLevelLayer(this, 'bg_4', tileset_jungle, 0.8);
 		this.common.createLevelLayer(this, 'bg_3', tileset_jungle, 0.9);
 		this.common.createLevelLayer(this, 'bg_2', tileset_jungle);
-		this.common.createLevelLayer(this, 'top_bg4', tileset_field, 0.7);
-		this.common.createLevelLayer(this, 'top_bg3', tileset_field, 0.8);
-		this.common.createLevelLayer(this, 'top_bg2', tileset_field, 0.9);
+		this.common.createLevelLayer(this, 'top_bg4', tileset_field);
+		this.common.createLevelLayer(this, 'top_bg3', tileset_field);
+		this.common.createLevelLayer(this, 'top_bg2', tileset_field);
 		this.common.createLevelLayer(this, 'top_bg1', tileset_field);
 		this.common.createLevelLayer(this, 'bg_1', tileset_jungle);
 		this.common.createLevelLayer(this, 'fg_background', tileset_jungle);

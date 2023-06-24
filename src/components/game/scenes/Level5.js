@@ -157,8 +157,11 @@ export default class Level5 extends Phaser.Scene
 			});
 		});
 
-		this.time.delayedCall(230000, () => {
+		this.time.delayedCall(210000, () => {
 			this.cameras.main.fadeOut(4000);
+			this.time.delay(4000, () => {
+				this.common.startScene(this, 'PreLevel', {levelKey: 'MainMenu'});
+			})
 		});
 
 		this.lanterns = this.physics.add.group();
@@ -211,8 +214,8 @@ export default class Level5 extends Phaser.Scene
 		this.manageText('Beta testers:\n- Xavier Miranda Sánchez\n- Miriam Garcia Sala\n- Arnau Morató Codorniu',
 							150000, 7000, 1500, '40px', 'left');
 		this.manageText('Agraïments:\n- A tots els que ens\nacompanyareu en un dia\nmolt especial :-)',
-		 					175000, 7000, 1500, '40px', 'left');
-		this.manageText('Gràcies', 200000, 7000, 1500, '80px');
+		 					165000, 7000, 1500, '40px', 'left');
+		this.manageText('Gràcies', 180000, 7000, 1500, '80px');
 	}
 
 	manageText(text, startTime, endTime, duration, textSize = '32px', showStyle = 'center') {

@@ -40,7 +40,7 @@ export default class Joystick {
         // Enable touch input on the container
         container.setInteractive({ useHandCursor: true });
 
-		return btn;
+		return container;
 	}
 
 	createInteractButton = function (scene, x, y) {
@@ -68,7 +68,7 @@ export default class Joystick {
         // Enable touch input on the container
         container.setInteractive({ useHandCursor: true });
 
-		return btn;
+		return container;
 	}
 
     createCursorKeys() {

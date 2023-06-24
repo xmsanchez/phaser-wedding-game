@@ -19,7 +19,7 @@ export default class Message {
         // console.log('Show messages. Messages.length: ' + messages.length);
         if (messages.length != 0) {
             this.showMessage(scene, messages[0]);
-            scene.interactBtn.once('pointerdown', () => {
+            scene.interactBtn.list[0].once('pointerdown', () => {
                 messages.shift();
                 this.destroyMessageBox();
                 //check if there are any more messages to display

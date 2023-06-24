@@ -104,8 +104,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 	addTouchScreenPointers(scene) {
 		const UIScene = scene.UIScene;
 		const joystick = scene.joystick.joystick;
-		const interactBtn = scene.interactBtn;
-		const jumpBtn = scene.jumpBtn;
+		const interactBtn = scene.interactBtn.list[0];
+		const jumpBtn = scene.jumpBtn.list[0];
 
 		joystick.on('update', this.readTouchInput, scene);
 
@@ -134,7 +134,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
 		// Add a listener for the 'pointerup' event, which fires when the button is released
 		interactBtn.on('pointerdown', () => {
-            console.log('Pointer down!');
+            console.log('Pointer down interactBtn!');
 			this.checkInteractBtn(scene);
 		});
 

@@ -21,8 +21,9 @@
     align-self: center;
   }
 
-  .loadingIndicatorContainer p {
+  .loadingIndicatorContainer p i {
     align-self: center;
     justify-content: center;
     margin-left: -40px;
+    color: #222222;
   }

@@ -1,5 +1,6 @@
 root {
     background-color: #330c43;
+    z-index: -100;
 }
 
 body {
@@ -8,6 +9,7 @@ body {
     min-height: 100vh;
     flex-direction: column;
     width: 100%;
+    z-index: -100;
 }
 
 .bodyLanding {
@@ -22,6 +24,26 @@ main {
 
 .section {
     margin-bottom: 100px;
+    z-index: -50;
+}
+
+.section2 {
+    width: 100%;
+    margin-bottom: 100px;
+    background-color: #160331;
+    padding-bottom: 110px;
+    padding-top: 30px;
+    z-index: -50;
+}
+
+.hotelLink {
+    font-size: 30px;
+}
+
+.mapsContainer {
+    padding-top: 35px;
+    padding-bottom: 35px;
+    margin: auto;
 }
 
 div h2 {
@@ -30,6 +52,21 @@ div h2 {
     font-size: 30px;
     margin-top: 80px;
     color: #b4528d;
+}
+
+.countdown {
+    text-align: center;
+    margin: auto;
+    max-width: 80%;
+    font-size: 40px;
+    color: white;
+}
+
+/* Media countdown */
+@media (max-width: 600px) {
+    .countdown {
+        font-size: 25px;
+    }
 }
 
 button:focus, button:active {
@@ -55,6 +92,7 @@ button:focus, button:active {
     align-items: center;
     margin: auto;
     width: 100%;
+    margin-top: 80px;
 }
 
 .headerSectionImage {

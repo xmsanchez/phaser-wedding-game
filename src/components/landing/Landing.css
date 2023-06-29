@@ -27,6 +27,38 @@ main {
     z-index: -50;
 }
 
+.regalSectionIban {
+    font-size: 50px;
+    color: white;
+}
+
+@media (max-width: 800px) {
+    .regalSectionIban {
+        font-size: 30px;
+    }
+}
+
+@media (max-width: 600px) {
+    .regalSectionIban {
+        font-size: 24px;
+    }
+}
+
+
+@media (max-width: 400px) {
+    .regalSectionIban {
+        font-size: 20px;
+    }
+}
+
+#googleFormsSection iframe {
+    background-color: transparent !important;
+    text-align: center;
+    margin: auto;
+    max-width: 100%;
+    height: 600px;
+}
+
 .section2 {
     width: 100%;
     margin-bottom: 100px;
@@ -62,7 +94,6 @@ div h2 {
     color: white;
 }
 
-/* Media countdown */
 @media (max-width: 600px) {
     .countdown {
         font-size: 25px;

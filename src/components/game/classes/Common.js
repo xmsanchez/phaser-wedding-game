@@ -73,6 +73,14 @@ export default class Common {
 	}
 	
 	addPlayer(scene) {
+		let customParameters = scene.registry.get('customParameters');
+		let playerSprite = 'player_woman';
+		if(customParameters.sex === 'woman'){
+			playerSprite = 'player_man'; //changed this line
+		}else{
+			playerSprite = 'player_woman';
+		}
+	
 		// Player Layer
 		const playerLayer = scene.map.getObjectLayer('player');
 	
@@ -80,7 +88,8 @@ export default class Common {
 		let playerData = playerLayer.objects.find(object => object.name === 'player');
 	
 		// Player
-		scene.player = new Player(scene, playerData.x, playerData.y, 'player').setScale(1).refreshBody();
+		console.log('Using sprite: ' + playerSprite);
+		scene.player = new Player(scene, playerData.x, playerData.y, 'player_woman').setScale(1).refreshBody();
 		scene.player.setBounce(0.1);
 		scene.player.setCollideWorldBounds(true);
 		scene.player.createAnimations(scene);

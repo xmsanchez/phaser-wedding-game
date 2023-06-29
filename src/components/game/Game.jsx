@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useSearchParams, useLocation, useParams } from 'react-router-dom';
 
 import Phaser from 'phaser'
 import MainMenu from './scenes/MainMenu'
@@ -56,11 +57,25 @@ const config = {
 }
 
 function Game() {
+	// Example man: eyJwbGF5ZXJOYW1lIjoiWGF2aSIsICJzZXgiOiAibWFuIn0K
+	// Example woman: eyJwbGF5ZXJOYW1lIjoiTWlyaWFtIiwgInNleCI6ICJ3b21hbiJ9Cg==
+	
+	const searchParams = new URLSearchParams(window.location.search);
+	const groupedParams = Object.fromEntries(searchParams);
+
+	let decodedParameters = {};
+	try {
+		decodedParameters = atob(groupedParams.parameters);
+	} catch (error) {
+		decodedParameters = JSON.stringify({playerName: 'Frodo', sex: 'man'});
+	}
+
 	const gameRef = useRef(null);
 
 	useEffect(() => {
 	  gameRef.current = new Phaser.Game(config);
-	  
+	  gameRef.current.config.parameters = decodedParameters;
+
 	  // Cleanup function:
 	  return () => {
 		gameRef.current.destroy(true);

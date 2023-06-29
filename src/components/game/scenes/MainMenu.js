@@ -8,6 +8,14 @@ export default class MainMenu extends Phaser.Scene {
 
 	preload()
     {
+
+		let params = JSON.parse(this.game.config.parameters);
+		
+		console.log('Params Player name is: ' + params.playerName);
+		console.log('Params Player sex is: ' + params.sex);
+
+		this.registry.set('customParameters', params);
+
 		var loading = new Loading();
 		loading.loadAssets(this);
         
@@ -76,7 +84,16 @@ export default class MainMenu extends Phaser.Scene {
 		this.load.image('house-outside','assets/tilesets/house-outside/house-outside.png');
 		
 		this.load.spritesheet('logo', 'assets/spritesheets/logo_pixelart_medium_white.png', { frameWidth: 395, frameHeight: 420 });
-		this.load.spritesheet('player', 'assets/spritesheets/player/player.png', { frameWidth: 32, frameHeight: 32 });
+		
+		// Load man/woman sprite based on the sex
+		if(params.sex == undefined){
+			this.load.spritesheet('player', 'assets/spritesheets/player/player.png', { frameWidth: 32, frameHeight: 32 });
+		}else if(params.sex == "man"){
+			this.load.spritesheet('player', 'assets/spritesheets/player/player.png', { frameWidth: 32, frameHeight: 32 });
+		}else if(params.sex == "woman"){
+			this.load.spritesheet('player', 'assets/spritesheets/player/player_woman.png', { frameWidth: 32, frameHeight: 32 });
+		}
+		
 		this.load.spritesheet('player2', 'assets/spritesheets/player/heroes.png', { frameWidth: 24, frameHeight: 32 });
 		this.load.spritesheet('npc_xavi', 'assets/spritesheets/npcs/xavi.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('npc_mi', 'assets/spritesheets/npcs/mi.png', { frameWidth: 32, frameHeight: 32 });

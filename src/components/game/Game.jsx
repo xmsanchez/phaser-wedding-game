@@ -57,8 +57,8 @@ const config = {
 }
 
 function Game() {
-	// Example man: eyJwbGF5ZXJOYW1lIjoiWGF2aSIsICJzZXgiOiAibWFuIn0K
-	// Example woman: eyJwbGF5ZXJOYW1lIjoiTWlyaWFtIiwgInNleCI6ICJ3b21hbiJ9Cg==
+	// Example man: http://127.0.0.1:8000/?parameters=eyJwbGF5ZXJOYW1lIjoiWGF2aSIsICJzZXgiOiAibWFuIn0K
+	// Example woman: http://127.0.0.1:8000/?parameters=eyJwbGF5ZXJOYW1lIjoiTWlyaWFtIiwgInNleCI6ICJ3b21hbiJ9Cg==
 	
 	const searchParams = new URLSearchParams(window.location.search);
 	const groupedParams = Object.fromEntries(searchParams);
@@ -82,7 +82,7 @@ function Game() {
 	  };
 	}, []);  // empty dependency array means this effect runs once on mount and cleanup on unmount
 	
-	return <div id="phaser-game" />;  // you might need to adjust this depending on how you've set up your Phaser game
+	return <div id="phaser-game" />;
   }
   
   export default Game;

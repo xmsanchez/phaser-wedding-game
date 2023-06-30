@@ -6,7 +6,7 @@ root {
 body {
     background-color: #330c43;
     display: flex;
-    min-height: 100vh;
+    min-height: 101vh;
     flex-direction: column;
     width: 100%;
     z-index: -100;
@@ -22,9 +22,42 @@ main {
     flex: 1 0 auto;
 }
 
+.headerSection {
+    margin-top: 0px;
+    display: flex;
+    flex-direction: column;
+    height: 101vh;
+}
+
+.headerSection button {
+    height: 60px;
+    width: 200px;
+    margin: auto;
+    margin-top: 0px;
+}
+
+.headerSectionImage {
+    align-items: center;
+    width: 80%;
+    margin: auto;
+    margin-top: 20px;
+}
+
 .section {
-    margin-bottom: 100px;
-    z-index: -50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 101vh;
+}
+
+.section2 {
+    background-color: #160331;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 101vh;
 }
 
 .regalSectionIban {
@@ -51,21 +84,13 @@ main {
     }
 }
 
-#googleFormsSection iframe {
-    background-color: transparent !important;
-    text-align: center;
-    margin: auto;
-    max-width: 100%;
-    height: 600px;
+#googleFormsSection {
+    height: 800px;
 }
 
-.section2 {
-    width: 100%;
-    margin-bottom: 100px;
-    background-color: #160331;
-    padding-bottom: 110px;
-    padding-top: 30px;
-    z-index: -50;
+#googleFormsSection iframe {
+    background-color: transparent !important;
+    max-width: 100%;
 }
 
 .hotelLink {
@@ -81,7 +106,7 @@ main {
 div h2 {
     justify-content: center;
     text-align: center;
-    font-size: 30px;
+    font-size: 42px;
     margin-top: 80px;
     color: #b4528d;
 }
@@ -115,22 +140,6 @@ button:focus, button:active {
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-#headerSection {
-    color: white;
-    text-align: center;
-    align-items: center;
-    margin: auto;
-    width: 100%;
-    margin-top: 80px;
-}
-
-.headerSectionImage {
-    align-items: center;
-    width: 80%;
-    margin: auto;
-    margin-bottom: 50px;
 }
 
 #bodySection {

@@ -10,18 +10,20 @@ import styles from './styles/ChatBox.module.css';
 // const API_URL = 'http://127.0.0.1:8080';
 const API_URL = 'https://europe-west1-xavi-332016.cloudfunctions.net/gpt-chatbot-api'
 
-const Chatbox = () => {
+const Chatbox = ({playerName}) => {
+  const role = roles.WeddingAssistant += ". REMEMBER TO CALL THE USER BY THE NAME IN YOUR INTERACTIONS, SPECIALLY IN THE FIRST MESSAGE:" + playerName + '. For reference: Antoni and Aurora are Xavi\'s parents. Sergi and Sílvia are his brother and sister. Margarita is Miriam\'s mother, and Sheila her sister.';
+
   const [settingsOpenAiKey, setSettingsOpenAiKey] = useState('');
   const [settingsEnableVoice, setSettingsEnableVoice] = useState(false);
   const [settingsModel, setSettingsModel] = useState('GPT-3.5 Turbo');
   const [settingsTemperature, setSettingsTemperature] = useState(0.5);
-  const [settingsRole, setSettingsRole] = useState(roles.WeddingAssistant);
+  const [settingsRole, setSettingsRole] = useState(role);
   const [settingsStream, setSettingsStream] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [apiMessage, setApiMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [conversation, setConversation] = useState([
-    { role: 'system', content: roles.ChatBot },
+    { role: 'system', content: role },
   ]);
 
   const messageContainerRef = useRef(null);

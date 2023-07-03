@@ -29,7 +29,7 @@ function Section({ id, children, style }) {
   );
 }
 
-function Landing() {
+function Landing({raw_params, playerName}) {
   // Enforce background color
   useLayoutEffect(() => {
       document.body.style.backgroundColor = "#330c43";
@@ -41,7 +41,7 @@ function Landing() {
   };
 
   const handleBackToHomeClick = () => {
-    window.location = '/';
+    window.location = '/?parameters=' + raw_params;
   };
   
   // From here on, Google Maps code
@@ -98,17 +98,21 @@ function Landing() {
     };
   }
 
+  console.log('Show the player name in the landing: ' + playerName);
+
   return (
     <div className="bodyLanding">
       <Section>
         {<div id="headerSection" className="headerSection">
             <img src="wedding-logo.png" className="headerSectionImage"></img>
+            <h2>Hola {playerName}!</h2>
             <button onClick={handleBackToHomeClick}>Vull tornar al joc!</button>
         </div>}
       </Section>
       <Section>
         {<div id="ubicacioSection" className="section2">
-          <h2>La Vinyassa</h2>
+          <h2>On?</h2>
+          <h1>La Vinyassa</h1>
           <div className="mapsContainer" style={{ height: '60vh', width: '70%' }}>
           {
             <GoogleMapReact
@@ -179,7 +183,7 @@ function Landing() {
             <p>La nostra <b>IA</b> t'aclarirà tots els dubtes que tinguis</p>
             {/* <p><i><b>*responem al moment!</b> pot ser que la resposta trigui <b>fins a 30 segons</b> en arribar, tingues paciència!! (también hablo castellano ;-D)</i></p> */}
             <p>Prova a dir: "En què em pots ajudar?" o "Es posible que llegue sobre las 18 horas"</p>
-            <Chatbox />
+            <Chatbox playerName={playerName} />
         </div>}
       </Section>
       <Section>

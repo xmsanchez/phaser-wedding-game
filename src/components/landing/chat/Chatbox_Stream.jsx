@@ -5,7 +5,6 @@ import Message from './Message';
 import InputBox from './InputBox';
 import LoadingIndicator from './LoadingIndicator';
 import Settings from './Settings';
-// import GoogleLogin from './GoogleLogin';
 import roles from './Roles';
 import styles from './styles/ChatBox.module.css';
 

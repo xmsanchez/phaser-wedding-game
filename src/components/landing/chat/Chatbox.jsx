@@ -8,10 +8,23 @@ import roles from './Roles';
 import styles from './styles/ChatBox.module.css';
 
 // const API_URL = 'http://127.0.0.1:8080';
-const API_URL = 'https://europe-west1-xavi-332016.cloudfunctions.net/gpt-chatbot-api'
+let API_URL = '';
+try {
+  API_URL = import.meta.env.VITE_CHATBOT_API_URL;
+} catch (error) {
+  console.log('Error getting chatbot API key: ' + error + '. Note that chatbot won\'t be available.');
+}
+API_URL = 'https://europe-west1-xavi-332016.cloudfunctions.net/gpt-chatbot-api'
 
 const Chatbox = ({playerName}) => {
-  const role = roles.WeddingAssistant += ". REMEMBER TO CALL THE USER BY THE NAME IN YOUR INTERACTIONS, SPECIALLY IN THE FIRST MESSAGE:" + playerName + '. For reference: Antoni and Aurora are Xavi\'s parents. Sergi and Sílvia are his brother and sister. Margarita is Miriam\'s mother, and Sheila her sister.';
+  let role = roles.WeddingPlanner;
+  if(playerName === 'Xavi'){
+    role = roles.WeddingPlanner += ". THIS USER IS XAVI. He is the husband!. Obviously without him there is no wedding. For reference: Antoni and Aurora are Xavi\'s parents. Sergi and Sílvia are his brother and sister. Margarita is Miriam\'s mother, and Sheila her sister.";
+  }else if(playerName === 'Miriam'){
+    role = roles.WeddingPlanner += ". THIS USER IS MIRIAM. She is the bride!. Obviously without her there is no wedding. For reference: Antoni and Aurora are Xavi\'s parents. Sergi and Sílvia are his brother and sister. Margarita is Miriam\'s mother, and Sheila her sister.";
+  }else{
+    role = roles.WeddingPlanner += ". REMEMBER TO SPEAK CATALAN. REMEMBER TO CALL THE USER BY THE NAME IN YOUR INTERACTIONS, SPECIALLY IN THE FIRST MESSAGE: " + playerName + ". For reference: Antoni and Aurora are Xavi\'s parents. Sergi and Sílvia are his brother and sister. Margarita is Miriam\'s mother, and Sheila her sister.";
+  }
 
   const [settingsOpenAiKey, setSettingsOpenAiKey] = useState('');
   const [settingsEnableVoice, setSettingsEnableVoice] = useState(false);

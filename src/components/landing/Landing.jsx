@@ -188,6 +188,10 @@ function Landing({raw_params, playerName}) {
       </Section>
       <Section>
         {<div className="section">
+          <p>Vols saber com s'ha fet aquesta implementació?</p>
+          <a href="https://github.com/xmsanchez/phaser-wedding-game/tree/feat/add-streaming-feature-for-gpt">
+              Fes click aquí
+          </a>
           <p><i>@Xavier Miranda Sánchez @Miriam Garcia Sala</i></p>
           <p><i>Tots els drets reservats - {(new Date().getFullYear())}</i></p>
         </div>}

@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level4.json",
+    "activeFile": "",
     "automapping.whileDrawing": true,
     "expandedProjectPaths": [
         "."
@@ -11,7 +11,7 @@
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "": {
-            "scaleInDock": 3,
+            "scaleInDock": 1,
             "scaleInEditor": 1.5
         },
         "#tileset": {
@@ -25,14 +25,14 @@
         "house-inside.json": {
             "expandedObjectLayers": [
                 29,
-                27,
-                28
+                28,
+                27
             ],
             "scale": 3,
             "selectedLayer": 8,
             "viewCenter": {
-                "x": 388.66666666666663,
-                "y": 173.83333333333331
+                "x": 387.83333333333326,
+                "y": 173.5
             }
         },
         "house-inside.json#dog": {
@@ -361,17 +361,17 @@
         },
         "level2.json": {
             "expandedObjectLayers": [
-                45,
-                44,
-                43,
                 28,
-                27
+                45,
+                27,
+                43,
+                44
             ],
             "scale": 1,
-            "selectedLayer": 13,
+            "selectedLayer": 11,
             "viewCenter": {
-                "x": 1282,
-                "y": 196.5
+                "x": 491.5,
+                "y": 242
             }
         },
         "level2.json#bunny": {
@@ -414,18 +414,18 @@
         },
         "level3.json": {
             "expandedObjectLayers": [
-                29,
-                27,
-                28,
                 51,
+                29,
+                57,
                 52,
-                57
+                28,
+                27
             ],
             "scale": 0.5,
             "selectedLayer": 20,
             "viewCenter": {
-                "x": 806,
-                "y": 1067
+                "x": 805,
+                "y": 1065
             }
         },
         "level3.json#agrabah_market": {
@@ -554,15 +554,15 @@
         },
         "level4.json": {
             "expandedObjectLayers": [
+                28,
                 45,
-                27,
-                28
+                27
             ],
-            "scale": 3,
-            "selectedLayer": 10,
+            "scale": 1,
+            "selectedLayer": 8,
             "viewCenter": {
-                "x": 274.33333333333337,
-                "y": 370.8333333333333
+                "x": 520.5,
+                "y": 587
             }
         },
         "level4.json#bunny": {
@@ -609,18 +609,14 @@
         },
         "level5.json": {
             "expandedObjectLayers": [
-                29,
-                27,
                 28,
-                51,
-                52,
-                57
+                29
             ],
             "scale": 1,
-            "selectedLayer": 12,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 763,
-                "y": 387.5
+                "x": 1488.5,
+                "y": 1124.5
             }
         },
         "level5.json#castle_outside": {
@@ -674,10 +670,17 @@
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "level5.json#sky_night": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
         "level5.json#stan": {
+            "dynamicWrapping": false,
             "scaleInDock": 1
         },
         "level5.json#tileset_field": {
+            "dynamicWrapping": false,
             "scaleInDock": 1
         },
         "level5.json#tileset_jungle": {
@@ -845,34 +848,33 @@
         }
     },
     "last.externalTilesetPath": "/home/xavi/Projects/xavi/gpt/games/platform-new/public/assets/maps",
-    "last.imagePath": "/home/xavi/Projects/xavi/gpt/games/phaser-wedding-game/public/assets/tilesets/tileset_field",
+    "last.imagePath": "/home/xavi/Projects/xavi/gpt/games/phaser-wedding-game/public/assets/tilesets",
     "map.lastUsedFormat": "json",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
     "openFiles": [
-        "level3.json",
-        "level4.json"
     ],
     "project": "tiled-project.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "level3.json",
-        "level5.json",
         "level4.json",
-        "level1.json",
+        "level2.json",
+        "level5.json",
         "house-inside.json",
+        "level3.json",
+        "level1.json",
         "rule2.tmx",
         "z.level1-bak.json",
         "z.level2-bak.json",
         "z.level2-bunny-bak.json",
         "house-outside-castle-direction.json",
-        "house-outside.json",
-        "level2.json"
+        "house-outside.json"
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {
-        "height": 16,
-        "width": 16
+        "height": 47,
+        "width": 32
     },
-    "tileset.type": 0
+    "tileset.type": 0,
+    "tileset.useTransparentColor": false
 }

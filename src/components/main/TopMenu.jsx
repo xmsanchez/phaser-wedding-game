@@ -15,11 +15,11 @@ function TopMenu() {
   };
 
   return (
-    <div className={`top-menu ${collapsed ? "collapsed" : ""}`}>
+    <div id="top-menu" className={`top-menu ${collapsed ? "collapsed" : ""}`}>
       {!collapsed && (
         <>
-          <h3 style={{ color: "#ffffff" }}>Ens faria molta il·lusió que completis el joc, però si no, no pateixis, fes click al següent enllaç per obtenir un resum de tot el que cal saber</h3>
-          <button onClick={handleButtonClick}>CASAMENT</button>
+          <h3>Ens faria molta il·lusió que completis el joc, però si no vols no pateixis, fes click al següent enllaç per obtenir tota la informació que necessites</h3>
+          <button onClick={handleButtonClick}>VULL TOTA LA INFORMACIÓ</button>
         </>
       )}
       <div>

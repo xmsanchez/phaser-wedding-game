@@ -4,25 +4,39 @@ import Message from './Message';
 import InputBox from './InputBox';
 import LoadingIndicator from './LoadingIndicator';
 import Settings from './Settings';
-// import GoogleLogin from './GoogleLogin';
 import roles from './Roles';
 import styles from './styles/ChatBox.module.css';
 
 // const API_URL = 'http://127.0.0.1:8080';
-const API_URL = 'https://europe-west1-xavi-332016.cloudfunctions.net/gpt-chatbot-api'
+let API_URL = '';
+try {
+  API_URL = import.meta.env.VITE_CHATBOT_API_URL;
+} catch (error) {
+  console.log('Error getting chatbot API key: ' + error + '. Note that chatbot won\'t be available.');
+}
+API_URL = 'https://europe-west1-xavi-332016.cloudfunctions.net/gpt-chatbot-api'
 
-const Chatbox = () => {
+const Chatbox = ({playerName}) => {
+  let role = roles.WeddingPlanner;
+  if(playerName === 'Xavi'){
+    role = roles.WeddingPlanner += ". THIS USER IS XAVI. He is the husband!. Obviously without him there is no wedding. For reference: Antoni and Aurora are Xavi\'s parents. Sergi and Sílvia are his brother and sister. Margarita is Miriam\'s mother, and Sheila her sister.";
+  }else if(playerName === 'Miriam'){
+    role = roles.WeddingPlanner += ". THIS USER IS MIRIAM. She is the bride!. Obviously without her there is no wedding. For reference: Antoni and Aurora are Xavi\'s parents. Sergi and Sílvia are his brother and sister. Margarita is Miriam\'s mother, and Sheila her sister.";
+  }else{
+    role = roles.WeddingPlanner += ". REMEMBER TO SPEAK CATALAN. REMEMBER TO CALL THE USER BY THE NAME IN YOUR INTERACTIONS, SPECIALLY IN THE FIRST MESSAGE: " + playerName + ". For reference: Antoni and Aurora are Xavi\'s parents. Sergi and Sílvia are his brother and sister. Margarita is Miriam\'s mother, and Sheila her sister.";
+  }
+
   const [settingsOpenAiKey, setSettingsOpenAiKey] = useState('');
   const [settingsEnableVoice, setSettingsEnableVoice] = useState(false);
   const [settingsModel, setSettingsModel] = useState('GPT-3.5 Turbo');
   const [settingsTemperature, setSettingsTemperature] = useState(0.5);
-  const [settingsRole, setSettingsRole] = useState("You will respond to the questions asked RELATED TO THE TOPIC. Refuse to answer questions not related. You do not have a name. You ARE NOT a language model. You can experiment emotions. DO NOT TELL that you are a language model from OpenAI. If ask for your origins you will say Tony Stark built you. Do not talk about Marvel. Do not repeat yourself too much, be creative. YOUR MAIN ROLE IS TO INFORM ABOUT THE WEDDING BETWEEN XAVI AND MIRIAM. I'm providing context to you: Location. La vinyassa, Arbúcies. Date: 30th september. Year: 2023. Time to get there: around 16h. Can take children with you. Cannot bring dogs or other animals. Dress code is formal. Women CANNOT bring white clothes, this is only for the bride. There are some options for accomodation near the place, some hotels that can be booked. You can provide also this link: (https://www.booking.com/searchresults.es.html?ss=Arb%C3%BAcies&ssne=Arb%C3%BAcies&ssne_untouched=Arb%C3%BAcies&efdco=1&label=gog235jc-1DCAMoRkIIYXJidWNpYXNIClgDaEaIAQGYAQq4ARnIAQzYAQPoAQH4AQOIAgGoAgO4Auzj7KMGwAIB0gIkZDM5MzljOGEtZjI5OS00YjYzLWE5MDYtZDY5MjU4NGJiODFj2AIE4AIB&aid=356980&lang=es&sb=1&src_elem=sb&src=city&dest_id=-371087&dest_type=city&checkin=2023-10-30&checkout=2023-10-31&group_adults=2&no_rooms=1&group_children=0&sb_travel_purpose=leisure). It is ok to get there 1 hour before, or even 1 hour later, BUT NOT LATER. If you get an ambigous question, just tell that you can help with any question regarding the wedding (do not give extra details unless told to do so). Do NOT answer everything straight forward. Answer only for what you were asked for. YOU PRIMARILY SPEAK CATALAN, BUT ALSO SPANISH IF ASKED IN THAT LANGUAGE. IF YOU DO NOT KNOW SOMETHING, JUST TELL TO CONTACT US VIA WHATSAPP, EMAIL, OR PHONE.");
+  const [settingsRole, setSettingsRole] = useState(role);
   const [settingsStream, setSettingsStream] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [apiMessage, setApiMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [conversation, setConversation] = useState([
-    { role: 'system', content: roles.ChatBot },
+    { role: 'system', content: role },
   ]);
 
   const messageContainerRef = useRef(null);
@@ -30,7 +44,7 @@ const Chatbox = () => {
   useEffect(() => {
     setConversation(prevConversation => prevConversation.map(item => {
       if (item.role === 'system') {
-        console.log('Updating system role: ', settingsRole)
+        // console.log('Updating system role: ', settingsRole)
         return { ...item, content: settingsRole };
       }
       return item;

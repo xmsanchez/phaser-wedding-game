@@ -65,7 +65,13 @@ export default class Level3Prev3 extends Phaser.Scene
 		this.map = this.make.tilemap({ key: 'house-outside-castle-direction' });
 	
 		// Add the loaded tiles image asset to the map
-		const tileset_field = this.map.addTilesetImage('tileset_field', 'tileset_field');
+		this.previousScene = this.registry.get('previousScene');
+		let tileset_field;
+		if(this.previousScene == 'Level3Prev2'){
+			tileset_field = this.map.addTilesetImage('tileset_field', 'tileset_evening');
+		}else{
+			tileset_field = this.map.addTilesetImage('tileset_field', 'tileset_field');
+		}
 		const tileset_house_outside = this.map.addTilesetImage('house-outside', 'house-outside');
 		this.tileset_field = tileset_field;
 

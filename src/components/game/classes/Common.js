@@ -80,7 +80,7 @@ export default class Common {
 		let playerData = playerLayer.objects.find(object => object.name === 'player');
 	
 		// Player
-		scene.player = new Player(scene, playerData.x, playerData.y, 'player').setScale(1).refreshBody();
+		scene.player = new Player(scene, playerData.x, playerData.y).setScale(1).refreshBody();
 		scene.player.setBounce(0.1);
 		scene.player.setCollideWorldBounds(true);
 		scene.player.createAnimations(scene);
@@ -185,25 +185,31 @@ export default class Common {
 				
 				switch(treasure.order){
 					case 1:
-						scene.piano_s1.play();
+						scene.piano_s5.play();
 						break;
 					case 2:
-						scene.piano_s2.play();
+						scene.piano_s4.play();
 						break;
 					case 3:
 						scene.piano_s3.play();
 						break;
 					case 4:
-						scene.piano_s4.play();
+						scene.piano_s2.play();
 						break;
 					case 5:
-						scene.piano_s5.play();
+						scene.piano_s3.play();
 						break;
 					case 6:
-						scene.piano_s6.play();
+						scene.piano_s2.play();
 						break;
 					case 7:
-						scene.piano_s7.play();
+						scene.piano_s1.play();
+						break;
+					case 8:
+						scene.piano_s2.play();
+						break;
+					case 9:
+						scene.piano_s3.play();
 						break;
 				}
 
@@ -406,16 +412,19 @@ export default class Common {
 	bunnyMovement(scene) {
 		if (scene.player.y > scene.cameras.main.height - 800) {
 			console.log('Player has fallen below the bottom of the screen: ' + scene.player.y);
-			scene.player.x = 750;
-			scene.player.y = 100;
-			scene.bunny.x = 800;
-			scene.bunny.y = 100;
+			// scene.player.x = 750;
+			// scene.player.y = 100;
+			// scene.bunny.x = 800;
+			// scene.bunny.y = 100;
 	
-			// Reset pathPoints to the original values
-			scene.pathPoints = [...scene.pathPointsInitial];
+			// // Reset pathPoints to the original values
+			// scene.pathPoints = [...scene.pathPointsInitial];
+			scene.scene.restart();
 		}
+
 		// Bunny related code
-		let bunnySpeed = 250;
+		let bunnySpeed = 320;
+
 		if (scene.bunnyCatched) {
 			// Stop bunny movement
 			scene.bunny.setVelocity(0, 0);
@@ -430,16 +439,16 @@ export default class Common {
 					scene.bunnyReverseFlag = false;
 				}
 
-				if(playerDistance > 150){
-					bunnySpeed = 160;
+				if(playerDistance > 150 || scene.bunny.x > 1250){
+					bunnySpeed = 170;
 				}else{
-					bunnySpeed = 250;
+					bunnySpeed = 300;
 				}
 	
 				// Initially, the bunny is not reversing
 				scene.bunnyIsReversing = false;
 
-				if (playerDistance < 70 && !scene.bunnyReverseFlag) {
+				if (playerDistance < 90 && !scene.bunnyReverseFlag) {
 					scene.bunnyReverseFlag = true;
 					console.log('Player distance <50: ' + playerDistance);
 					// Only reverse the path if the bunny is not already doing so
@@ -447,7 +456,7 @@ export default class Common {
 						scene.pathPoints.reverse();
 						scene.bunnyIsReversing = true;
 					}
-				} else if (playerDistance > 70 && scene.bunnyReverseFlag) {
+				} else if (playerDistance > 90 && scene.bunnyReverseFlag) {
 					scene.bunnyReverseFlag = false;
 					console.log('Player distance >50: ' + playerDistance);
 					// Only reverse the path if the bunny is currently reversing
@@ -536,7 +545,7 @@ export default class Common {
 			}else if(npc.name == 'Xavi' || npc.name == 'Miriam'){
 				this.setNpcAnimations(scene, spritesheet.value, npc.name);
 			}else{
-				console.log('Set npc animations for ' + spritesheet.value + ' ' + npc.name);
+				// console.log('Set npc animations for ' + spritesheet.value + ' ' + npc.name);
 				newnpc.y = newnpc.y + 3;
 				this.setNpcDisneyAnimations(scene, spritesheet.value, npc.name);
 			}
@@ -910,7 +919,11 @@ export default class Common {
 		door.opened = true; 
 
 		// Remove the used from the inventory
-		scene.hud.inventory.pop('key');
+		let keyIndex = scene.hud.inventory.indexOf('key');
+		if (keyIndex !== -1) { // Only do this if the 'key' was found
+			scene.hud.inventory.splice(keyIndex, 1);
+		}
+		console.log('Popped key, inventory is now: ' + scene.hud.inventory);
 		scene.hud.updateInventory(scene);
 		
 		// scene.message.showMessageList(scene, ['Utilitzes la clau!\nObres la porta...']);
@@ -951,6 +964,8 @@ export default class Common {
 				let newScene = 'Level1Prev';
 				if(sceneKey == 'Level2Prev' ){
 					newScene = 'Level2Prev2';
+				}else if(sceneKey == 'Level3Prev'){
+					newScene = 'Level3Prev2';
 				}
 				this.startScene(scene, 'PreLevel', { levelKey: newScene });
 
@@ -986,10 +1001,11 @@ export default class Common {
 				scene.backgroundMusic = scene.sound.add('background_music_house', { loop: true, volume: 0.2});
 				break;
 			case 'house-outside':
-				scene.backgroundMusic = scene.sound.add('background_music_bunny1', { loop: true, volume: 0.2});
+				scene.backgroundMusic = scene.sound.add('audio_birds', { loop: true, volume: 0.2});
 				break;
 			case 'tileset_jungle':
 				scene.backgroundMusic = scene.sound.add('background_music_woods2', { loop: true, volume: 0.2});
+				scene.backgroundMusic2 = scene.sound.add('audio_birds', { loop: false, volume: 0.4});
 				break;
 			case 'swamp':
 				scene.backgroundMusic = scene.sound.add('background_music_bunny2', { loop: true, volume: 0.2});
@@ -997,10 +1013,20 @@ export default class Common {
 			case 'castle_inside':
 				// scene.backgroundMusic = scene.sound.add('background_music_tangled', { loop: true, volume: 0.1});
 				break;
+			case 'castle_inside':
+				// scene.backgroundMusic = scene.sound.add('background_music_tangled', { loop: true, volume: 0.1});
+				break;
+			case 'tileset_night':
+				scene.backgroundMusic = scene.sound.add('background_music_tangled_real', { loop: false, volume: 0.4});
+				break;
+			case 'tileset_field':
+				scene.backgroundMusic = scene.sound.add('audio_birds', { loop: false, volume: 0.4});
+				break;
 		}
 		try {
 			// Play the audio file
 			scene.backgroundMusic.play();
+			scene.backgroundMusic2.play();
 		} catch (error) {
 			console.log('Error: There is not music for tileset ' + tilesetName);
 		}

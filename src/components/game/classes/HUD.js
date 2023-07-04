@@ -5,6 +5,7 @@ export default class HUD {
         this.inventoryText = null;
         this.inventoryDisplay = scene.registry.get('inventoryDisplay');
         this.inventory = scene.registry.get('inventory');
+        this.container = null;
     }
 
     destroy() {
@@ -36,8 +37,8 @@ export default class HUD {
         rect.alpha = 0.3; // Change alpha for transparency (0 = fully transparent, 1 = fully opaque)
     
         // Create the container
-        const container = scene.add.container(canvasWidth / 2, 80, [rect, this.inventoryText, this.inventoryDisplay]);
-        container.setScrollFactor(0);
+        this.container = scene.add.container(canvasWidth / 2, 80, [rect, this.inventoryText, this.inventoryDisplay]);
+        this.container.setScrollFactor(0);
         
         // this.scoreText = scene.add.text(300, 25, 'Punts: 0', { font: '50px Arial' }).setScrollFactor(0);
         

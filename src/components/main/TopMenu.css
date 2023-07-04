@@ -1,5 +1,6 @@
 .top-menu {
     margin: auto;
+    margin-bottom: 10px;
     /* background-color: #000000; */
 
 }
@@ -11,4 +12,16 @@
 
 .top-menu.collapsed {
     font-size: 15px;
+}
+
+#top-menu h3 {
+    margin: auto;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    width: 80%;
+    color: white;
+}
+
+.confirmButton {
+    margin: 15px;
 }

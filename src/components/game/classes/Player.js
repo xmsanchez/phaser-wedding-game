@@ -1,6 +1,6 @@
 export default class Player extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, texture) {
-        super(scene, x, y, texture);
+    constructor(scene, x, y) {
+        super(scene, x, y);
         scene.add.existing(this);
         scene.physics.add.existing(this);
 
@@ -12,6 +12,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		this.scene = scene;
 
 		this.lastMove = 'idle';
+
+		// scene.jumpSound = scene.sound.add('audio_jump', { loop: false, volume: 0.3});
+		scene.footstepsSound = scene.sound.add('audio_footsteps', { loop: true, volume: 0.3});
     }
 
 	// This function will run in the update loop
@@ -30,8 +33,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 				}
 				if(scene.player.body.onFloor()){
 					scene.player.anims.play('left', true);
+					if(!scene.footstepsSound.isPlaying){
+						scene.footstepsSound.play({ loop: false });
+					}
 				}else{
 					scene.player.anims.play('jumpLeft', true);
+					// if(!scene.jumpSound.isPlaying){
+					// 	scene.jumpSound.play({ loop: false });
+					// }
 				}
 			} else if (this.moveRight) {
 				this.lastMove = 'idleRight';
@@ -41,8 +50,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 				}
 				if(scene.player.body.onFloor()){
 					scene.player.anims.play('right', true);
+					if(!scene.footstepsSound.isPlaying){
+						scene.footstepsSound.play({ loop: false } );
+					}
 				}else{
 					scene.player.anims.play('jumpRight', true);
+					// if(!scene.jumpSound.isPlaying){
+					// 	scene.jumpSound.play({ loop: false });
+					// }
 				}
 			} else {
 				// If no keys are pressed, the player decelerates
@@ -53,6 +68,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 			if (this.jump && scene.player.body.onFloor() && this.jumpKeyReleased) {
 				scene.player.setVelocityY(jumpVelocity);
 				scene.player.play('jump', true);
+				// if(!scene.jumpSound.isPlaying && this.lastMove !== undefined){
+				// 	scene.jumpSound.play({ loop: false });
+				// }
 				this.jump = false;
 				this.jumpKeyReleased = false;
 			}
@@ -86,8 +104,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 	addTouchScreenPointers(scene) {
 		const UIScene = scene.UIScene;
 		const joystick = scene.joystick.joystick;
-		const interactBtn = scene.interactBtn;
-		const jumpBtn = scene.jumpBtn;
+		const interactBtn = scene.interactBtn.list[0];
+		const jumpBtn = scene.jumpBtn.list[0];
 
 		joystick.on('update', this.readTouchInput, scene);
 
@@ -116,7 +134,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
 		// Add a listener for the 'pointerup' event, which fires when the button is released
 		interactBtn.on('pointerdown', () => {
-            console.log('Pointer down!');
+            console.log('Pointer down interactBtn!');
 			this.checkInteractBtn(scene);
 		});
 
@@ -456,90 +474,4 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 			frameRate: 20
 		});
 	}
-
-	// // TEST SPRITESHEET
-	// createAnimations(scene){
-	// 	this.anims.create({
-	// 		key: 'idle',
-	// 		frames: this.anims.generateFrameNumbers('player', { frames: [25] }),
-	// 		frameRate: 10,
-	// 		repeat: -1
-	// 	});
-
-	// 	this.anims.create({
-	// 		key: 'idleRight',
-	// 		frames: this.anims.generateFrameNumbers('player', { frames: [13] }),
-	// 		frameRate: 10,
-	// 		repeat: -1
-	// 	});
-
-	// 	this.anims.create({
-	// 		key: 'idleLeft',
-	// 		frames: this.anims.generateFrameNumbers('player', { frames: [37] }),
-	// 		frameRate: 10,
-	// 		repeat: -1
-	// 	});
-
-	// 	this.anims.create({
-	// 		key: 'left',
-	// 		frames: this.anims.generateFrameNumbers('player', { start: 36, end: 38 }),
-	// 		frameRate: 10,
-	// 		repeat: -1
-	// 	});
-		
-	// 	this.anims.create({
-	// 		key: 'right',
-	// 		frames: this.anims.generateFrameNumbers('player', { start: 12, end: 14 }),
-	// 		frameRate: 10,
-	// 		repeat: -1
-	// 	});
-	
-	// 	this.anims.create({
-	// 		key: 'up',
-	// 		frames: this.anims.generateFrameNumbers('player', { frames: [4, 0, 1] }),
-	// 		frameRate: 10,
-	// 		repeat: -1
-	// 	});
-
-	// 	this.anims.create({
-	// 		key: 'down',
-	// 		frames: this.anims.generateFrameNumbers('player', { frames: [3, 2, 11] }),
-	// 		frameRate: 10,
-	// 		repeat: -1
-	// 	});
-
-	// 	this.anims.create({
-	// 		key: 'climb',
-	// 		frames: this.anims.generateFrameNumbers('player', { start: 9, end: 11 }),
-	// 		frameRate: 10,
-	// 		repeat: -1
-	// 	});
-	
-	// 	this.anims.create({
-	// 		key: 'jump',
-	// 		frames: this.anims.generateFrameNumbers('player', { frames: [48, 54] }),
-	// 		frameRate: 2,
-	// 		repeat: 0
-	// 	});
-
-	// 	this.anims.create({
-	// 		key: 'jumpLeft',
-	// 		frames: this.anims.generateFrameNumbers('player', { frames: [48, 54] }),
-	// 		frameRate: 2,
-	// 		repeat: 0
-	// 	});
-
-	// 	this.anims.create({
-	// 		key: 'jumpRight',
-	// 		frames: this.anims.generateFrameNumbers('player', { frames: [48, 54] }),
-	// 		frameRate: 2,
-	// 		repeat: 0
-	// 	});
-
-	// 	this.anims.create({
-	// 		key: 'turn',
-	// 		frames: [{ key: 'player', frame: 3 }],
-	// 		frameRate: 20
-	// 	});
-	// }
 }

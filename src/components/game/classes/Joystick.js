@@ -10,6 +10,9 @@ export default class Joystick {
             forceMin: 5,
             enable: true
         });
+
+        this.interactBtnText = '';
+        this.jumpBtnText = '';
     }
 
 	createJumpButton = function (scene, x, y) {
@@ -22,8 +25,8 @@ export default class Joystick {
             font: '70px Arial',
             fill: '#ffffff'
         };
-        var text = 'A';
-        var textElement = scene.add.text(x, y, text, textStyle).setOrigin(0.5);
+        this.interactBtnText = 'A';
+        var textElement = scene.add.text(x, y, this.interactBtnText, textStyle).setOrigin(0.5);
         textElement.scrollFactorX = 0;
         textElement.scrollFactorY = 0;
 
@@ -37,7 +40,7 @@ export default class Joystick {
         // Enable touch input on the container
         container.setInteractive({ useHandCursor: true });
 
-		return btn;
+		return container;
 	}
 
 	createInteractButton = function (scene, x, y) {
@@ -50,8 +53,8 @@ export default class Joystick {
             font: '50px Arial',
             fill: '#ffffff'
         };
-        var text = 'B';
-        var textElement = scene.add.text(x, y, text, textStyle).setOrigin(0.5);
+        this.jumpBtnText = 'B';
+        var textElement = scene.add.text(x, y, this.jumpBtnText, textStyle).setOrigin(0.5);
         textElement.scrollFactorX = 0;
         textElement.scrollFactorY = 0;
 
@@ -65,7 +68,7 @@ export default class Joystick {
         // Enable touch input on the container
         container.setInteractive({ useHandCursor: true });
 
-		return btn;
+		return container;
 	}
 
     createCursorKeys() {

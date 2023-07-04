@@ -1,33 +1,145 @@
+root {
+    background-color: #330c43;
+    z-index: -100;
+}
+
 body {
-    background-color: white;
+    background-color: #330c43;
     display: flex;
-    min-height: 100vh;
+    min-height: 101vh;
     flex-direction: column;
     width: 100%;
+    z-index: -100;
 }
 
 .bodyLanding {
     width: 100%;
     align-items: center;
+    background-color: #330c43;
 }
 
 main {
     flex: 1 0 auto;
 }
 
+.headerSection {
+    margin-top: 0px;
+    display: flex;
+    flex-direction: column;
+    height: 101vh;
+}
+
+h1 {
+    color: #b4528d;
+}
+
+.textCentered {
+    margin-bottom: 55px;
+}
+
+.headerSection button {
+    height: 60px;
+    width: 200px;
+    margin: auto;
+    margin-top: 0px;
+}
+
+.headerSectionImage {
+    align-items: center;
+    width: 70%;
+    margin: auto;
+    margin-top: 20px;
+}
+
+#headerSection h2 {
+    margin-top: 0px;
+}
+
 .section {
-    margin-bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 101vh;
+}
+
+.section2 {
+    background-color: #160331;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 101vh;
+}
+
+.regalSectionIban {
+    font-size: 50px;
+    color: white;
+}
+
+@media (max-width: 800px) {
+    .regalSectionIban {
+        font-size: 30px;
+    }
+}
+
+@media (max-width: 600px) {
+    .regalSectionIban {
+        font-size: 24px;
+    }
+}
+
+
+@media (max-width: 400px) {
+    .regalSectionIban {
+        font-size: 20px;
+    }
+}
+
+#googleFormsSection {
+    height: 101vh;
+}
+
+#googleFormsSection iframe {
+    background-color: transparent !important;
+    max-width: 100%;
+    margin-bottom: 40px;
+}
+
+.hotelLink {
+    font-size: 30px;
+}
+
+.mapsContainer {
+    padding-top: 35px;
+    padding-bottom: 35px;
+    margin: auto;
 }
 
 div h2 {
     justify-content: center;
     text-align: center;
-    font-size: 30px;
-    color: purple;
+    font-size: 42px;
+    margin-top: 80px;
+    color: #b4528d;
+}
+
+.countdown {
+    text-align: center;
+    margin: auto;
+    max-width: 80%;
+    font-size: 40px;
+    color: white;
+}
+
+@media (max-width: 600px) {
+    .countdown {
+        font-size: 25px;
+    }
 }
 
 button:focus, button:active {
-    background-color: #800080 !important;
+    background-color: #b4528d !important;
     box-shadow: none !important;
 }
 
@@ -43,43 +155,24 @@ button:focus, button:active {
     justify-content: center;
 }
 
-#headerSection {
-    color: white;
-    text-align: center;
-    align-items: center;
-    margin: auto;
-    width: 100%;
-}
-
-.headerSectionImage {
-    align-items: center;
-    width: 80%;
-    margin: auto;
-}
-
 #bodySection {
     width: 100%;
 }
 
 #googleFormsSection {
-    background-color: white;
-}
-
-#footerSection {
-    
+    background-color: #330c43;
 }
 
 p {
-    font-size: 20px;
-    color: black !important;
-    text-align: left;
+    font-size: 17px;
+    color: white !important;
     margin: 15px;
 }
 
 #chatContainer {
     height: 300px;
     overflow-y: auto;
-    background-color: white;
+    background-color: black;
     border: 1px solid #ccc;
     padding: 10px;
     display: flex;
@@ -111,8 +204,8 @@ p {
     color: black;
 }
 .user-message {
-    background-color: #800080;
-    color: white;
+    background-color: #b4528d;
+    color: black;
     align-self: flex-start;
 }
 .bot-message {

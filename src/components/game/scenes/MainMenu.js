@@ -8,6 +8,14 @@ export default class MainMenu extends Phaser.Scene {
 
 	preload()
     {
+
+		let params = JSON.parse(this.game.config.parameters);
+		
+		console.log('Params Player name is: ' + params.playerName);
+		console.log('Params Player sex is: ' + params.sex);
+
+		this.registry.set('customParameters', params);
+
 		var loading = new Loading();
 		loading.loadAssets(this);
         
@@ -21,13 +29,17 @@ export default class MainMenu extends Phaser.Scene {
 
 		// Load common tilesets
 		this.load.image('tileset_field','assets/tilesets/tileset_field/tileset.png');
+		this.load.image('tileset_evening','assets/tilesets/tileset_field/tileset_evening.png');
 		this.load.image('tileset_night','assets/tilesets/tileset_field/tileset_night.png');
+		this.load.image('sky_night','assets/tilesets/sky_night/sky_night.png');
 		this.load.image('tileset_jungle','assets/tilesets/tileset_jungle/tileset_jungle_embed.png');
+		this.load.image('tileset_jungle_evening','assets/tilesets/tileset_jungle/tileset_jungle_embed_evening.png');
 		this.load.image('swamp', 'assets/tilesets/tileset_swamp/swamp.png');
 		this.load.image('swamp_bg', 'assets/tilesets/tileset_swamp/swamp_bg.png');
 
 		// Load audio music
-		this.load.audio('background_music_tangled', 'assets/audio/tangled.mp3');
+		this.load.audio('background_music_tangled', 'assets/audio/tangled_revamped.mp3');
+		this.load.audio('background_music_tangled_real', 'assets/audio/tangled_can_see_the_light.mp3');
 		this.load.audio('background_music_house', 'assets/audio/music/PerituneMaterial_Dawning_Tale.mp3');
 		this.load.audio('background_music_bunny1', 'assets/audio/music/Fluffing-a-Duck.mp3');
 		this.load.audio('background_music_bunny2', 'assets/audio/music/Run-Amok.mp3');
@@ -38,6 +50,9 @@ export default class MainMenu extends Phaser.Scene {
 		this.load.audio('audio_coin', 'assets/audio/coin.mp3');
 		this.load.audio('audio_chest_opened', 'assets/audio/new_item.mp3');
 		this.load.audio('audio_dog_bark', 'assets/audio/dog_bark2.mp3');
+		this.load.audio('audio_footsteps', 'assets/audio/footsteps.flac');
+		// this.load.audio('audio_jump', 'assets/audio/jump1.wav');
+		this.load.audio('audio_birds', 'assets/audio/nature_birds.mp3');
 		this.load.audio('audio_piano_s1', 'assets/audio/piano/C5.mp3');
 		this.load.audio('audio_piano_s2', 'assets/audio/piano/D5.mp3');
 		this.load.audio('audio_piano_s3', 'assets/audio/piano/E5.mp3');
@@ -68,7 +83,17 @@ export default class MainMenu extends Phaser.Scene {
 		this.load.image('house-outside','assets/tilesets/house-outside/house-outside.png');
 		this.load.image('house-outside','assets/tilesets/house-outside/house-outside.png');
 		
-		this.load.spritesheet('player', 'assets/spritesheets/player/player.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.spritesheet('logo', 'assets/spritesheets/logo_pixelart_medium_white.png', { frameWidth: 395, frameHeight: 420 });
+		
+		// Load man/woman sprite based on the sex
+		if(params.sex == undefined){
+			this.load.spritesheet('player', 'assets/spritesheets/player/player.png', { frameWidth: 32, frameHeight: 32 });
+		}else if(params.sex == "man"){
+			this.load.spritesheet('player', 'assets/spritesheets/player/player.png', { frameWidth: 32, frameHeight: 32 });
+		}else if(params.sex == "woman"){
+			this.load.spritesheet('player', 'assets/spritesheets/player/player_woman.png', { frameWidth: 32, frameHeight: 32 });
+		}
+		
 		this.load.spritesheet('player2', 'assets/spritesheets/player/heroes.png', { frameWidth: 24, frameHeight: 32 });
 		this.load.spritesheet('npc_xavi', 'assets/spritesheets/npcs/xavi.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('npc_mi', 'assets/spritesheets/npcs/mi.png', { frameWidth: 32, frameHeight: 32 });
@@ -87,9 +112,10 @@ export default class MainMenu extends Phaser.Scene {
 		this.load.spritesheet('npc_stan', 'assets/spritesheets/npcs/stan.png', { frameWidth: 66, frameHeight: 66 });
 		this.load.spritesheet('npc_fairy', 'assets/spritesheets/npcs/fairy.png', { frameWidth: 64, frameHeight: 64 });
 		this.load.spritesheet('npc_worker', 'assets/spritesheets/npcs/worker.png', { frameWidth: 32, frameHeight: 32 });
-		this.load.spritesheet('treasure', 'assets/spritesheets/objects/treasure.png', {frameWidth: 16, frameHeight: 16});		
-		this.load.spritesheet('objects', 'assets/spritesheets/objects/objects.png', {frameWidth: 16, frameHeight: 16});
-		this.load.spritesheet('fire', 'assets/spritesheets/objects/fire1.png', {frameWidth: 16, frameHeight: 16});
+		this.load.spritesheet('lantern', 'assets/spritesheets/objects/lantern_illuminated.png', {frameWidth: 96, frameHeight: 141 });
+		this.load.spritesheet('treasure', 'assets/spritesheets/objects/treasure.png', {frameWidth: 16, frameHeight: 16 });		
+		this.load.spritesheet('objects', 'assets/spritesheets/objects/objects.png', {frameWidth: 16, frameHeight: 16 });
+		this.load.spritesheet('fire', 'assets/spritesheets/objects/fire1.png', {frameWidth: 16, frameHeight: 16 });
     }
 
 	create() {
@@ -155,16 +181,17 @@ export default class MainMenu extends Phaser.Scene {
 		const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
 		const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
 
-		var titleText = 'The Wedding';
-		this.add.text(screenCenterX, screenCenterY - 100, titleText, { font: '115px Arial' }).setOrigin(0.5);
+		// var titleText = 'The Wedding';
+		// this.add.text(screenCenterX, screenCenterY - 100, titleText, { font: '115px Arial' }).setOrigin(0.5);
+		var titleSprite = this.add.sprite(screenCenterX, screenCenterY - 290, 'logo');
 
-		var startText = this.add.text(screenCenterX, screenCenterY + 40, 'Toca la pantalla per continuar', {
+		var startText = this.add.text(screenCenterX, screenCenterY, 'Toca la pantalla per continuar', {
 			font: 'italic 30px Arial',
 		}).setOrigin(0.5);
 
 		var instructionsText =
-			'Instruccions: Utilitza el joystick esquerre per moure el personatge. Utilitza el botó dret per saltar/interactuar.';
-		this.add.text(screenCenterX, screenCenterY + 190, instructionsText, {
+			"Instruccions:\nUtilitza el joystick per moure't.\nUtilitza el botó verd per saltar.\nUtilitza el botó vermell per interactuar.";
+		this.add.text(screenCenterX, screenCenterY + 130, instructionsText, {
 				font: '25px Arial',
 				wordWrap: { width: 500, useAdvancedWrap: true },
 			}).setOrigin(0.5);

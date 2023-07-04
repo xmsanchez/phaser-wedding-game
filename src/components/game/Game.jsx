@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useSearchParams, useLocation, useParams } from 'react-router-dom';
 
 import Phaser from 'phaser'
 import MainMenu from './scenes/MainMenu'
@@ -22,7 +23,6 @@ const config = {
 	width: 800,
 	height: 1200,
 	scale: {
-		// mode: Phaser.Scale.ENVELOP,
 		mode: Phaser.Scale.FIT,
 	},
 	physics: {
@@ -57,19 +57,32 @@ const config = {
 }
 
 function Game() {
-	console.log('INITIATING GAME');
-	const gameRef = useRef(null);
+	// Example man: http://127.0.0.1:8000/?parameters=eyJwbGF5ZXJOYW1lIjoiWGF2aSIsICJzZXgiOiAibWFuIn0K
+	// Example woman: http://127.0.0.1:8000/?parameters=eyJwbGF5ZXJOYW1lIjoiTWlyaWFtIiwgInNleCI6ICJ3b21hbiJ9Cg==
 	
+	const searchParams = new URLSearchParams(window.location.search);
+	const groupedParams = Object.fromEntries(searchParams);
+
+	let decodedParameters = {};
+	try {
+		decodedParameters = atob(groupedParams.parameters);
+	} catch (error) {
+		decodedParameters = JSON.stringify({playerName: 'Frodo', sex: 'man'});
+	}
+
+	const gameRef = useRef(null);
+
 	useEffect(() => {
 	  gameRef.current = new Phaser.Game(config);
-	  
+	  gameRef.current.config.parameters = decodedParameters;
+
 	  // Cleanup function:
 	  return () => {
 		gameRef.current.destroy(true);
 	  };
 	}, []);  // empty dependency array means this effect runs once on mount and cleanup on unmount
 	
-	return <div id="phaser-game" />;  // you might need to adjust this depending on how you've set up your Phaser game
+	return <div id="phaser-game" />;
   }
   
   export default Game;

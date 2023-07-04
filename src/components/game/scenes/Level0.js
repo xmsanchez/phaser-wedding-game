@@ -39,7 +39,6 @@ export default class Level0 extends Phaser.Scene
 		this.interactBtn = null;
 		this.firstInteraction = null;
 		
-
 		this.common = null;
 		this.message = null;
 	}
@@ -95,6 +94,8 @@ export default class Level0 extends Phaser.Scene
 		this.cameras.main.fadeIn(250);
 
 		this.checkCompleted();
+
+		this.playerName = this.registry.get('customParameters').playerName;
 	}
 
 	checkCompleted() {
@@ -137,7 +138,7 @@ export default class Level0 extends Phaser.Scene
 				// For first interaction, show a message list when approaching NPCs
 				if(this.firstInteraction && !this.message.messageDisplaying){
 					this.messageListShowing = [
-						npc.name + ': Hola! Saps què?!\n\n**ENS CASEM!!!**', 
+						npc.name + ': Hola ' + this.playerName + '! Saps què?!\n\n**ENS CASEM!!!**', 
 						npc.name + ': Ara tenim un problema, i és que **hem perdut tota la informació** sobre el casament.\nEns ajudes a trobar-la?'
 					];
 					this.message.showMessageList(this, this.messageListShowing);

@@ -73,21 +73,21 @@ export default class Level3 extends Phaser.Scene
 		this.map = this.make.tilemap({ key: 'level3' });
 	
 		// Add the loaded tiles image asset to the map
-		const tileset_field = this.map.addTilesetImage('tileset_field', 'tileset_field');
-		const tileset_jungle = this.map.addTilesetImage('tileset_jungle', 'tileset_jungle');
+		const tileset_field = this.map.addTilesetImage('tileset_field', 'tileset_evening');
+		const tileset_jungle = this.map.addTilesetImage('tileset_jungle', 'tileset_jungle_evening');
 		const castle_outside = this.map.addTilesetImage('castle_outside', 'castle_outside');
 
 		// Create all the layers
-		this.common.createLevelLayer(this, 'bg_5', tileset_jungle, 0.4);
-		this.common.createLevelLayer(this, 'bg_4', tileset_jungle, 0.5);
-		this.common.createLevelLayer(this, 'bg_3', tileset_jungle, 0.6);
-		this.common.createLevelLayer(this, 'bg_2', tileset_jungle, 0.7);
-		this.common.createLevelLayer(this, 'top_bg4', tileset_field, 0.4);
-		this.common.createLevelLayer(this, 'top_bg3', tileset_field, 0.5);
-		this.common.createLevelLayer(this, 'top_bg2', tileset_field, 0.6);
-		this.common.createLevelLayer(this, 'top_bg1', tileset_field, 0.7);
-		this.common.createLevelLayer(this, 'bg_1', tileset_jungle, 0.8);
-		this.common.createLevelLayer(this, 'fg_background', tileset_jungle, 0.9);
+		this.common.createLevelLayer(this, 'bg_5', tileset_jungle, 0.7);
+		this.common.createLevelLayer(this, 'bg_4', tileset_jungle, 0.8);
+		this.common.createLevelLayer(this, 'bg_3', tileset_jungle, 0.9);
+		this.common.createLevelLayer(this, 'bg_2', tileset_jungle);
+		this.common.createLevelLayer(this, 'top_bg4', tileset_field);
+		this.common.createLevelLayer(this, 'top_bg3', tileset_field);
+		this.common.createLevelLayer(this, 'top_bg2', tileset_field, 0.8);
+		this.common.createLevelLayer(this, 'top_bg1', tileset_field);
+		this.common.createLevelLayer(this, 'bg_1', tileset_jungle);
+		this.common.createLevelLayer(this, 'fg_background', tileset_jungle);
 		this.common.createLevelLayer(this, 'ground_bg', tileset_field);
 		this.common.createLevelLayer(this, 'castle_outside', castle_outside);
 		// this.common.createLevelLayer(this, 'rocks', tileset_field);
@@ -211,7 +211,6 @@ export default class Level3 extends Phaser.Scene
 			// Check overlaps (show the 'B' button hint)
 			this.common.checkOverlapsStaticGroups(this.npcs, this);
 			this.common.checkOverlapsStaticGroups(this.doors, this);
-			// this.common.checkOverlapsStaticGroups(this.treasures, this);
 	
 			if(this.player.y >= this.map.heightInPixels - 300){
 				this.inInfraworld = true;
@@ -233,14 +232,14 @@ export default class Level3 extends Phaser.Scene
 					console.log("this.inInfraWorldLeft: " + this.inInfraWorldLeft);
 					console.log("this.inInfraWorldRight: " + this.inInfraWorldRight);
 					this.player.x = this.map.widthInPixels - 250;
-					this.player.y = this.map.heightInPixels - 100;
+					this.player.y = this.map.heightInPixels - 140;
 				}
 				if(this.inInfraWorldLeft){
 					console.log('infraworld Must spawn at the left');
 					console.log("this.inInfraWorldLeft: " + this.inInfraWorldLeft);
 					console.log("this.inInfraWorldRight: " + this.inInfraWorldRight);
 					this.player.x = 625;
-					this.player.y = this.map.heightInPixels - 100;
+					this.player.y = this.map.heightInPixels - 140;
 				}
 			}
 		}

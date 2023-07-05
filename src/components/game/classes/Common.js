@@ -412,14 +412,14 @@ export default class Common {
 	bunnyMovement(scene) {
 		if (scene.player.y > scene.cameras.main.height - 800) {
 			console.log('Player has fallen below the bottom of the screen: ' + scene.player.y);
-			// scene.player.x = 750;
-			// scene.player.y = 100;
-			// scene.bunny.x = 800;
-			// scene.bunny.y = 100;
+			scene.player.x = 750;
+			scene.player.y = 100;
+			scene.bunny.x = 800;
+			scene.bunny.y = 100;
 	
-			// // Reset pathPoints to the original values
-			// scene.pathPoints = [...scene.pathPointsInitial];
-			scene.scene.restart();
+			// Reset pathPoints to the original values
+			scene.pathPoints = [...scene.pathPointsInitial];
+			// scene.scene.restart();
 		}
 
 		// Bunny related code

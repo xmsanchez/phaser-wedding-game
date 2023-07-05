@@ -52,7 +52,6 @@ function Landing({raw_params, playerName}) {
   } catch (error) {
     console.log('Error getting API key: ' + error);
   }
-  // console.log('Api key: ' + googleMapsApiKey);
   
   const defaultProps = {
     center: {
@@ -165,12 +164,26 @@ function Landing({raw_params, playerName}) {
       </Section>
       <Section>
         {<div id="regalSection" className="section2">
-          <h2>Ens ajudes a fer la millor festa?</h2>
+          <h2>El millor regal que ens pots fer és venir! Però si ens vols ajudar a fer la millor festa, t'ho agraïm molt!</h2>
           <h2 className="regalSectionIban">ES45 1465 0120 3717 3372 2703</h2>
         </div>}
       </Section>
       <Section>
-        {<div id="googleFormsSection" className="section">
+        {<div id="chatbotSection" className="section">
+            <h2>Tens alguna pregunta abans de confirmar assistència?</h2>
+            <p>La nostra <b>IA</b> t'aclarirà tots els dubtes que tinguis</p>
+            {/* <p><i><b>*responem al moment!</b> pot ser que la resposta trigui <b>fins a 30 segons</b> en arribar, tingues paciència!! (también hablo castellano ;-D)</i></p> */}
+            <p>Prova a dir: "En què em pots ajudar?" o "Es posible que llegue sobre las 18 horas"</p>
+            <Chatbox playerName={playerName} />
+
+            <p>Vols veure el codi font per saber com està feta la implementació d'aquesta invitació?</p>
+            <a href="https://github.com/xmsanchez/phaser-wedding-game/">
+              FES CLICK AQUÍ
+            </a>
+        </div>}
+      </Section>
+      <Section>
+        {<div id="googleFormsSection" className="section2">
           <h2>Confirma la teva assistència</h2>
           {/* <button id="confirmarButton" className="btn" onClick={handleConfirmarClick}>Confirmar</button> */}
           <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSclSjSkfrUHTZslpKcBdnK0e5sA7r4nwDMsZIuDL0pHJIlkFQ/viewform?embedded=true"
@@ -178,20 +191,7 @@ function Landing({raw_params, playerName}) {
         </div>}
       </Section>
       <Section>
-        {<div id="footerSection" className="section2">
-            <h2>Tens alguna pregunta?</h2>
-            <p>La nostra <b>IA</b> t'aclarirà tots els dubtes que tinguis</p>
-            {/* <p><i><b>*responem al moment!</b> pot ser que la resposta trigui <b>fins a 30 segons</b> en arribar, tingues paciència!! (también hablo castellano ;-D)</i></p> */}
-            <p>Prova a dir: "En què em pots ajudar?" o "Es posible que llegue sobre las 18 horas"</p>
-            <Chatbox playerName={playerName} />
-        </div>}
-      </Section>
-      <Section>
         {<div className="section">
-          <p>Vols saber com s'ha fet aquesta implementació?</p>
-          <a href="https://github.com/xmsanchez/phaser-wedding-game/tree/feat/add-streaming-feature-for-gpt">
-              Fes click aquí
-          </a>
           <p><i>@Xavier Miranda Sánchez @Miriam Garcia Sala</i></p>
           <p><i>Tots els drets reservats - {(new Date().getFullYear())}</i></p>
         </div>}

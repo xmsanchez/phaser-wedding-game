@@ -56,6 +56,24 @@ const config = {
 	]
 }
 
+function GetParameters(decode) {
+	const searchParams = new URLSearchParams(window.location.search);
+	const groupedParams = Object.fromEntries(searchParams);
+  
+	if(decode){
+	  let decodedParameters = {};
+	  try {
+		const decodedString = atob(groupedParams.parameters);
+		decodedParameters = JSON.parse(decodedString);
+	  } catch (error) {
+		decodedParameters = JSON.parse(JSON.stringify({playerName: '', sex: 'man'}));
+	  }
+	  return decodedParameters;
+	}else{
+	  return groupedParams.parameters;
+	}
+}
+
 function Game() {
 	// Example man: http://127.0.0.1:8000/?parameters=eyJwbGF5ZXJOYW1lIjoiWGF2aSIsICJzZXgiOiAibWFuIn0K
 	// Example woman: http://127.0.0.1:8000/?parameters=eyJwbGF5ZXJOYW1lIjoiTWlyaWFtIiwgInNleCI6ICJ3b21hbiJ9Cg==
@@ -63,7 +81,7 @@ function Game() {
 	const searchParams = new URLSearchParams(window.location.search);
 	const groupedParams = Object.fromEntries(searchParams);
 
-	let decodedParameters = {};
+	let decodedParameters = GetParameters(true);
 	try {
 		decodedParameters = atob(groupedParams.parameters);
 	} catch (error) {
@@ -75,6 +93,11 @@ function Game() {
 	useEffect(() => {
 	  gameRef.current = new Phaser.Game(config);
 	  gameRef.current.config.parameters = decodedParameters;
+	  try {
+		gameRef.current.config.raw_parameters = JSON.stringify(groupedParams.parameters);
+	  } catch (error) {
+		console.log('An error ocurred');
+	  }
 
 	  // Cleanup function:
 	  return () => {

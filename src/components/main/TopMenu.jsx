@@ -19,13 +19,13 @@ function TopMenu() {
       {!collapsed && (
         <>
           <h3>Ens faria molta il·lusió que completis el joc, però si no vols no pateixis, fes click al següent enllaç per obtenir tota la informació que necessites</h3>
-          <button onClick={handleButtonClick}>VULL TOTA LA INFORMACIÓ</button>
+          <button onClick={handleButtonClick}>VULL CONFIRMAR ASSISTÈNCIA</button>
         </>
       )}
       <div>
         <br/>
         <button className="collapse-button" onClick={toggleCollapse}>
-          {collapsed ? "No vols jugar?" : "Vull jugar"}
+          {collapsed ? "CONFIRMA ASSISTÈNCIA AQUÍ" : "Vull jugar"}
         </button>
       </div>
     </div>

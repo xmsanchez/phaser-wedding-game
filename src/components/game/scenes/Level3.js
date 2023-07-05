@@ -359,7 +359,7 @@ export default class Level3 extends Phaser.Scene
 		if(!this.message.messageDisplaying) {
 			let dialog = [
 				npc.name + ": Ah, buscant respostes, no és així?",
-				npc.name + ": De vegades el camí correcte no és el més obvi. **La segona caixa**, fes-la **la quarta** a obrir."
+				npc.name + ": De vegades el camí correcte no és el més obvi. **La segona caixa**, és la **la quarta** que hauràs d'obrir."
 			]
 			this.message.showMessageList(this, dialog);
 		}
@@ -369,7 +369,7 @@ export default class Level3 extends Phaser.Scene
 		if(!this.message.messageDisplaying) {
 			let dialog = [
 				npc.name + ": Hola, company! Preparat per a una aventura al País de Mai Més?",
-				npc.name + ": No tots els tresors estan al final del mapa. **La novena caixa**, ha de ser **la cinquena** a obrir."
+				npc.name + ": En aquest bosc trobaràs molts personatges que et donaràn les pistes que necessites. Fins i tot a sota del bosc i també al cel!"
 			]
 			this.message.showMessageList(this, dialog);
 		}

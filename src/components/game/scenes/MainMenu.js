@@ -10,11 +10,13 @@ export default class MainMenu extends Phaser.Scene {
     {
 
 		let params = JSON.parse(this.game.config.parameters);
+		let rawParams = JSON.parse(this.game.config.raw_parameters);
 		
 		console.log('Params Player name is: ' + params.playerName);
 		console.log('Params Player sex is: ' + params.sex);
 
 		this.registry.set('customParameters', params);
+		this.registry.set('rawParams', rawParams);
 
 		var loading = new Loading();
 		loading.loadAssets(this);
@@ -190,7 +192,7 @@ export default class MainMenu extends Phaser.Scene {
 		}).setOrigin(0.5);
 
 		var instructionsText =
-			"Instruccions:\nUtilitza el joystick per moure't.\nUtilitza el botó verd per saltar.\nUtilitza el botó vermell per interactuar.";
+			"Instruccions:\nUtilitza el joystick per moure't.\nUtilitza el botó verd per saltar.\nUtilitza el botó vermell per interactuar.\n\n*Recorda confirmar assistència\nquan acabis el joc ;-D";
 		this.add.text(screenCenterX, screenCenterY + 130, instructionsText, {
 				font: '25px Arial',
 				wordWrap: { width: 500, useAdvancedWrap: true },

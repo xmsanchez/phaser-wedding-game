@@ -61,6 +61,9 @@ export default class Level5 extends Phaser.Scene
 
 	create()
 	{
+		let rawParams = this.registry.get('rawParams');
+		console.log('Raw params: ' + rawParams);
+
 		// Create all resources
 		this.sceneRegistry = this.registry.get(this.scene.key);
 		this.common = new Common(this);
@@ -157,10 +160,11 @@ export default class Level5 extends Phaser.Scene
 			});
 		});
 
-		this.time.delayedCall(210000, () => {
+		// Fade-in black and go to the MainMenu when finished and redirect to the landing
+		this.time.delayedCall(216000, () => {
 			this.cameras.main.fadeOut(4000);
-			this.time.delay(4000, () => {
-				this.common.startScene(this, 'PreLevel', {levelKey: 'MainMenu'});
+			this.time.delayedCall(5000, () => {
+				window.location = '/landing?parameters=' + rawParams;
 			})
 		});
 
@@ -193,7 +197,7 @@ export default class Level5 extends Phaser.Scene
 							2000, 2000, 1500);
 		this.manageText('Ha estat un plaer treballar\nen aquest projecte', 
 							7000, 2000, 1500);
-		this.manageText('Us esperem a tots al casament\n- Dia 30 de Setembre\n- Recepció a les 16:30\n- Dress code: Formal. El color blanc\n  està reservat per la núvia!!\n- Allotjament: Booking :-)', 
+		this.manageText('Us esperem a tots al casament\n- Dia 30 de Setembre\n- A La Vinyassa\n- Recepció a les 16:30\n- Dress code: Formal. El color blanc\n  està reservat per la núvia!!\n- Allotjament: Booking :-)', 
 							14000, 2000, 20000, '27px', 'resum')
 		this.manageText('Direcció:\n- Xavier Miranda Sánchez',
 							30000, 7000, 1500, '40px', 'left');
@@ -209,13 +213,13 @@ export default class Level5 extends Phaser.Scene
 							105000, 7000, 1500, '40px', 'left');
 		this.manageText('Pixel Art:\n- Xavier Miranda Sánchez\n- Miriam Garcia Sala\n- www.spriters-resource.com\n- Adobe Stock\n- Google Images',
 							120000, 7000, 1500, '40px', 'left');
-		this.manageText('Àudio:\n- Creative Commons',
+		this.manageText('Àudio:\n- Creative Commons\n- Algun que altre rip...\n  (no ho comenteu a la SGAE ;-D)',
 							135000, 7000, 1500, '40px', 'left');
 		this.manageText('Beta testers:\n- Xavier Miranda Sánchez\n- Miriam Garcia Sala\n- Arnau Morató Codorniu',
 							150000, 7000, 1500, '40px', 'left');
 		this.manageText('Agraïments:\n- A tots els que ens\nacompanyareu en un dia\nmolt especial :-)',
 		 					165000, 7000, 1500, '40px', 'left');
-		this.manageText('Gràcies', 180000, 7000, 1500, '80px');
+		this.manageText('Gràcies', 180000, 12000, 1500, '80px');
 	}
 
 	manageText(text, startTime, endTime, duration, textSize = '32px', showStyle = 'center') {
@@ -314,7 +318,7 @@ export default class Level5 extends Phaser.Scene
 				this.tweens.add({
 					targets: lantern,
 					y: lantern.y - 2000, // move upwards a larger distance
-					duration: 100000, // longer duration
+					duration: 105000, // longer duration
 					ease: 'Sine.easeInOut',
 					yoyo: false,
 					delay: delay, // start after the random delay
@@ -354,200 +358,5 @@ export default class Level5 extends Phaser.Scene
 			yoyo: true,
 			repeat: -1
 		});
-	}
-
-	npcActions(player, npc) {
-		if(npc.name != 'Xavi' && npc.name != 'Miriam'){
-			npc.anims.play(npc.name + '_talking', true);
-			switch(npc.name) {
-				case 'Bèstia':
-					this.npcActionsBeast(player, npc);
-					break;
-				case 'Aladdin':
-					this.npcActionsAladdin(player, npc);
-					break;
-				case 'Gaston':
-					this.npcActionsGaston(player, npc);
-					break;
-				case 'Malèfica':
-					this.npcActionsMaleficent(player, npc);
-					break;
-				case 'Peter Pan':
-					this.npcActionsPeterPan(player, npc);
-					break;
-				case 'Pluto':
-					this.npcActionsPluto(player, npc);
-					break;
-				case 'Rapunzel':
-					this.npcActionsRapunzel(player, npc);
-					break;
-				case 'Mickey Mouse':
-					this.npcActionsMickeyMouse(player, npc);
-					break;
-				case 'Geni':
-					this.npcActionsGenie(player, npc);
-					break;
-				case 'Simba':
-					this.npcActionsSimba(player, npc);
-					break;
-				case 'Hades':
-					this.npcActionsHades(player, npc);
-					break;
-			}
-
-		// Define actions for Xavi and Miriam
-		}else{
-			this.npcActionsXaviMiriam(player, npc);
-		}
-	}
-
-	npcActionsXaviMiriamGameFinished(player, npc) {
-		if(!this.message.messageDisplaying){
-			this.message.showMessageList(this, this.finishDialog, function(scene){
-				scene.common.startScene(scene, 'PreLevel', { textSize: 40, timeout: 5000, levelName: 'Epíleg', levelKey: 'Level0', text: 'I així, ens encaminem\ncap a les afores,\nmentre es fa de nit...' }, 4000, 5000);
-			});
-		}
-	}
-
-	npcActionsXaviMiriam(player, npc) {
-		let dialog = [];
-		if(npc.name == 'Xavi'){
-			dialog = [
-				npc.name + ': Ei, hola!'
-			]
-		}else if (npc.name == 'Miriam'){
-			dialog = [
-				npc.name + ': Holaaa!'
-			]
-		}
-		this.message.showMessageList(this, dialog);
-	}
-
-	npcActionsAladdin(player, npc) {
-		if(!this.message.messageDisplaying) {
-			let dialog = [
-				npc.name + ": Hola, amic aventurer! T'agraden les emocions fortes?",
-				npc.name + ": Recordo els carrers d'Agrabah, obria portes en l'ordre correcte per evitar els guàrdies.",
-				npc.name + ": Aquí tens el meu consell, **la sisena caixa**, ha de ser **la primera** que obres."
-			]
-			this.message.showMessageList(this, dialog);
-		}
-	}
-
-	npcActionsGaston(player, npc) {
-		if(!this.message.messageDisplaying) {
-			let dialog = [
-				npc.name + ": Què fas aquí, petit ratolí?",
-				npc.name + ": Necessites una pista? No pots amb aquest desafiament?",
-				npc.name + ": Està bé, te la donaré perquè sóc el millor en tot. **La quarta caixa** és **la segona** que hauries d'obrir."
-			]
-			this.message.showMessageList(this, dialog);
-		}
-	}
-
-	npcActionsBeast(player, npc) {
-		if(!this.message.messageDisplaying) {
-			let dialog = [
-				npc.name + ": Per què em molestes?",
-				npc.name + ": Aquest castell està ple de secrets i en tinc un per a tu. **La vuitena caixa**, ha de ser **la tercera** en obrir."
-			]
-			this.message.showMessageList(this, dialog);
-		}
-	}
-
-	npcActionsMaleficent(player, npc) {
-		if(!this.message.messageDisplaying) {
-			let dialog = [
-				npc.name + ": Ah, buscant respostes, no és així?",
-				npc.name + ": De vegades el camí correcte no és el més obvi. **La segona caixa**, fes-la **la quarta** a obrir."
-			]
-			this.message.showMessageList(this, dialog);
-		}
-	}
-
-	npcActionsPeterPan(player, npc) {
-		if(!this.message.messageDisplaying) {
-			let dialog = [
-				npc.name + ": Hola, company! Preparat per a una aventura al País de Mai Més?",
-				npc.name + ": No tots els tresors estan al final del mapa. **La novena caixa**, ha de ser **la cinquena** a obrir."
-			]
-			this.message.showMessageList(this, dialog);
-		}
-	}
-
-	npcActionsPluto(player, npc) {
-		if(!this.message.messageDisplaying) {
-			// this.bark.play();
-			let dialog = [
-				"(En Pluto mou la cua amb entusiasme quan li acaricies el cap)",
-				"(Assenyala amb la pota que **la primera caixa** ha de ser **la sisena** a obrir)",
-				"(Escoltes a en Bug lladrant perquè estàs fent cas a un altre gosset. Decideixes seguir el teu camí...)"
-			]
-			this.message.showMessageList(this, dialog, function(scene){
-				// Play the sound 3 times in a row, then stop
-				var playCount = 3;
-				scene.bark.play();
-				scene.bark.on('complete', function() {
-					playCount--;
-					if (playCount > 0) {
-						scene.bark.play();
-					} else {
-						scene.bark.stop();
-					}
-				});
-			});
-		}
-	}
-
-	npcActionsRapunzel(player, npc) {
-		if(!this.message.messageDisplaying) {
-			let dialog = [
-				npc.name + ": Hola! Aquest enigma que has de resoldre em recorda als misteris de la meva torre!",
-				npc.name + ": Et donaré una pista, **la tercera caixa** és **la setena** que hauries d'obrir."
-			]
-			this.message.showMessageList(this, dialog);
-		}
-	}
-
-	npcActionsMickeyMouse(player, npc) {
-		if(!this.message.messageDisplaying) {
-			let dialog = [
-				npc.name + ": Hola, amic! Preparat per a un bon moment?",
-				npc.name + ": Aquí va el meu consell, **la setena caixa** ha de ser **la vuitena** a obrir."
-			]
-			this.message.showMessageList(this, dialog);
-		}
-	}
-
-	npcActionsGenie(player, npc) {
-		if(!this.message.messageDisplaying) {
-			let dialog = [
-				npc.name + ": Hola, amic! Estàs llest per un desig?",
-				npc.name + ": Vols una pista? Doncs aquí va: **la cinquena caixa** ha de ser **la novena** a obrir."
-			]
-			this.message.showMessageList(this, dialog);
-		}
-	}
-
-	npcActionsSimba(player, npc) {
-		if(!this.message.messageDisplaying) {
-			let dialog = [
-				npc.name + ": Hola, amic! Sents la crida de la savana?",
-				npc.name + ": Aquest bosc és ple de misteris, igual que aquest enigma que has de resoldre.",
-				npc.name + ": El meu consell per a tu, **la setena caixa** ha de ser **la vuitena** a obrir."
-			]
-			this.message.showMessageList(this, dialog);
-		}
-	}
-	
-	npcActionsHades(player, npc) {
-		if(!this.message.messageDisplaying) {
-			let dialog = [
-				npc.name + ": Oh, un altre mortal perdut.",
-				npc.name + ": Els misteris dels déus són complexos, com aquest enigma que has de resoldre.",
-				npc.name + ": Però ja que estàs aquí, et donaré una pista. **La novena caixa**, ha de ser **la cinquena** a obrir."
-			]
-			this.message.showMessageList(this, dialog);
-		}
 	}
 }

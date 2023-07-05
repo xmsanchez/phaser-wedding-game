@@ -4,7 +4,18 @@
 
 This game is created to be used as a wedding invitation 😊
 
+- Framework used for the game: **Phaser3**
+- Framework used for the whole app: **React**
+
+The landing contains an integration to OpenAI GPT-3.5 as an assistant chatbot.
+
 ## Development
+
+Install node dependencies locally:
+
+```
+npm install
+```
 
 Build and spin up a docker container:
 
@@ -28,6 +39,12 @@ gcloud run deploy game-new \
     --allow-unauthenticated \
     --set-secrets VITE_MAPS_API_KEY=VITE_MAPS_API_KEY:1 \
     --quiet
+```
+
+You can also use the helper included:
+
+```bash
+./deploy.sh
 ```
 
 ## Architecture

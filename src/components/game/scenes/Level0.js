@@ -48,6 +48,16 @@ export default class Level0 extends Phaser.Scene
 
 	create()
 	{
+		window.dataLayer = window.dataLayer || [];
+		window.dataLayer.push({
+		  'event': 'event',
+		  'eventCategory': 'User',
+		  'eventAction': 'User accessed LEVEL 0'
+		})
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'G-ZH68BVB2WF');
+
 		this.firstInteraction = this.registry.get('firstInteraction');
 
 		// Create all resources

@@ -1,11 +1,11 @@
-import { useLayoutEffect } from 'react'
+import { useLayoutEffect, useEffect } from 'react'
+import { useLocation } from "react-router-dom";
 import { useInView } from 'react-intersection-observer';
 import { useSpring, animated } from 'react-spring';
 import { Element } from 'react-scroll';
 import GoogleMapReact from 'google-map-react';
 import Chatbox from './chat/Chatbox.jsx';
 import Countdown from './Countdown.jsx';
-import HeaderFooter from './HeaderFooter.jsx';
 import './Landing.css'
 
 function Section({ id, children, style }) {
@@ -30,6 +30,17 @@ function Section({ id, children, style }) {
 }
 
 function Landing({raw_params, playerName}) {
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    'event': 'event',
+    'eventCategory': 'User',
+    'eventAction': 'User who accessed LANDING: ' + playerName
+  })
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZH68BVB2WF');
+
+
   // Enforce background color
   useLayoutEffect(() => {
       document.body.style.backgroundColor = "#330c43";
@@ -165,7 +176,7 @@ function Landing({raw_params, playerName}) {
       <Section>
         {<div id="regalSection" className="section2">
           <h2>El millor regal que ens pots fer és venir! Però si ens vols ajudar a fer la millor festa, t'ho agraïm molt!</h2>
-          <h2 className="regalSectionIban">ES45 1465 0120 3717 3372 2703</h2>
+          <h2 className="regalSectionIban">ES30 1465 0120 3517 5585 1875</h2>
         </div>}
       </Section>
       <Section>

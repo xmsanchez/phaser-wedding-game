@@ -41,16 +41,19 @@ function KillingGame() {
       <Section>
         {<div id="header" className="headerSection">
           {/* <img src="wedding-logo.png" className="headerSectionImage"></img> */}
-          <h1>Benvinguts als jocs de la fam!</h1>
-          <h2>De què va això?</h2>
+          <h1>Benvingut al "Killing Game"!</h1>
+          <h2>ATENCIÓ: El nom de la targeta que tens, és confidencial!</h2>
           <p><b>Llegeix les instruccions a continuació</b></p>
           <p>L'objectiu d'aquest joc és "matar" a la persona que apareix a la teva targeta.</p>
           <p><b>I com sé qui és??</b></p>
           <p>Molt fàcil! Hauràs de parlar amb tothom per intentar-ho esbrinar!</p>
           <p>Però compte! Has de ser dissimulat i intentar evitar que ningú vegi venir les teves intencions!</p>
           <br />
+          <p><b>Aleshores, com he de matar al meu objectiu?</b></p>
+          <p>Quan estiguis amb el teu objectiu, i hi hagis parlat una mica, digue-li "estàs mort"</p>
           <p><b>D'acord, he matat a algú. I ara què?</b></p>
           <p>Doncs ara la persona a la que has matat t'ha de donar la seva targeta.</p>
+          <p>Atenció! Que et doni la SEVA targeta, però NO les targetes de qui ha matat</p>
           <p>Sobretot recorda a demanar-li! La persona que hi apareix serà el teu següent objectiu!!</p>
           <br />
           <p><b>I si m'han matat a mi?</b></p>

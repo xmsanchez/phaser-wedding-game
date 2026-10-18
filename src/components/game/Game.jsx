@@ -1,111 +1,28 @@
-import { useEffect, useRef } from 'react';
-import { useSearchParams, useLocation, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import Phaser from 'phaser';
+import config from '../../game/config.js';
 
-import Phaser from 'phaser'
-import MainMenu from './scenes/MainMenu'
-import PreLevel from './scenes/PreLevel'
-import UIScene from './scenes/UIScene'
-import Level0 from './scenes/Level0'
-import Level1Prev from './scenes/Level1Prev'
-import Level1 from './scenes/Level1'
-import Level2Prev from './scenes/Level2Prev'
-import Level2Prev2 from './scenes/Level2Prev2'
-import Level2 from './scenes/Level2'
-import Level3Prev from './scenes/Level3Prev'
-import Level3Prev2 from './scenes/Level3Prev2'
-import Level3Prev3 from './scenes/Level3Prev3'
-import Level3 from './scenes/Level3'
-import Level4 from './scenes/Level4'
-import Level5 from './scenes/Level5'
-
-const config = {
-	type: Phaser.AUTO,
-	width: 800,
-	height: 1200,
-	scale: {
-		mode: Phaser.Scale.FIT,
-	},
-	physics: {
-		default: 'arcade',
-		arcade: {
-			gravity: { y: 1000 },
-			// debug: true
-		}
-	},
-	render: {
-		antialias: false,
-		pixelArt: true,
-		roundPixels: true
-	},
-	scene: [ 
-		MainMenu,
-		PreLevel,
-		UIScene,
-		Level0,
-		Level1Prev,
-		Level1,
-		Level2Prev,
-		Level2Prev2,
-		Level2,
-		Level3Prev,
-		Level3Prev2,
-		Level3Prev3,
-		Level3,
-		Level4,
-		Level5
-	]
-}
-
-function GetParameters(decode) {
-	const searchParams = new URLSearchParams(window.location.search);
-	const groupedParams = Object.fromEntries(searchParams);
-  
-	if(decode){
-	  let decodedParameters = {};
-	  try {
-		const decodedString = atob(groupedParams.parameters);
-		decodedParameters = JSON.parse(decodedString);
-	  } catch (error) {
-		decodedParameters = JSON.parse(JSON.stringify({playerName: '', sex: 'man'}));
-	  }
-	  return decodedParameters;
-	}else{
-	  return groupedParams.parameters;
-	}
-}
-
-function Game() {
-	// Example man: http://127.0.0.1:8000/?parameters=eyJwbGF5ZXJOYW1lIjoiWGF2aSIsICJzZXgiOiAibWFuIn0K
-	// Example woman: http://127.0.0.1:8000/?parameters=eyJwbGF5ZXJOYW1lIjoiTWlyaWFtIiwgInNleCI6ICJ3b21hbiJ9Cg==
-	
-	const searchParams = new URLSearchParams(window.location.search);
-	const groupedParams = Object.fromEntries(searchParams);
-
-	let decodedParameters = GetParameters(true);
-	try {
-		decodedParameters = atob(groupedParams.parameters);
-	} catch (error) {
-		decodedParameters = JSON.stringify({playerName: 'Frodo', sex: 'man'});
-	}
-
-	const gameRef = useRef(null);
-
+function Game({ invite }) {
 	useEffect(() => {
-	  gameRef.current = new Phaser.Game(config);
-	  gameRef.current.config.parameters = decodedParameters;
-	  try {
-		gameRef.current.config.raw_parameters = JSON.stringify(groupedParams.parameters);
-	  } catch (error) {
-		console.log('An error ocurred');
-	  }
+		let game = null;
+		// Create the game on the next tick: React StrictMode mounts/unmounts/mounts synchronously in dev,
+		// and two overlapping games would clash on Phaser's global plugin cache.
+		const timer = setTimeout(() => {
+			game = new Phaser.Game({
+				...config,
+				// Make the invitation available to every scene before the first one starts
+				callbacks: { preBoot: (g) => g.registry.set('invite', invite) },
+			});
+			if (import.meta.env.DEV) window.__game = game;
+		});
 
-	  // Cleanup function:
-	  return () => {
-		gameRef.current.destroy(true);
-	  };
-	}, []);  // empty dependency array means this effect runs once on mount and cleanup on unmount
-	
+		return () => {
+			clearTimeout(timer);
+			game?.destroy(true);
+		};
+	}, [invite]);
+
 	return <div id="phaser-game" />;
-  }
-  
-  export default Game;
+}
+
+export default Game;

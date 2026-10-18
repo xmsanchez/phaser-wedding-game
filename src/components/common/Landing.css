@@ -1,0 +1,92 @@
+body {
+    background-color: #330c43;
+    display: flex;
+    min-height: 101vh;
+    flex-direction: column;
+    width: 100%;
+}
+
+.bodyLanding {
+    width: 100%;
+    align-items: center;
+    background-color: #330c43;
+}
+
+h1 {
+    color: #b4528d;
+}
+
+div h2 {
+    justify-content: center;
+    text-align: center;
+    font-size: 42px;
+    margin-top: 80px;
+    color: #b4528d;
+}
+
+p {
+    font-size: 17px;
+    color: white !important;
+    margin: 15px;
+}
+
+button:focus, button:active {
+    background-color: #b4528d !important;
+    box-shadow: none !important;
+}
+
+.headerSection {
+    margin-top: 0px;
+    display: flex;
+    flex-direction: column;
+    min-height: 101vh;
+}
+
+#headerSection h2 {
+    margin-top: 0px;
+}
+
+.headerSection button {
+    height: 60px;
+    width: 200px;
+    margin: auto;
+    margin-top: 0px;
+}
+
+.headerSectionImage {
+    align-items: center;
+    width: 70%;
+    margin: auto;
+    margin-top: 20px;
+}
+
+/* Full-height sections alternate between these two backgrounds */
+.section,
+.section2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 101vh;
+}
+
+.section2 {
+    background-color: #160331;
+}
+
+.mapsContainer {
+    height: 60vh;
+    width: 70%;
+    padding-top: 35px;
+    padding-bottom: 35px;
+    margin: auto;
+}
+
+.textCentered {
+    margin-bottom: 55px;
+}
+
+.bigLink {
+    margin-bottom: 20px;
+    font-size: 30px;
+}

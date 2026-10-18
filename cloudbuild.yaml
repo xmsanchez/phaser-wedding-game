@@ -1,0 +1,27 @@
+# Builds and pushes the production image (deploy.sh then deploys it to Cloud Run).
+# The Google Maps key is read from Secret Manager and baked into the bundle at build time.
+substitutions:
+  _IMAGE: gcr.io/${PROJECT_ID}/game-new
+
+availableSecrets:
+  secretManager:
+    - versionName: projects/${PROJECT_ID}/secrets/VITE_MAPS_API_KEY/versions/latest
+      env: VITE_MAPS_API_KEY
+
+steps:
+  - name: gcr.io/cloud-builders/docker
+    entrypoint: bash
+    args:
+      - -c
+      - >-
+        docker build
+        --build-arg VITE_MAPS_API_KEY="$$VITE_MAPS_API_KEY"
+        -t ${_IMAGE} .
+    secretEnv: ['VITE_MAPS_API_KEY']
+
+images: ['${_IMAGE}']
+
+options:
+  substitutionOption: ALLOW_LOOSE
+  # Required when the build runs as a custom service account (BUILD_SERVICE_ACCOUNT in deploy.sh)
+  logging: CLOUD_LOGGING_ONLY

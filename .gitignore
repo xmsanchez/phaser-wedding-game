@@ -2,11 +2,8 @@
 logs
 *.log
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
+# Dependencies and build output
 node_modules
 dist
 dist-ssr
@@ -18,14 +15,10 @@ dist-ssr
 .idea
 .DS_Store
 *.suo
-*.ntvs*
-*.njsproj
-*.sln
 *.sw?
 
-/.cache
-/package-lock.json
-/.DS_Store
+# Python virtualenvs (tools/)
 venv
-**/venv
-node_modules
+
+# Smoke test output
+.smoke-output

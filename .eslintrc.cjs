@@ -1,5 +1,6 @@
 module.exports = {
-  env: { browser: true, es2020: true },
+  root: true,
+  env: { browser: true, es2022: true },
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
@@ -11,5 +12,18 @@ module.exports = {
   plugins: ['react-refresh'],
   rules: {
     'react-refresh/only-export-components': 'warn',
+    // Plain JS project without PropTypes
+    'react/prop-types': 'off',
   },
+  overrides: [
+    {
+      // Phaser code relies on the global Phaser namespace
+      files: ['src/game/**/*.js', 'src/components/game/**/*.js'],
+      globals: { Phaser: 'readonly' },
+    },
+    {
+      files: ['src/**/*.test.js'],
+      env: { node: true },
+    },
+  ],
 }
